@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartSure — Project Diagrams</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; color: #0f172a; }
+    header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 2rem; text-align: center; }
+    header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+    header p { opacity: 0.85; font-size: 1rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 1.5rem; padding: 2rem; max-width: 1400px; margin: 0 auto; }
+    .card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; overflow: hidden; }
+    .card-header { padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 0.75rem; }
+    .card-header .num { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: white; flex-shrink: 0; }
+    .card-header h2 { font-size: 1rem; font-weight: 700; }
+    .card-header p { font-size: 0.8rem; color: #64748b; margin-top: 0.1rem; }
+    .card img, .card object { width: 100%; display: block; }
+    .card a { display: block; text-align: center; padding: 0.75rem; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #3b82f6; font-weight: 600; text-decoration: none; }
+    .card a:hover { background: #dbeafe; }
+    footer { text-align: center; padding: 2rem; color: #64748b; font-size: 0.875rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🛡️ SmartSure Insurance — Project Diagrams</h1>
+    <p>Complete UML and architecture documentation for the SmartSure Insurance Management System</p>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="num" style="background:#1e40af;">1</div>
+        <div>
+          <h2>Use Case Diagram</h2>
+          <p>Customer and Admin actors with all system use cases</p>
+        </div>
+      </div>
+      <img src="use-case-diagram.svg" alt="Use Case Diagram"/>
+      <a href="use-case-diagram.svg" target="_blank">Open Full Size →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="num" style="background:#059669;">2</div>
+        <div>
+          <h2>ER Diagram</h2>
+          <p>All 8 entities with relationships and database ownership</p>
+        </div>
+      </div>
+      <img src="er-diagram.svg" alt="ER Diagram"/>
+      <a href="er-diagram.svg" target="_blank">Open Full Size →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="num" style="background:#7c3aed;">3</div>
+        <div>
+          <h2>Class Diagram</h2>
+          <p>4-layer architecture: Controller → Service → Repository → Model</p>
+        </div>
+      </div>
+      <img src="class-diagram.svg" alt="Class Diagram"/>
+      <a href="class-diagram.svg" target="_blank">Open Full Size →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="num" style="background:#3b82f6;">4</div>
+        <div>
+          <h2>Sequence Diagram — Policy Purchase</h2>
+          <p>Complete flow: Login → Select Type → Calculate Premium → Buy → Activate</p>
+        </div>
+      </div>
+      <img src="sequence-policy-purchase.svg" alt="Sequence Diagram Policy"/>
+      <a href="sequence-policy-purchase.svg" target="_blank">Open Full Size →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="num" style="background:#d97706;">5</div>
+        <div>
+          <h2>Sequence Diagram — Claim Flow</h2>
+          <p>Draft → Submitted → UnderReview → Approved → Closed</p>
+        </div>
+      </div>
+      <img src="sequence-claim-flow.svg" alt="Sequence Diagram Claims"/>
+      <a href="sequence-claim-flow.svg" target="_blank">Open Full Size →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="num" style="background:#0891b2;">6</div>
+        <div>
+          <h2>WBS + Agile Sprint Plan</h2>
+          <p>Work Breakdown Structure and 4-sprint delivery plan</p>
+        </div>
+      </div>
+      <img src="wbs.svg" alt="WBS Diagram"/>
+      <a href="wbs.svg" target="_blank">Open Full Size →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>SmartSure Insurance Management System — Angular + ASP.NET Core Microservices + Ocelot + SQL Server + JWT</p>
+    <p style="margin-top:0.5rem;">Identity Service :7001 | Policy Service :7002 | Claims Service :7003 | Admin Service :7004 | Gateway :7000</p>
+  </footer>
+</body>
+</html>

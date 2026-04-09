@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1000" height="680" fill="#f8fafc" rx="12"/>
+  <text x="500" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e40af">Sequence Diagram — Policy Purchase Flow</text>
+
+  <!-- Lifeline Headers -->
+  <rect x="30" y="55" width="110" height="36" fill="#1e40af" rx="6"/>
+  <text x="85" y="78" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Customer</text>
+
+  <rect x="190" y="55" width="110" height="36" fill="#3b82f6" rx="6"/>
+  <text x="245" y="78" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Angular UI</text>
+
+  <rect x="350" y="55" width="110" height="36" fill="#0891b2" rx="6"/>
+  <text x="405" y="78" text-anchor="middle" font-size="12" font-weight="bold" fill="white">API Gateway</text>
+
+  <rect x="510" y="55" width="130" height="36" fill="#059669" rx="6"/>
+  <text x="575" y="78" text-anchor="middle" font-size="12" font-weight="bold" fill="white">PolicyService</text>
+
+  <rect x="700" y="55" width="110" height="36" fill="#059669" rx="6"/>
+  <text x="755" y="78" text-anchor="middle" font-size="12" font-weight="bold" fill="white">PolicyDB</text>
+
+  <rect x="860" y="55" width="110" height="36" fill="#1e40af" rx="6"/>
+  <text x="915" y="78" text-anchor="middle" font-size="12" font-weight="bold" fill="white">IdentityDB</text>
+
+  <!-- Lifelines -->
+  <line x1="85" y1="91" x2="85" y2="650" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="245" y1="91" x2="245" y2="650" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="405" y1="91" x2="405" y2="650" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="575" y1="91" x2="575" y2="650" stroke="#059669" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="755" y1="91" x2="755" y2="650" stroke="#059669" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="915" y1="91" x2="915" y2="650" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- Step 1: Login -->
+  <rect x="30" y="108" width="940" height="20" fill="#f0f9ff" rx="3"/>
+  <text x="500" y="122" text-anchor="middle" font-size="10" fill="#0891b2" font-weight="bold">STEP 1 — Authentication</text>
+
+  <line x1="85" y1="140" x2="245" y2="140" stroke="#1e40af" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="165" y="135" text-anchor="middle" font-size="10" fill="#1e40af">1. Enter email + password</text>
+
+  <line x1="245" y1="155" x2="405" y2="155" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="325" y="150" text-anchor="middle" font-size="10" fill="#3b82f6">2. POST /gateway/auth/login</text>
+
+  <line x1="405" y1="170" x2="575" y2="170" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a)"/>
+  <text x="490" y="165" text-anchor="middle" font-size="10" fill="#0891b2">3. Route → IdentityService :7001</text>
+
+  <line x1="575" y1="185" x2="915" y2="185" stroke="#059669" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="745" y="180" text-anchor="middle" font-size="10" fill="#059669">4. Verify credentials in Users table</text>
+
+  <line x1="915" y1="200" x2="575" y2="200" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a)"/>
+  <text x="745" y="195" text-anchor="middle" font-size="10" fill="#059669">5. User found, valid password</text>
+
+  <line x1="575" y1="215" x2="245" y2="215" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a)"/>
+  <text x="410" y="210" text-anchor="middle" font-size="10" fill="#059669">6. Return JWT token (200 OK)</text>
+
+  <line x1="245" y1="230" x2="85" y2="230" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a)"/>
+  <text x="165" y="225" text-anchor="middle" font-size="10" fill="#3b82f6">7. Store JWT in localStorage</text>
+
+  <!-- Step 2: Get Policy Types -->
+  <rect x="30" y="248" width="940" height="20" fill="#f0fdf4" rx="3"/>
+  <text x="500" y="262" text-anchor="middle" font-size="10" fill="#059669" font-weight="bold">STEP 2 — Wizard Step 1: Select Policy Type</text>
+
+  <line x1="85" y1="280" x2="245" y2="280" stroke="#1e40af" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="165" y="275" text-anchor="middle" font-size="10" fill="#1e40af">8. Open Buy Policy wizard</text>
+
+  <line x1="245" y1="295" x2="405" y2="295" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="325" y="290" text-anchor="middle" font-size="10" fill="#3b82f6">9. GET /gateway/policy-types [Bearer]</text>
+
+  <line x1="405" y1="310" x2="575" y2="310" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a)"/>
+  <text x="490" y="305" text-anchor="middle" font-size="10" fill="#0891b2">10. Route → PolicyService :7002</text>
+
+  <line x1="575" y1="325" x2="755" y2="325" stroke="#059669" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="665" y="320" text-anchor="middle" font-size="10" fill="#059669">11. SELECT * FROM PolicyTypes</text>
+
+  <line x1="755" y1="340" x2="245" y2="340" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a)"/>
+  <text x="500" y="335" text-anchor="middle" font-size="10" fill="#059669">12. Return [Life, Health, Vehicle] (200 OK)</text>
+
+  <!-- Step 3: Calculate Premium -->
+  <rect x="30" y="358" width="940" height="20" fill="#fefce8" rx="3"/>
+  <text x="500" y="372" text-anchor="middle" font-size="10" fill="#d97706" font-weight="bold">STEP 3 — Wizard Step 2: Calculate Premium</text>
+
+  <line x1="85" y1="390" x2="245" y2="390" stroke="#1e40af" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="165" y="385" text-anchor="middle" font-size="10" fill="#1e40af">13. Enter coverage: ₹500,000</text>
+
+  <line x1="245" y1="405" x2="405" y2="405" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="325" y="400" text-anchor="middle" font-size="10" fill="#3b82f6">14. POST /gateway/policy-types/calculate-premium</text>
+
+  <line x1="575" y1="420" x2="245" y2="420" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a)"/>
+  <text x="410" y="415" text-anchor="middle" font-size="10" fill="#059669">15. Return premium: ₹40,000 (500000 × 8%)</text>
+
+  <!-- Step 4: Buy Policy -->
+  <rect x="30" y="438" width="940" height="20" fill="#f0fdf4" rx="3"/>
+  <text x="500" y="452" text-anchor="middle" font-size="10" fill="#059669" font-weight="bold">STEP 4 — Wizard Step 3: Confirm Purchase → Policy Created (Draft) → Auto-Activated</text>
+
+  <line x1="85" y1="470" x2="245" y2="470" stroke="#1e40af" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="165" y="465" text-anchor="middle" font-size="10" fill="#1e40af">16. Click Confirm Purchase</text>
+
+  <line x1="245" y1="485" x2="405" y2="485" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="325" y="480" text-anchor="middle" font-size="10" fill="#3b82f6">17. POST /gateway/policies/buy [Bearer]</text>
+
+  <line x1="575" y1="500" x2="755" y2="500" stroke="#059669" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="665" y="495" text-anchor="middle" font-size="10" fill="#059669">18. INSERT Policy (Draft) + Premium</text>
+
+  <line x1="245" y1="515" x2="405" y2="515" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="325" y="510" text-anchor="middle" font-size="10" fill="#3b82f6">19. POST /gateway/policies/{id}/activate</text>
+
+  <line x1="575" y1="530" x2="755" y2="530" stroke="#059669" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="665" y="525" text-anchor="middle" font-size="10" fill="#059669">20. UPDATE Policy → Active + INSERT Payment</text>
+
+  <line x1="755" y1="545" x2="245" y2="545" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a)"/>
+  <text x="500" y="540" text-anchor="middle" font-size="10" fill="#059669">21. Return PolicyDto {status: Active, premiumAmount: 40000}</text>
+
+  <line x1="245" y1="560" x2="85" y2="560" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a)"/>
+  <text x="165" y="555" text-anchor="middle" font-size="10" fill="#3b82f6">22. Navigate to /customer/policies</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="500" y="645" text-anchor="middle" font-size="11" fill="#64748b">Policy Lifecycle: Draft → Active (auto on purchase). Payment record created. Premium stored in Premiums table.</text>
+  <text x="500" y="663" text-anchor="middle" font-size="11" fill="#64748b">All requests carry JWT Bearer token. Gateway validates token before forwarding to PolicyService.</text>
+</svg>

@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AdminService/AdminService.csproj" />
+    <Project Path="src/ApiGateway/ApiGateway.csproj" />
+    <Project Path="src/ClaimsService/ClaimsService.csproj" />
+    <Project Path="src/IdentityService/IdentityService.csproj" />
+    <Project Path="src/PolicyService/PolicyService.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AdminService.Tests/AdminService.Tests.csproj" />
+    <Project Path="tests/ClaimsService.Tests/ClaimsService.Tests.csproj" />
+    <Project Path="tests/IdentityService.Tests/IdentityService.Tests.csproj" />
+    <Project Path="tests/PolicyService.Tests/PolicyService.Tests.csproj" />
+  </Folder>
+</Solution>

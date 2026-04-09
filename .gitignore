@@ -1,0 +1,72 @@
+# ── .NET Build Output ──────────────────────────────────────────
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# ── EF Core ────────────────────────────────────────────────────
+# Keep migrations, ignore generated files
+*.db
+*.db-shm
+*.db-wal
+
+# ── NuGet ──────────────────────────────────────────────────────
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ── Test Coverage ──────────────────────────────────────────────
+coverage.opencover.xml
+coverage.json
+TestResults/
+*.trx
+
+# ── Visual Studio ──────────────────────────────────────────────
+.vs/
+*.rsuser
+*.MojoProj
+*.pidb
+*.svclog
+*.scc
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+.idea/
+*.dotCover
+
+# ── Angular / Node ─────────────────────────────────────────────
+smartsure-ui/node_modules/
+smartsure-ui/dist/
+smartsure-ui/.angular/cache/
+smartsure-ui/.angular/
+smartsure-ui/*.js.map
+smartsure-ui/coverage/
+
+# ── Environment / Secrets ──────────────────────────────────────
+appsettings.Development.json
+*.env
+.env
+.env.local
+.env.production
+
+# ── OS Files ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ───────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Uploaded Files (runtime) ───────────────────────────────────
+src/ClaimsService/uploads/
+
+# ── dotnet tools manifest (keep) ───────────────────────────────
+# dotnet-tools.json is intentionally tracked

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 720" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1050" height="720" fill="#f8fafc" rx="12"/>
+  <text x="525" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#d97706">Sequence Diagram — Claim Lifecycle Flow</text>
+
+  <!-- Lifeline Headers -->
+  <rect x="20" y="55" width="100" height="36" fill="#1e40af" rx="6"/>
+  <text x="70" y="78" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Customer</text>
+
+  <rect x="165" y="55" width="100" height="36" fill="#3b82f6" rx="6"/>
+  <text x="215" y="78" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Angular UI</text>
+
+  <rect x="310" y="55" width="100" height="36" fill="#0891b2" rx="6"/>
+  <text x="360" y="78" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Gateway</text>
+
+  <rect x="455" y="55" width="120" height="36" fill="#d97706" rx="6"/>
+  <text x="515" y="78" text-anchor="middle" font-size="11" font-weight="bold" fill="white">ClaimsService</text>
+
+  <rect x="625" y="55" width="100" height="36" fill="#d97706" rx="6"/>
+  <text x="675" y="78" text-anchor="middle" font-size="11" font-weight="bold" fill="white">ClaimsDB</text>
+
+  <rect x="775" y="55" width="100" height="36" fill="#7c3aed" rx="6"/>
+  <text x="825" y="78" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Admin</text>
+
+  <rect x="920" y="55" width="110" height="36" fill="#7c3aed" rx="6"/>
+  <text x="975" y="78" text-anchor="middle" font-size="11" font-weight="bold" fill="white">AdminService</text>
+
+  <!-- Lifelines -->
+  <line x1="70" y1="91" x2="70" y2="700" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="215" y1="91" x2="215" y2="700" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="360" y1="91" x2="360" y2="700" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="515" y1="91" x2="515" y2="700" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="675" y1="91" x2="675" y2="700" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="825" y1="91" x2="825" y2="700" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="975" y1="91" x2="975" y2="700" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- Phase 1: Initiate -->
+  <rect x="20" y="108" width="1010" height="18" fill="#fef3c7" rx="3"/>
+  <text x="525" y="121" text-anchor="middle" font-size="10" fill="#d97706" font-weight="bold">PHASE 1 — Customer Initiates Claim (Draft)</text>
+
+  <line x1="70" y1="138" x2="215" y2="138" stroke="#1e40af" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="142" y="133" text-anchor="middle" font-size="9" fill="#1e40af">1. Open Initiate Claim wizard</text>
+
+  <line x1="215" y1="153" x2="360" y2="153" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="287" y="148" text-anchor="middle" font-size="9" fill="#3b82f6">2. POST /gateway/claims [Bearer]</text>
+
+  <line x1="360" y1="168" x2="515" y2="168" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#b)"/>
+  <text x="437" y="163" text-anchor="middle" font-size="9" fill="#0891b2">3. Route → ClaimsService :7003</text>
+
+  <line x1="515" y1="183" x2="675" y2="183" stroke="#d97706" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="595" y="178" text-anchor="middle" font-size="9" fill="#d97706">4. INSERT Claim {status: Draft}</text>
+
+  <line x1="675" y1="198" x2="215" y2="198" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#b)"/>
+  <text x="445" y="193" text-anchor="middle" font-size="9" fill="#d97706">5. Return ClaimDto {id:5001, status:Draft} (201)</text>
+
+  <!-- Phase 2: Upload -->
+  <rect x="20" y="215" width="1010" height="18" fill="#fef3c7" rx="3"/>
+  <text x="525" y="228" text-anchor="middle" font-size="10" fill="#d97706" font-weight="bold">PHASE 2 — Upload Documents</text>
+
+  <line x1="70" y1="245" x2="215" y2="245" stroke="#1e40af" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="142" y="240" text-anchor="middle" font-size="9" fill="#1e40af">6. Select hospital_bill.pdf</text>
+
+  <line x1="215" y1="260" x2="360" y2="260" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="287" y="255" text-anchor="middle" font-size="9" fill="#3b82f6">7. POST /gateway/claims/5001/documents</text>
+
+  <line x1="515" y1="275" x2="675" y2="275" stroke="#d97706" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="595" y="270" text-anchor="middle" font-size="9" fill="#d97706">8. Save file to disk + INSERT ClaimDocument</text>
+
+  <line x1="675" y1="290" x2="215" y2="290" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#b)"/>
+  <text x="445" y="285" text-anchor="middle" font-size="9" fill="#d97706">9. Return ClaimDocumentDto (200 OK)</text>
+
+  <!-- Phase 3: Submit -->
+  <rect x="20" y="308" width="1010" height="18" fill="#fef3c7" rx="3"/>
+  <text x="525" y="321" text-anchor="middle" font-size="10" fill="#d97706" font-weight="bold">PHASE 3 — Submit Claim (Draft → Submitted)</text>
+
+  <line x1="70" y1="338" x2="215" y2="338" stroke="#1e40af" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="142" y="333" text-anchor="middle" font-size="9" fill="#1e40af">10. Click Submit Claim</text>
+
+  <line x1="215" y1="353" x2="360" y2="353" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="287" y="348" text-anchor="middle" font-size="9" fill="#3b82f6">11. POST /gateway/claims/5001/submit</text>
+
+  <line x1="515" y1="368" x2="675" y2="368" stroke="#d97706" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="595" y="363" text-anchor="middle" font-size="9" fill="#d97706">12. UPDATE Claim {status: Submitted}</text>
+
+  <line x1="675" y1="383" x2="215" y2="383" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#b)"/>
+  <text x="445" y="378" text-anchor="middle" font-size="9" fill="#d97706">13. Return ClaimDto {status: Submitted} (200)</text>
+
+  <!-- Phase 4: Admin Review -->
+  <rect x="20" y="400" width="1010" height="18" fill="#ede9fe" rx="3"/>
+  <text x="525" y="413" text-anchor="middle" font-size="10" fill="#7c3aed" font-weight="bold">PHASE 4 — Admin Reviews (Submitted → UnderReview → Approved)</text>
+
+  <line x1="825" y1="430" x2="975" y2="430" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="900" y="425" text-anchor="middle" font-size="9" fill="#7c3aed">14. GET /gateway/admin/claims</text>
+
+  <line x1="975" y1="445" x2="515" y2="445" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#b)"/>
+  <text x="745" y="440" text-anchor="middle" font-size="9" fill="#7c3aed">15. Proxy → GET /api/claims (ClaimsService)</text>
+
+  <line x1="975" y1="460" x2="825" y2="460" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#b)"/>
+  <text x="900" y="455" text-anchor="middle" font-size="9" fill="#7c3aed">16. Return all claims list</text>
+
+  <line x1="825" y1="475" x2="975" y2="475" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="900" y="470" text-anchor="middle" font-size="9" fill="#7c3aed">17. GET /gateway/admin/claims/5001/documents</text>
+
+  <line x1="825" y1="490" x2="975" y2="490" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="900" y="485" text-anchor="middle" font-size="9" fill="#7c3aed">18. PATCH /gateway/admin/claims/5001/status {UnderReview}</text>
+
+  <line x1="975" y1="505" x2="515" y2="505" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#b)"/>
+  <text x="745" y="500" text-anchor="middle" font-size="9" fill="#7c3aed">19. Proxy → PATCH /api/claims/5001/status</text>
+
+  <line x1="515" y1="520" x2="675" y2="520" stroke="#d97706" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="595" y="515" text-anchor="middle" font-size="9" fill="#d97706">20. UPDATE Claim {status: UnderReview}</text>
+
+  <line x1="825" y1="535" x2="975" y2="535" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="900" y="530" text-anchor="middle" font-size="9" fill="#7c3aed">21. PATCH /gateway/admin/claims/5001/status {Approved}</text>
+
+  <line x1="515" y1="550" x2="675" y2="550" stroke="#d97706" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="595" y="545" text-anchor="middle" font-size="9" fill="#d97706">22. UPDATE Claim {status: Approved}</text>
+
+  <!-- Phase 5: Close -->
+  <rect x="20" y="568" width="1010" height="18" fill="#d1fae5" rx="3"/>
+  <text x="525" y="581" text-anchor="middle" font-size="10" fill="#059669" font-weight="bold">PHASE 5 — Close Claim (Approved → Closed)</text>
+
+  <line x1="825" y1="598" x2="975" y2="598" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="900" y="593" text-anchor="middle" font-size="9" fill="#7c3aed">23. PATCH status {Closed, remarks: "Payment sent"}</text>
+
+  <line x1="515" y1="613" x2="675" y2="613" stroke="#d97706" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="595" y="608" text-anchor="middle" font-size="9" fill="#d97706">24. UPDATE Claim {status: Closed}</text>
+
+  <line x1="70" y1="628" x2="215" y2="628" stroke="#1e40af" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="142" y="623" text-anchor="middle" font-size="9" fill="#1e40af">25. GET /gateway/claims/customer/1 → status: Closed</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="525" y="660" text-anchor="middle" font-size="10" fill="#64748b">Claim Lifecycle: Draft → Submitted → UnderReview → Approved → Closed</text>
+  <text x="525" y="676" text-anchor="middle" font-size="10" fill="#64748b">Customer can only move Draft→Submitted. Admin controls all subsequent transitions. AdminService proxies to ClaimsService.</text>
+  <text x="525" y="692" text-anchor="middle" font-size="10" fill="#64748b">All requests validated by JWT at Gateway. Admin endpoints require Role=Admin claim in token.</text>
+</svg>

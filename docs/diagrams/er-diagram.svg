@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1000" height="720" fill="#f8fafc" rx="12"/>
+  <text x="500" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e40af">SmartSure — Entity Relationship Diagram</text>
+
+  <!-- USERS table -->
+  <rect x="30" y="60" width="160" height="180" fill="white" stroke="#1e40af" stroke-width="2" rx="6"/>
+  <rect x="30" y="60" width="160" height="30" fill="#1e40af" rx="6"/>
+  <rect x="30" y="84" width="160" height="6" fill="#1e40af"/>
+  <text x="110" y="81" text-anchor="middle" font-size="13" font-weight="bold" fill="white">USERS</text>
+  <text x="40" y="110" font-size="11" fill="#0f172a">🔑 Id (PK)</text>
+  <text x="40" y="128" font-size="11" fill="#64748b">FullName</text>
+  <text x="40" y="146" font-size="11" fill="#64748b">Email (UNIQUE)</text>
+  <text x="40" y="164" font-size="11" fill="#64748b">PasswordHash</text>
+  <text x="40" y="182" font-size="11" fill="#64748b">Role</text>
+  <text x="40" y="200" font-size="11" fill="#64748b">IsActive</text>
+  <text x="40" y="218" font-size="11" fill="#64748b">CreatedAt</text>
+  <text x="40" y="236" font-size="11" fill="#94a3b8" font-style="italic">DB: Identity</text>
+
+  <!-- POLICY_TYPES table -->
+  <rect x="250" y="60" width="160" height="160" fill="white" stroke="#059669" stroke-width="2" rx="6"/>
+  <rect x="250" y="60" width="160" height="30" fill="#059669" rx="6"/>
+  <rect x="250" y="84" width="160" height="6" fill="#059669"/>
+  <text x="330" y="81" text-anchor="middle" font-size="13" font-weight="bold" fill="white">POLICY_TYPES</text>
+  <text x="260" y="110" font-size="11" fill="#0f172a">🔑 Id (PK)</text>
+  <text x="260" y="128" font-size="11" fill="#64748b">Name</text>
+  <text x="260" y="146" font-size="11" fill="#64748b">Description</text>
+  <text x="260" y="164" font-size="11" fill="#64748b">BaseRate</text>
+  <text x="260" y="182" font-size="11" fill="#64748b">IsActive</text>
+  <text x="260" y="200" font-size="11" fill="#94a3b8" font-style="italic">DB: Policy</text>
+
+  <!-- POLICIES table -->
+  <rect x="470" y="60" width="170" height="220" fill="white" stroke="#059669" stroke-width="2" rx="6"/>
+  <rect x="470" y="60" width="170" height="30" fill="#059669" rx="6"/>
+  <rect x="470" y="84" width="170" height="6" fill="#059669"/>
+  <text x="555" y="81" text-anchor="middle" font-size="13" font-weight="bold" fill="white">POLICIES</text>
+  <text x="480" y="110" font-size="11" fill="#0f172a">🔑 Id (PK)</text>
+  <text x="480" y="128" font-size="11" fill="#64748b">🔗 CustomerId (FK→Users)</text>
+  <text x="480" y="146" font-size="11" fill="#64748b">🔗 PolicyTypeId (FK)</text>
+  <text x="480" y="164" font-size="11" fill="#64748b">PolicyNumber</text>
+  <text x="480" y="182" font-size="11" fill="#64748b">CoverageAmount</text>
+  <text x="480" y="200" font-size="11" fill="#64748b">StartDate / EndDate</text>
+  <text x="480" y="218" font-size="11" fill="#64748b">Status</text>
+  <text x="480" y="236" font-size="11" fill="#64748b">CreatedAt</text>
+  <text x="480" y="254" font-size="11" fill="#94a3b8" font-style="italic">DB: Policy</text>
+
+  <!-- PREMIUMS table -->
+  <rect x="700" y="60" width="160" height="160" fill="white" stroke="#059669" stroke-width="2" rx="6"/>
+  <rect x="700" y="60" width="160" height="30" fill="#059669" rx="6"/>
+  <rect x="700" y="84" width="160" height="6" fill="#059669"/>
+  <text x="780" y="81" text-anchor="middle" font-size="13" font-weight="bold" fill="white">PREMIUMS</text>
+  <text x="710" y="110" font-size="11" fill="#0f172a">🔑 Id (PK)</text>
+  <text x="710" y="128" font-size="11" fill="#64748b">🔗 PolicyId (FK→Policies)</text>
+  <text x="710" y="146" font-size="11" fill="#64748b">Amount</text>
+  <text x="710" y="164" font-size="11" fill="#64748b">CalculatedAt</text>
+  <text x="710" y="182" font-size="11" fill="#94a3b8" font-style="italic">DB: Policy</text>
+
+  <!-- PAYMENTS table -->
+  <rect x="700" y="260" width="160" height="160" fill="white" stroke="#059669" stroke-width="2" rx="6"/>
+  <rect x="700" y="260" width="160" height="30" fill="#059669" rx="6"/>
+  <rect x="700" y="284" width="160" height="6" fill="#059669"/>
+  <text x="780" y="281" text-anchor="middle" font-size="13" font-weight="bold" fill="white">PAYMENTS</text>
+  <text x="710" y="310" font-size="11" fill="#0f172a">🔑 Id (PK)</text>
+  <text x="710" y="328" font-size="11" fill="#64748b">🔗 PolicyId (FK→Policies)</text>
+  <text x="710" y="346" font-size="11" fill="#64748b">Amount</text>
+  <text x="710" y="364" font-size="11" fill="#64748b">Status</text>
+  <text x="710" y="382" font-size="11" fill="#64748b">PaidAt</text>
+  <text x="710" y="400" font-size="11" fill="#94a3b8" font-style="italic">DB: Policy</text>
+
+  <!-- CLAIMS table -->
+  <rect x="250" y="320" width="180" height="220" fill="white" stroke="#d97706" stroke-width="2" rx="6"/>
+  <rect x="250" y="320" width="180" height="30" fill="#d97706" rx="6"/>
+  <rect x="250" y="344" width="180" height="6" fill="#d97706"/>
+  <text x="340" y="341" text-anchor="middle" font-size="13" font-weight="bold" fill="white">CLAIMS</text>
+  <text x="260" y="368" font-size="11" fill="#0f172a">🔑 Id (PK)</text>
+  <text x="260" y="386" font-size="11" fill="#64748b">🔗 CustomerId (FK→Users)</text>
+  <text x="260" y="404" font-size="11" fill="#64748b">🔗 PolicyId (cross-svc ref)</text>
+  <text x="260" y="422" font-size="11" fill="#64748b">Description</text>
+  <text x="260" y="440" font-size="11" fill="#64748b">ClaimAmount</text>
+  <text x="260" y="458" font-size="11" fill="#64748b">Status</text>
+  <text x="260" y="476" font-size="11" fill="#64748b">AdminRemarks</text>
+  <text x="260" y="494" font-size="11" fill="#64748b">CreatedAt / UpdatedAt</text>
+  <text x="260" y="512" font-size="11" fill="#94a3b8" font-style="italic">DB: Claims</text>
+
+  <!-- CLAIM_DOCUMENTS table -->
+  <rect x="30" y="320" width="180" height="180" fill="white" stroke="#d97706" stroke-width="2" rx="6"/>
+  <rect x="30" y="320" width="180" height="30" fill="#d97706" rx="6"/>
+  <rect x="30" y="344" width="180" height="6" fill="#d97706"/>
+  <text x="120" y="341" text-anchor="middle" font-size="13" font-weight="bold" fill="white">CLAIM_DOCUMENTS</text>
+  <text x="40" y="368" font-size="11" fill="#0f172a">🔑 Id (PK)</text>
+  <text x="40" y="386" font-size="11" fill="#64748b">🔗 ClaimId (FK→Claims)</text>
+  <text x="40" y="404" font-size="11" fill="#64748b">FileName</text>
+  <text x="40" y="422" font-size="11" fill="#64748b">FilePath</text>
+  <text x="40" y="440" font-size="11" fill="#64748b">FileType</text>
+  <text x="40" y="458" font-size="11" fill="#64748b">UploadedAt</text>
+  <text x="40" y="476" font-size="11" fill="#94a3b8" font-style="italic">DB: Claims</text>
+
+  <!-- REPORTS table -->
+  <rect x="470" y="340" width="180" height="180" fill="white" stroke="#7c3aed" stroke-width="2" rx="6"/>
+  <rect x="470" y="340" width="180" height="30" fill="#7c3aed" rx="6"/>
+  <rect x="470" y="364" width="180" height="6" fill="#7c3aed"/>
+  <text x="560" y="361" text-anchor="middle" font-size="13" font-weight="bold" fill="white">REPORTS</text>
+  <text x="480" y="388" font-size="11" fill="#0f172a">🔑 Id (PK)</text>
+  <text x="480" y="406" font-size="11" fill="#64748b">Title</text>
+  <text x="480" y="424" font-size="11" fill="#64748b">ReportType</text>
+  <text x="480" y="442" font-size="11" fill="#64748b">Data (JSON)</text>
+  <text x="480" y="460" font-size="11" fill="#64748b">GeneratedBy (AdminId)</text>
+  <text x="480" y="478" font-size="11" fill="#64748b">GeneratedAt</text>
+  <text x="480" y="496" font-size="11" fill="#94a3b8" font-style="italic">DB: Admin</text>
+
+  <!-- Relationship Lines -->
+  <!-- PolicyTypes → Policies -->
+  <line x1="410" y1="150" x2="470" y2="150" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="440" y="143" text-anchor="middle" font-size="9" fill="#059669">1:N</text>
+
+  <!-- Policies → Premiums -->
+  <line x1="640" y1="130" x2="700" y2="130" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="670" y="123" text-anchor="middle" font-size="9" fill="#059669">1:N</text>
+
+  <!-- Policies → Payments -->
+  <line x1="640" y1="200" x2="700" y2="340" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="680" y="270" text-anchor="middle" font-size="9" fill="#059669">1:N</text>
+
+  <!-- Claims → ClaimDocuments -->
+  <line x1="250" y1="430" x2="210" y2="430" stroke="#d97706" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="230" y="423" text-anchor="middle" font-size="9" fill="#d97706">1:N</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Legend -->
+  <rect x="30" y="560" width="940" height="130" fill="white" stroke="#e2e8f0" stroke-width="1" rx="8"/>
+  <text x="50" y="585" font-size="13" font-weight="bold" fill="#0f172a">Legend &amp; Database Ownership</text>
+  <rect x="50" y="600" width="14" height="14" fill="#1e40af" rx="2"/>
+  <text x="70" y="612" font-size="11" fill="#0f172a">Identity DB — Users</text>
+  <rect x="200" y="600" width="14" height="14" fill="#059669" rx="2"/>
+  <text x="220" y="612" font-size="11" fill="#0f172a">Policy DB — PolicyTypes, Policies, Premiums, Payments</text>
+  <rect x="550" y="600" width="14" height="14" fill="#d97706" rx="2"/>
+  <text x="570" y="612" font-size="11" fill="#0f172a">Claims DB — Claims, ClaimDocuments</text>
+  <rect x="750" y="600" width="14" height="14" fill="#7c3aed" rx="2"/>
+  <text x="770" y="612" font-size="11" fill="#0f172a">Admin DB — Reports</text>
+  <text x="50" y="640" font-size="11" fill="#64748b">🔑 = Primary Key   🔗 = Foreign Key   Cross-service references (PolicyId in Claims) are logical only — no DB-level FK across databases</text>
+  <text x="50" y="658" font-size="11" fill="#64748b">Each microservice owns its own SQL Server database. No shared database. EF Core Code-First migrations applied per service.</text>
+  <text x="50" y="676" font-size="11" fill="#64748b">All decimal monetary fields use HasPrecision(18,2). All status fields stored as strings. Cascade delete on child entities.</text>
+</svg>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" font-family="Segoe UI, Arial, sans-serif">
+  <!-- Background -->
+  <rect width="900" height="700" fill="#f8fafc" rx="12"/>
+  <text x="450" y="40" text-anchor="middle" font-size="22" font-weight="bold" fill="#1e40af">SmartSure — Use Case Diagram</text>
+
+  <!-- System Boundary -->
+  <rect x="180" y="60" width="540" height="600" fill="white" stroke="#3b82f6" stroke-width="2" rx="10" stroke-dasharray="8,4"/>
+  <text x="450" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="#3b82f6">SmartSure Insurance Management System</text>
+
+  <!-- Customer Actor -->
+  <circle cx="60" cy="200" r="20" fill="none" stroke="#1e40af" stroke-width="2"/>
+  <line x1="60" y1="220" x2="60" y2="270" stroke="#1e40af" stroke-width="2"/>
+  <line x1="60" y1="240" x2="30" y2="260" stroke="#1e40af" stroke-width="2"/>
+  <line x1="60" y1="240" x2="90" y2="260" stroke="#1e40af" stroke-width="2"/>
+  <line x1="60" y1="270" x2="35" y2="300" stroke="#1e40af" stroke-width="2"/>
+  <line x1="60" y1="270" x2="85" y2="300" stroke="#1e40af" stroke-width="2"/>
+  <text x="60" y="320" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e40af">Customer</text>
+
+  <!-- Admin Actor -->
+  <circle cx="840" cy="200" r="20" fill="none" stroke="#7c3aed" stroke-width="2"/>
+  <line x1="840" y1="220" x2="840" y2="270" stroke="#7c3aed" stroke-width="2"/>
+  <line x1="840" y1="240" x2="810" y2="260" stroke="#7c3aed" stroke-width="2"/>
+  <line x1="840" y1="240" x2="870" y2="260" stroke="#7c3aed" stroke-width="2"/>
+  <line x1="840" y1="270" x2="815" y2="300" stroke="#7c3aed" stroke-width="2"/>
+  <line x1="840" y1="270" x2="865" y2="300" stroke="#7c3aed" stroke-width="2"/>
+  <text x="840" y="320" text-anchor="middle" font-size="13" font-weight="bold" fill="#7c3aed">Admin</text>
+
+  <!-- Use Cases — Left column (Customer) -->
+  <ellipse cx="320" cy="130" rx="100" ry="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="320" y="135" text-anchor="middle" font-size="12" fill="#1e40af">Register / Login</text>
+
+  <ellipse cx="320" cy="200" rx="100" ry="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="320" y="205" text-anchor="middle" font-size="12" fill="#1e40af">Buy Insurance Policy</text>
+
+  <ellipse cx="320" cy="270" rx="100" ry="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="320" y="275" text-anchor="middle" font-size="12" fill="#1e40af">Calculate Premium</text>
+
+  <ellipse cx="320" cy="340" rx="100" ry="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="320" y="345" text-anchor="middle" font-size="12" fill="#1e40af">View Policy Details</text>
+
+  <ellipse cx="320" cy="410" rx="100" ry="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="320" y="415" text-anchor="middle" font-size="12" fill="#1e40af">Initiate Claim</text>
+
+  <ellipse cx="320" cy="480" rx="100" ry="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="320" y="485" text-anchor="middle" font-size="12" fill="#1e40af">Upload Documents</text>
+
+  <ellipse cx="320" cy="550" rx="100" ry="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="320" y="555" text-anchor="middle" font-size="12" fill="#1e40af">Track Claim Status</text>
+
+  <!-- Use Cases — Right column (Admin) -->
+  <ellipse cx="580" cy="130" rx="100" ry="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="580" y="135" text-anchor="middle" font-size="12" fill="#5b21b6">Admin Login</text>
+
+  <ellipse cx="580" cy="200" rx="100" ry="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="580" y="205" text-anchor="middle" font-size="12" fill="#5b21b6">Review Claim Documents</text>
+
+  <ellipse cx="580" cy="270" rx="100" ry="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="580" y="275" text-anchor="middle" font-size="12" fill="#5b21b6">Approve / Reject Claim</text>
+
+  <ellipse cx="580" cy="340" rx="100" ry="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="580" y="345" text-anchor="middle" font-size="12" fill="#5b21b6">Manage Policy Types</text>
+
+  <ellipse cx="580" cy="410" rx="100" ry="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="580" y="415" text-anchor="middle" font-size="12" fill="#5b21b6">Manage Users</text>
+
+  <ellipse cx="580" cy="480" rx="100" ry="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="580" y="485" text-anchor="middle" font-size="12" fill="#5b21b6">Generate Reports</text>
+
+  <ellipse cx="580" cy="550" rx="100" ry="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="580" y="555" text-anchor="middle" font-size="12" fill="#5b21b6">View Dashboard Stats</text>
+
+  <!-- Lines from Customer to use cases -->
+  <line x1="80" y1="200" x2="220" y2="130" stroke="#3b82f6" stroke-width="1.2"/>
+  <line x1="80" y1="210" x2="220" y2="200" stroke="#3b82f6" stroke-width="1.2"/>
+  <line x1="80" y1="220" x2="220" y2="270" stroke="#3b82f6" stroke-width="1.2"/>
+  <line x1="80" y1="230" x2="220" y2="340" stroke="#3b82f6" stroke-width="1.2"/>
+  <line x1="80" y1="240" x2="220" y2="410" stroke="#3b82f6" stroke-width="1.2"/>
+  <line x1="80" y1="250" x2="220" y2="480" stroke="#3b82f6" stroke-width="1.2"/>
+  <line x1="80" y1="260" x2="220" y2="550" stroke="#3b82f6" stroke-width="1.2"/>
+
+  <!-- Lines from Admin to use cases -->
+  <line x1="820" y1="200" x2="680" y2="130" stroke="#7c3aed" stroke-width="1.2"/>
+  <line x1="820" y1="210" x2="680" y2="200" stroke="#7c3aed" stroke-width="1.2"/>
+  <line x1="820" y1="220" x2="680" y2="270" stroke="#7c3aed" stroke-width="1.2"/>
+  <line x1="820" y1="230" x2="680" y2="340" stroke="#7c3aed" stroke-width="1.2"/>
+  <line x1="820" y1="240" x2="680" y2="410" stroke="#7c3aed" stroke-width="1.2"/>
+  <line x1="820" y1="250" x2="680" y2="480" stroke="#7c3aed" stroke-width="1.2"/>
+  <line x1="820" y1="260" x2="680" y2="550" stroke="#7c3aed" stroke-width="1.2"/>
+
+  <!-- Shared use case line (Register/Login shared) -->
+  <line x1="420" y1="130" x2="480" y2="130" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="450" y="120" text-anchor="middle" font-size="9" fill="#94a3b8">«uses»</text>
+</svg>

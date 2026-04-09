@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 680" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1100" height="680" fill="#f8fafc" rx="12"/>
+  <text x="550" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e40af">SmartSure — Work Breakdown Structure (WBS)</text>
+
+  <!-- Root -->
+  <rect x="400" y="55" width="300" height="40" fill="#1e40af" rx="8"/>
+  <text x="550" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="white">SmartSure Insurance System</text>
+
+  <!-- Level 1 nodes -->
+  <rect x="20" y="145" width="160" height="36" fill="#3b82f6" rx="6"/>
+  <text x="100" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="white">1. Planning</text>
+
+  <rect x="210" y="145" width="160" height="36" fill="#059669" rx="6"/>
+  <text x="290" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="white">2. Backend</text>
+
+  <rect x="400" y="145" width="160" height="36" fill="#d97706" rx="6"/>
+  <text x="480" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="white">3. Database</text>
+
+  <rect x="590" y="145" width="160" height="36" fill="#7c3aed" rx="6"/>
+  <text x="670" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="white">4. Frontend</text>
+
+  <rect x="780" y="145" width="160" height="36" fill="#dc2626" rx="6"/>
+  <text x="860" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="white">5. Testing</text>
+
+  <rect x="970" y="145" width="110" height="36" fill="#0891b2" rx="6"/>
+  <text x="1025" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="white">6. Docs</text>
+
+  <!-- Lines from root to L1 -->
+  <line x1="550" y1="95" x2="100" y2="145" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="550" y1="95" x2="290" y2="145" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="550" y1="95" x2="480" y2="145" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="550" y1="95" x2="670" y2="145" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="550" y1="95" x2="860" y2="145" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="550" y1="95" x2="1025" y2="145" stroke="#94a3b8" stroke-width="1.5"/>
+
+  <!-- 1. Planning children -->
+  <rect x="10" y="230" width="170" height="28" fill="#dbeafe" stroke="#3b82f6" stroke-width="1" rx="4"/>
+  <text x="95" y="249" text-anchor="middle" font-size="10" fill="#1e40af">1.1 Requirements Analysis</text>
+  <rect x="10" y="268" width="170" height="28" fill="#dbeafe" stroke="#3b82f6" stroke-width="1" rx="4"/>
+  <text x="95" y="287" text-anchor="middle" font-size="10" fill="#1e40af">1.2 Architecture Design</text>
+  <rect x="10" y="306" width="170" height="28" fill="#dbeafe" stroke="#3b82f6" stroke-width="1" rx="4"/>
+  <text x="95" y="325" text-anchor="middle" font-size="10" fill="#1e40af">1.3 Sprint Planning</text>
+  <rect x="10" y="344" width="170" height="28" fill="#dbeafe" stroke="#3b82f6" stroke-width="1" rx="4"/>
+  <text x="95" y="363" text-anchor="middle" font-size="10" fill="#1e40af">1.4 Diagrams (UML/ER)</text>
+  <line x1="100" y1="181" x2="100" y2="230" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="100" y1="230" x2="100" y2="372" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- 2. Backend children -->
+  <rect x="200" y="230" width="170" height="28" fill="#d1fae5" stroke="#059669" stroke-width="1" rx="4"/>
+  <text x="285" y="249" text-anchor="middle" font-size="10" fill="#059669">2.1 Identity Service</text>
+  <rect x="200" y="268" width="170" height="28" fill="#d1fae5" stroke="#059669" stroke-width="1" rx="4"/>
+  <text x="285" y="287" text-anchor="middle" font-size="10" fill="#059669">2.2 Policy Service</text>
+  <rect x="200" y="306" width="170" height="28" fill="#d1fae5" stroke="#059669" stroke-width="1" rx="4"/>
+  <text x="285" y="325" text-anchor="middle" font-size="10" fill="#059669">2.3 Claims Service</text>
+  <rect x="200" y="344" width="170" height="28" fill="#d1fae5" stroke="#059669" stroke-width="1" rx="4"/>
+  <text x="285" y="363" text-anchor="middle" font-size="10" fill="#059669">2.4 Admin Service</text>
+  <rect x="200" y="382" width="170" height="28" fill="#d1fae5" stroke="#059669" stroke-width="1" rx="4"/>
+  <text x="285" y="401" text-anchor="middle" font-size="10" fill="#059669">2.5 Ocelot API Gateway</text>
+  <line x1="290" y1="181" x2="290" y2="230" stroke="#059669" stroke-width="1"/>
+  <line x1="290" y1="230" x2="290" y2="410" stroke="#059669" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- 3. Database children -->
+  <rect x="390" y="230" width="170" height="28" fill="#fef3c7" stroke="#d97706" stroke-width="1" rx="4"/>
+  <text x="475" y="249" text-anchor="middle" font-size="10" fill="#d97706">3.1 Identity DB (Users)</text>
+  <rect x="390" y="268" width="170" height="28" fill="#fef3c7" stroke="#d97706" stroke-width="1" rx="4"/>
+  <text x="475" y="287" text-anchor="middle" font-size="10" fill="#d97706">3.2 Policy DB</text>
+  <rect x="390" y="306" width="170" height="28" fill="#fef3c7" stroke="#d97706" stroke-width="1" rx="4"/>
+  <text x="475" y="325" text-anchor="middle" font-size="10" fill="#d97706">3.3 Claims DB</text>
+  <rect x="390" y="344" width="170" height="28" fill="#fef3c7" stroke="#d97706" stroke-width="1" rx="4"/>
+  <text x="475" y="363" text-anchor="middle" font-size="10" fill="#d97706">3.4 Admin DB</text>
+  <rect x="390" y="382" width="170" height="28" fill="#fef3c7" stroke="#d97706" stroke-width="1" rx="4"/>
+  <text x="475" y="401" text-anchor="middle" font-size="10" fill="#d97706">3.5 EF Core Migrations</text>
+  <line x1="480" y1="181" x2="480" y2="230" stroke="#d97706" stroke-width="1"/>
+  <line x1="480" y1="230" x2="480" y2="410" stroke="#d97706" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- 4. Frontend children -->
+  <rect x="580" y="230" width="170" height="28" fill="#ede9fe" stroke="#7c3aed" stroke-width="1" rx="4"/>
+  <text x="665" y="249" text-anchor="middle" font-size="10" fill="#7c3aed">4.1 Angular Modules (7)</text>
+  <rect x="580" y="268" width="170" height="28" fill="#ede9fe" stroke="#7c3aed" stroke-width="1" rx="4"/>
+  <text x="665" y="287" text-anchor="middle" font-size="10" fill="#7c3aed">4.2 Auth Pages</text>
+  <rect x="580" y="306" width="170" height="28" fill="#ede9fe" stroke="#7c3aed" stroke-width="1" rx="4"/>
+  <text x="665" y="325" text-anchor="middle" font-size="10" fill="#7c3aed">4.3 Customer Pages (6)</text>
+  <rect x="580" y="344" width="170" height="28" fill="#ede9fe" stroke="#7c3aed" stroke-width="1" rx="4"/>
+  <text x="665" y="363" text-anchor="middle" font-size="10" fill="#7c3aed">4.4 Admin Pages (4)</text>
+  <rect x="580" y="382" width="170" height="28" fill="#ede9fe" stroke="#7c3aed" stroke-width="1" rx="4"/>
+  <text x="665" y="401" text-anchor="middle" font-size="10" fill="#7c3aed">4.5 Charts + Reports UI</text>
+  <line x1="670" y1="181" x2="670" y2="230" stroke="#7c3aed" stroke-width="1"/>
+  <line x1="670" y1="230" x2="670" y2="410" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- 5. Testing children -->
+  <rect x="770" y="230" width="170" height="28" fill="#fee2e2" stroke="#dc2626" stroke-width="1" rx="4"/>
+  <text x="855" y="249" text-anchor="middle" font-size="10" fill="#dc2626">5.1 NUnit Tests (49)</text>
+  <rect x="770" y="268" width="170" height="28" fill="#fee2e2" stroke="#dc2626" stroke-width="1" rx="4"/>
+  <text x="855" y="287" text-anchor="middle" font-size="10" fill="#dc2626">5.2 Jasmine Tests (14)</text>
+  <rect x="770" y="306" width="170" height="28" fill="#fee2e2" stroke="#dc2626" stroke-width="1" rx="4"/>
+  <text x="855" y="325" text-anchor="middle" font-size="10" fill="#dc2626">5.3 Coverage ≥ 90%</text>
+  <rect x="770" y="344" width="170" height="28" fill="#fee2e2" stroke="#dc2626" stroke-width="1" rx="4"/>
+  <text x="855" y="363" text-anchor="middle" font-size="10" fill="#dc2626">5.4 Security Tests (403)</text>
+  <line x1="860" y1="181" x2="860" y2="230" stroke="#dc2626" stroke-width="1"/>
+  <line x1="860" y1="230" x2="860" y2="372" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- 6. Docs children -->
+  <rect x="960" y="230" width="130" height="28" fill="#cffafe" stroke="#0891b2" stroke-width="1" rx="4"/>
+  <text x="1025" y="249" text-anchor="middle" font-size="10" fill="#0891b2">6.1 Use Case Diagram</text>
+  <rect x="960" y="268" width="130" height="28" fill="#cffafe" stroke="#0891b2" stroke-width="1" rx="4"/>
+  <text x="1025" y="287" text-anchor="middle" font-size="10" fill="#0891b2">6.2 ER Diagram</text>
+  <rect x="960" y="306" width="130" height="28" fill="#cffafe" stroke="#0891b2" stroke-width="1" rx="4"/>
+  <text x="1025" y="325" text-anchor="middle" font-size="10" fill="#0891b2">6.3 Class Diagram</text>
+  <rect x="960" y="344" width="130" height="28" fill="#cffafe" stroke="#0891b2" stroke-width="1" rx="4"/>
+  <text x="1025" y="363" text-anchor="middle" font-size="10" fill="#0891b2">6.4 Sequence Diagrams</text>
+  <rect x="960" y="382" width="130" height="28" fill="#cffafe" stroke="#0891b2" stroke-width="1" rx="4"/>
+  <text x="1025" y="401" text-anchor="middle" font-size="10" fill="#0891b2">6.5 README + API Guide</text>
+  <line x1="1025" y1="181" x2="1025" y2="230" stroke="#0891b2" stroke-width="1"/>
+  <line x1="1025" y1="230" x2="1025" y2="410" stroke="#0891b2" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- Sprint Labels -->
+  <rect x="20" y="450" width="1060" height="200" fill="white" stroke="#e2e8f0" stroke-width="1" rx="8"/>
+  <text x="550" y="475" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e40af">Agile Sprint Plan</text>
+
+  <rect x="40" y="490" width="220" height="140" fill="#dbeafe" stroke="#3b82f6" stroke-width="1" rx="6"/>
+  <text x="150" y="510" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">Sprint 1 (Week 1-2)</text>
+  <text x="50" y="530" font-size="10" fill="#0f172a">• Project setup + solution structure</text>
+  <text x="50" y="548" font-size="10" fill="#0f172a">• Identity Service (Auth + JWT)</text>
+  <text x="50" y="566" font-size="10" fill="#0f172a">• Database migrations (Identity)</text>
+  <text x="50" y="584" font-size="10" fill="#0f172a">• Angular Auth module (Login/Register)</text>
+  <text x="50" y="602" font-size="10" fill="#0f172a">• Ocelot Gateway setup</text>
+
+  <rect x="280" y="490" width="220" height="140" fill="#d1fae5" stroke="#059669" stroke-width="1" rx="6"/>
+  <text x="390" y="510" text-anchor="middle" font-size="11" font-weight="bold" fill="#059669">Sprint 2 (Week 3-4)</text>
+  <text x="290" y="530" font-size="10" fill="#0f172a">• Policy Service (CRUD + lifecycle)</text>
+  <text x="290" y="548" font-size="10" fill="#0f172a">• Premium calculation</text>
+  <text x="290" y="566" font-size="10" fill="#0f172a">• Policy DB migrations</text>
+  <text x="290" y="584" font-size="10" fill="#0f172a">• Angular Customer module</text>
+  <text x="290" y="602" font-size="10" fill="#0f172a">• Buy Policy wizard (3-step)</text>
+
+  <rect x="520" y="490" width="220" height="140" fill="#fef3c7" stroke="#d97706" stroke-width="1" rx="6"/>
+  <text x="630" y="510" text-anchor="middle" font-size="11" font-weight="bold" fill="#d97706">Sprint 3 (Week 5-6)</text>
+  <text x="530" y="530" font-size="10" fill="#0f172a">• Claims Service (lifecycle)</text>
+  <text x="530" y="548" font-size="10" fill="#0f172a">• Document upload</text>
+  <text x="530" y="566" font-size="10" fill="#0f172a">• Claims DB migrations</text>
+  <text x="530" y="584" font-size="10" fill="#0f172a">• Angular Claims module</text>
+  <text x="530" y="602" font-size="10" fill="#0f172a">• Initiate Claim wizard (4-step)</text>
+
+  <rect x="760" y="490" width="300" height="140" fill="#ede9fe" stroke="#7c3aed" stroke-width="1" rx="6"/>
+  <text x="910" y="510" text-anchor="middle" font-size="11" font-weight="bold" fill="#7c3aed">Sprint 4 (Week 7-8)</text>
+  <text x="770" y="530" font-size="10" fill="#0f172a">• Admin Service + Reports</text>
+  <text x="770" y="548" font-size="10" fill="#0f172a">• Angular Admin module + Charts</text>
+  <text x="770" y="566" font-size="10" fill="#0f172a">• NUnit + Jasmine tests (≥90%)</text>
+  <text x="770" y="584" font-size="10" fill="#0f172a">• UI polish + responsive design</text>
+  <text x="770" y="602" font-size="10" fill="#0f172a">• Diagrams + README + final review</text>
+</svg>

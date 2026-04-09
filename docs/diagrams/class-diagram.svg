@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 800" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1100" height="800" fill="#f8fafc" rx="12"/>
+  <text x="550" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e40af">SmartSure — Class Diagram (Layered Architecture)</text>
+
+  <!-- ═══ IDENTITY SERVICE ═══ -->
+  <rect x="20" y="55" width="240" height="30" fill="#1e40af" rx="6"/>
+  <text x="140" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Identity Service</text>
+
+  <!-- AuthController -->
+  <rect x="20" y="90" width="240" height="130" fill="white" stroke="#1e40af" stroke-width="1.5" rx="4"/>
+  <rect x="20" y="90" width="240" height="24" fill="#dbeafe" rx="4"/>
+  <text x="140" y="107" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">«Controller» AuthController</text>
+  <line x1="20" y1="114" x2="260" y2="114" stroke="#1e40af" stroke-width="1"/>
+  <text x="30" y="130" font-size="10" fill="#0f172a">+ Register(RegisterDto): IActionResult</text>
+  <text x="30" y="146" font-size="10" fill="#0f172a">+ Login(LoginDto): IActionResult</text>
+  <text x="30" y="162" font-size="10" fill="#0f172a">+ GetAllUsers(): IActionResult</text>
+  <text x="30" y="178" font-size="10" fill="#0f172a">+ GetUser(id): IActionResult</text>
+  <text x="30" y="194" font-size="10" fill="#0f172a">+ UpdateStatus(id, bool): IActionResult</text>
+  <line x1="20" y1="200" x2="260" y2="200" stroke="#1e40af" stroke-width="0.5" stroke-dasharray="3,2"/>
+  <text x="30" y="214" font-size="10" fill="#64748b">- _service: IAuthService</text>
+
+  <!-- AuthService -->
+  <rect x="20" y="235" width="240" height="130" fill="white" stroke="#1e40af" stroke-width="1.5" rx="4"/>
+  <rect x="20" y="235" width="240" height="24" fill="#dbeafe" rx="4"/>
+  <text x="140" y="252" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">«Service» AuthService</text>
+  <line x1="20" y1="259" x2="260" y2="259" stroke="#1e40af" stroke-width="1"/>
+  <text x="30" y="275" font-size="10" fill="#0f172a">+ RegisterAsync(dto): AuthResponseDto</text>
+  <text x="30" y="291" font-size="10" fill="#0f172a">+ LoginAsync(dto): AuthResponseDto</text>
+  <text x="30" y="307" font-size="10" fill="#0f172a">+ GetAllUsersAsync(): IEnumerable</text>
+  <text x="30" y="323" font-size="10" fill="#0f172a">+ UpdateUserStatusAsync(id): UserDto</text>
+  <line x1="20" y1="335" x2="260" y2="335" stroke="#1e40af" stroke-width="0.5" stroke-dasharray="3,2"/>
+  <text x="30" y="351" font-size="10" fill="#64748b">- GenerateToken(user): string</text>
+
+  <!-- UserRepository -->
+  <rect x="20" y="380" width="240" height="100" fill="white" stroke="#1e40af" stroke-width="1.5" rx="4"/>
+  <rect x="20" y="380" width="240" height="24" fill="#dbeafe" rx="4"/>
+  <text x="140" y="397" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">«Repository» UserRepository</text>
+  <line x1="20" y1="404" x2="260" y2="404" stroke="#1e40af" stroke-width="1"/>
+  <text x="30" y="420" font-size="10" fill="#0f172a">+ GetByEmailAsync(email): User?</text>
+  <text x="30" y="436" font-size="10" fill="#0f172a">+ GetByIdAsync(id): User?</text>
+  <text x="30" y="452" font-size="10" fill="#0f172a">+ CreateAsync(user): User</text>
+  <text x="30" y="468" font-size="10" fill="#0f172a">+ UpdateAsync(user): User</text>
+
+  <!-- User Model -->
+  <rect x="20" y="495" width="240" height="110" fill="white" stroke="#1e40af" stroke-width="1.5" rx="4"/>
+  <rect x="20" y="495" width="240" height="24" fill="#dbeafe" rx="4"/>
+  <text x="140" y="512" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">«Model» User</text>
+  <line x1="20" y1="519" x2="260" y2="519" stroke="#1e40af" stroke-width="1"/>
+  <text x="30" y="535" font-size="10" fill="#0f172a">+ Id: int</text>
+  <text x="30" y="551" font-size="10" fill="#0f172a">+ FullName: string</text>
+  <text x="30" y="567" font-size="10" fill="#0f172a">+ Email: string</text>
+  <text x="30" y="583" font-size="10" fill="#0f172a">+ PasswordHash: string</text>
+  <text x="30" y="599" font-size="10" fill="#0f172a">+ Role: string</text>
+
+  <!-- Arrows Identity -->
+  <line x1="140" y1="220" x2="140" y2="235" stroke="#1e40af" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="140" y1="365" x2="140" y2="380" stroke="#1e40af" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="140" y1="480" x2="140" y2="495" stroke="#1e40af" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ═══ POLICY SERVICE ═══ -->
+  <rect x="290" y="55" width="240" height="30" fill="#059669" rx="6"/>
+  <text x="410" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Policy Service</text>
+
+  <rect x="290" y="90" width="240" height="130" fill="white" stroke="#059669" stroke-width="1.5" rx="4"/>
+  <rect x="290" y="90" width="240" height="24" fill="#d1fae5" rx="4"/>
+  <text x="410" y="107" text-anchor="middle" font-size="11" font-weight="bold" fill="#059669">«Controller» PoliciesController</text>
+  <line x1="290" y1="114" x2="530" y2="114" stroke="#059669" stroke-width="1"/>
+  <text x="300" y="130" font-size="10" fill="#0f172a">+ Buy(BuyPolicyDto): IActionResult</text>
+  <text x="300" y="146" font-size="10" fill="#0f172a">+ Activate(id, customerId): IActionResult</text>
+  <text x="300" y="162" font-size="10" fill="#0f172a">+ GetByCustomer(id): IActionResult</text>
+  <text x="300" y="178" font-size="10" fill="#0f172a">+ GetById(id): IActionResult</text>
+  <text x="300" y="194" font-size="10" fill="#0f172a">+ UpdateStatus(id, status): IActionResult</text>
+
+  <rect x="290" y="235" width="240" height="130" fill="white" stroke="#059669" stroke-width="1.5" rx="4"/>
+  <rect x="290" y="235" width="240" height="24" fill="#d1fae5" rx="4"/>
+  <text x="410" y="252" text-anchor="middle" font-size="11" font-weight="bold" fill="#059669">«Service» PolicyService</text>
+  <line x1="290" y1="259" x2="530" y2="259" stroke="#059669" stroke-width="1"/>
+  <text x="300" y="275" font-size="10" fill="#0f172a">+ BuyPolicyAsync(dto): PolicyDto</text>
+  <text x="300" y="291" font-size="10" fill="#0f172a">+ ActivatePolicyAsync(id): PolicyDto</text>
+  <text x="300" y="307" font-size="10" fill="#0f172a">+ CalculatePremiumAsync(dto): PremiumDto</text>
+  <text x="300" y="323" font-size="10" fill="#0f172a">+ GetAllPoliciesAsync(): IEnumerable</text>
+  <text x="300" y="339" font-size="10" fill="#0f172a">+ UpdatePolicyStatusAsync(): PolicyDto</text>
+
+  <rect x="290" y="380" width="240" height="100" fill="white" stroke="#059669" stroke-width="1.5" rx="4"/>
+  <rect x="290" y="380" width="240" height="24" fill="#d1fae5" rx="4"/>
+  <text x="410" y="397" text-anchor="middle" font-size="11" font-weight="bold" fill="#059669">«Repository» PolicyRepository</text>
+  <line x1="290" y1="404" x2="530" y2="404" stroke="#059669" stroke-width="1"/>
+  <text x="300" y="420" font-size="10" fill="#0f172a">+ GetByIdAsync(id): Policy?</text>
+  <text x="300" y="436" font-size="10" fill="#0f172a">+ GetByCustomerIdAsync(id): IEnumerable</text>
+  <text x="300" y="452" font-size="10" fill="#0f172a">+ CreateAsync(policy): Policy</text>
+  <text x="300" y="468" font-size="10" fill="#0f172a">+ UpdateAsync(policy): Policy</text>
+
+  <rect x="290" y="495" width="240" height="110" fill="white" stroke="#059669" stroke-width="1.5" rx="4"/>
+  <rect x="290" y="495" width="240" height="24" fill="#d1fae5" rx="4"/>
+  <text x="410" y="512" text-anchor="middle" font-size="11" font-weight="bold" fill="#059669">«Model» Policy</text>
+  <line x1="290" y1="519" x2="530" y2="519" stroke="#059669" stroke-width="1"/>
+  <text x="300" y="535" font-size="10" fill="#0f172a">+ Id, CustomerId, PolicyTypeId: int</text>
+  <text x="300" y="551" font-size="10" fill="#0f172a">+ PolicyNumber, CoverageAmount</text>
+  <text x="300" y="567" font-size="10" fill="#0f172a">+ StartDate, EndDate: DateTime</text>
+  <text x="300" y="583" font-size="10" fill="#0f172a">+ Status: PolicyStatus (enum)</text>
+  <text x="300" y="599" font-size="10" fill="#0f172a">+ Premiums: ICollection&lt;Premium&gt;</text>
+
+  <line x1="410" y1="220" x2="410" y2="235" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="410" y1="365" x2="410" y2="380" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="410" y1="480" x2="410" y2="495" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ═══ CLAIMS SERVICE ═══ -->
+  <rect x="560" y="55" width="240" height="30" fill="#d97706" rx="6"/>
+  <text x="680" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Claims Service</text>
+
+  <rect x="560" y="90" width="240" height="130" fill="white" stroke="#d97706" stroke-width="1.5" rx="4"/>
+  <rect x="560" y="90" width="240" height="24" fill="#fef3c7" rx="4"/>
+  <text x="680" y="107" text-anchor="middle" font-size="11" font-weight="bold" fill="#d97706">«Controller» ClaimsController</text>
+  <line x1="560" y1="114" x2="800" y2="114" stroke="#d97706" stroke-width="1"/>
+  <text x="570" y="130" font-size="10" fill="#0f172a">+ Initiate(dto): IActionResult</text>
+  <text x="570" y="146" font-size="10" fill="#0f172a">+ Submit(id): IActionResult</text>
+  <text x="570" y="162" font-size="10" fill="#0f172a">+ GetByCustomer(id): IActionResult</text>
+  <text x="570" y="178" font-size="10" fill="#0f172a">+ UpdateStatus(id, dto): IActionResult</text>
+  <text x="570" y="194" font-size="10" fill="#0f172a">+ UploadDocument(id, file): IActionResult</text>
+
+  <rect x="560" y="235" width="240" height="130" fill="white" stroke="#d97706" stroke-width="1.5" rx="4"/>
+  <rect x="560" y="235" width="240" height="24" fill="#fef3c7" rx="4"/>
+  <text x="680" y="252" text-anchor="middle" font-size="11" font-weight="bold" fill="#d97706">«Service» ClaimService</text>
+  <line x1="560" y1="259" x2="800" y2="259" stroke="#d97706" stroke-width="1"/>
+  <text x="570" y="275" font-size="10" fill="#0f172a">+ InitiateClaimAsync(dto): ClaimDto</text>
+  <text x="570" y="291" font-size="10" fill="#0f172a">+ SubmitClaimAsync(id): ClaimDto</text>
+  <text x="570" y="307" font-size="10" fill="#0f172a">+ UpdateClaimStatusAsync(): ClaimDto</text>
+  <text x="570" y="323" font-size="10" fill="#0f172a">+ UploadDocumentAsync(): ClaimDocumentDto</text>
+  <text x="570" y="339" font-size="10" fill="#0f172a">+ GetDocumentsAsync(id): IEnumerable</text>
+
+  <rect x="560" y="380" width="240" height="100" fill="white" stroke="#d97706" stroke-width="1.5" rx="4"/>
+  <rect x="560" y="380" width="240" height="24" fill="#fef3c7" rx="4"/>
+  <text x="680" y="397" text-anchor="middle" font-size="11" font-weight="bold" fill="#d97706">«Repository» ClaimRepository</text>
+  <line x1="560" y1="404" x2="800" y2="404" stroke="#d97706" stroke-width="1"/>
+  <text x="570" y="420" font-size="10" fill="#0f172a">+ GetByIdAsync(id): Claim?</text>
+  <text x="570" y="436" font-size="10" fill="#0f172a">+ GetByCustomerIdAsync(id): IEnumerable</text>
+  <text x="570" y="452" font-size="10" fill="#0f172a">+ AddDocumentAsync(doc): ClaimDocument</text>
+  <text x="570" y="468" font-size="10" fill="#0f172a">+ UpdateAsync(claim): Claim</text>
+
+  <rect x="560" y="495" width="240" height="110" fill="white" stroke="#d97706" stroke-width="1.5" rx="4"/>
+  <rect x="560" y="495" width="240" height="24" fill="#fef3c7" rx="4"/>
+  <text x="680" y="512" text-anchor="middle" font-size="11" font-weight="bold" fill="#d97706">«Model» Claim</text>
+  <line x1="560" y1="519" x2="800" y2="519" stroke="#d97706" stroke-width="1"/>
+  <text x="570" y="535" font-size="10" fill="#0f172a">+ Id, CustomerId, PolicyId: int</text>
+  <text x="570" y="551" font-size="10" fill="#0f172a">+ Description: string</text>
+  <text x="570" y="567" font-size="10" fill="#0f172a">+ ClaimAmount: decimal</text>
+  <text x="570" y="583" font-size="10" fill="#0f172a">+ Status: ClaimStatus (enum)</text>
+  <text x="570" y="599" font-size="10" fill="#0f172a">+ Documents: ICollection&lt;ClaimDocument&gt;</text>
+
+  <line x1="680" y1="220" x2="680" y2="235" stroke="#d97706" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="680" y1="365" x2="680" y2="380" stroke="#d97706" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="680" y1="480" x2="680" y2="495" stroke="#d97706" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ═══ ADMIN SERVICE ═══ -->
+  <rect x="830" y="55" width="240" height="30" fill="#7c3aed" rx="6"/>
+  <text x="950" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Admin Service</text>
+
+  <rect x="830" y="90" width="240" height="130" fill="white" stroke="#7c3aed" stroke-width="1.5" rx="4"/>
+  <rect x="830" y="90" width="240" height="24" fill="#ede9fe" rx="4"/>
+  <text x="950" y="107" text-anchor="middle" font-size="11" font-weight="bold" fill="#7c3aed">«Controller» AdminController</text>
+  <line x1="830" y1="114" x2="1070" y2="114" stroke="#7c3aed" stroke-width="1"/>
+  <text x="840" y="130" font-size="10" fill="#0f172a">+ Dashboard(): IActionResult</text>
+  <text x="840" y="146" font-size="10" fill="#0f172a">+ GetAllClaims(): IActionResult</text>
+  <text x="840" y="162" font-size="10" fill="#0f172a">+ UpdateClaimStatus(): IActionResult</text>
+  <text x="840" y="178" font-size="10" fill="#0f172a">+ GetReports(): IActionResult</text>
+  <text x="840" y="194" font-size="10" fill="#0f172a">+ GetAllUsers(): IActionResult</text>
+
+  <rect x="830" y="235" width="240" height="130" fill="white" stroke="#7c3aed" stroke-width="1.5" rx="4"/>
+  <rect x="830" y="235" width="240" height="24" fill="#ede9fe" rx="4"/>
+  <text x="950" y="252" text-anchor="middle" font-size="11" font-weight="bold" fill="#7c3aed">«Service» AdminService</text>
+  <line x1="830" y1="259" x2="1070" y2="259" stroke="#7c3aed" stroke-width="1"/>
+  <text x="840" y="275" font-size="10" fill="#0f172a">+ GetDashboardStatsAsync(): StatsDto</text>
+  <text x="840" y="291" font-size="10" fill="#0f172a">+ GetReportsAsync(): IEnumerable</text>
+  <text x="840" y="307" font-size="10" fill="#0f172a">+ GenerateReportAsync(dto): ReportDto</text>
+  <line x1="830" y1="319" x2="1070" y2="319" stroke="#7c3aed" stroke-width="0.5" stroke-dasharray="3,2"/>
+  <text x="840" y="335" font-size="10" fill="#64748b">- _httpFactory: IHttpClientFactory</text>
+  <text x="840" y="351" font-size="10" fill="#64748b">Calls: Identity/Policy/Claims internal APIs</text>
+
+  <rect x="830" y="380" width="240" height="100" fill="white" stroke="#7c3aed" stroke-width="1.5" rx="4"/>
+  <rect x="830" y="380" width="240" height="24" fill="#ede9fe" rx="4"/>
+  <text x="950" y="397" text-anchor="middle" font-size="11" font-weight="bold" fill="#7c3aed">«Repository» ReportRepository</text>
+  <line x1="830" y1="404" x2="1070" y2="404" stroke="#7c3aed" stroke-width="1"/>
+  <text x="840" y="420" font-size="10" fill="#0f172a">+ GetAllAsync(): IEnumerable&lt;Report&gt;</text>
+  <text x="840" y="436" font-size="10" fill="#0f172a">+ GetByIdAsync(id): Report?</text>
+  <text x="840" y="452" font-size="10" fill="#0f172a">+ CreateAsync(report): Report</text>
+
+  <rect x="830" y="495" width="240" height="110" fill="white" stroke="#7c3aed" stroke-width="1.5" rx="4"/>
+  <rect x="830" y="495" width="240" height="24" fill="#ede9fe" rx="4"/>
+  <text x="950" y="512" text-anchor="middle" font-size="11" font-weight="bold" fill="#7c3aed">«Model» Report</text>
+  <line x1="830" y1="519" x2="1070" y2="519" stroke="#7c3aed" stroke-width="1"/>
+  <text x="840" y="535" font-size="10" fill="#0f172a">+ Id: int</text>
+  <text x="840" y="551" font-size="10" fill="#0f172a">+ Title, ReportType: string</text>
+  <text x="840" y="567" font-size="10" fill="#0f172a">+ Data: string (JSON)</text>
+  <text x="840" y="583" font-size="10" fill="#0f172a">+ GeneratedBy: int</text>
+  <text x="840" y="599" font-size="10" fill="#0f172a">+ GeneratedAt: DateTime</text>
+
+  <line x1="950" y1="220" x2="950" y2="235" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="950" y1="365" x2="950" y2="380" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="950" y1="480" x2="950" y2="495" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Layer Labels -->
+  <text x="550" y="680" text-anchor="middle" font-size="11" fill="#64748b">Architecture: Controller → Service → Repository → Model (each layer depends only on the layer below it)</text>
+  <text x="550" y="698" text-anchor="middle" font-size="11" fill="#64748b">All services use Dependency Injection. Interfaces (IAuthService, IPolicyService, IClaimService, IAdminService) decouple layers.</text>
+  <text x="550" y="716" text-anchor="middle" font-size="11" fill="#64748b">AdminService uses IHttpClientFactory to call other services internally via X-Internal-Key header (not through Ocelot Gateway).</text>
+</svg>
