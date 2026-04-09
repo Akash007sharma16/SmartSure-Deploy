@@ -33,19 +33,22 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Health check endpoint — confirms gateway is running
-app.MapGet("/", () => new {
+// Health check endpoint — must be BEFORE UseOcelot so Ocelot doesn't intercept it
+app.MapGet("/", () => Results.Json(new {
     status = "SmartSure API Gateway is running",
     version = "1.0",
     timestamp = DateTime.UtcNow,
+    http_url = "http://localhost:5000",
+    https_url = "https://localhost:7000",
+    note = "Use http://localhost:5000 if HTTPS certificate is not trusted",
     routes = new[] {
-        "POST /gateway/auth/register",
-        "POST /gateway/auth/login",
-        "GET  /gateway/policies",
-        "GET  /gateway/claims",
-        "GET  /gateway/admin/dashboard"
+        "POST /gateway/auth/register  (public)",
+        "POST /gateway/auth/login     (public)",
+        "GET  /gateway/policies       (JWT required)",
+        "GET  /gateway/claims         (JWT required)",
+        "GET  /gateway/admin/dashboard (Admin JWT required)"
     }
-});
+}));
 
 await app.UseOcelot();
 
