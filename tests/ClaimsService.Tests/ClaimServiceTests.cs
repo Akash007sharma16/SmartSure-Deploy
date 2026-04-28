@@ -2,6 +2,7 @@ using ClaimsService.DTOs;
 using ClaimsService.Models;
 using ClaimsService.Repositories;
 using ClaimsService.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Hosting;
 using Moq;
 using NUnit.Framework;
@@ -13,6 +14,7 @@ public class ClaimServiceTests
 {
     private Mock<IClaimRepository> _repoMock = null!;
     private Mock<IWebHostEnvironment> _envMock = null!;
+    private Mock<IPublishEndpoint> _publishMock = null!;
     private IClaimService _service = null!;
 
     [SetUp]
@@ -20,8 +22,9 @@ public class ClaimServiceTests
     {
         _repoMock = new Mock<IClaimRepository>();
         _envMock = new Mock<IWebHostEnvironment>();
+        _publishMock = new Mock<IPublishEndpoint>();
         _envMock.Setup(e => e.ContentRootPath).Returns(Path.GetTempPath());
-        _service = new ClaimService(_repoMock.Object, _envMock.Object);
+        _service = new ClaimService(_repoMock.Object, _envMock.Object, _publishMock.Object);
     }
 
     [Test]

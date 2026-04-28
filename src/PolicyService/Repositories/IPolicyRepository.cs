@@ -17,6 +17,7 @@ public interface IPolicyTypeRepository
     Task<PolicyType?> GetByIdAsync(int id);
     Task<PolicyType> CreateAsync(PolicyType policyType);
     Task<PolicyType> UpdateAsync(PolicyType policyType);
+    Task<bool> DeleteAsync(int id);
 }
 
 public interface IPremiumRepository

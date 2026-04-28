@@ -49,13 +49,18 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddCors(opt =>
-    opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+    opt.AddPolicy("AllowAngular", p =>
+        p.WithOrigins("http://localhost:4200", "https://localhost:4200",
+                      "https://localhost:7000", "http://localhost:5000")
+         .AllowAnyMethod()
+         .AllowAnyHeader()
+         .AllowCredentials()));
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors("AllowAll");
+app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

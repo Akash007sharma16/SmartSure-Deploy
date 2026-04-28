@@ -31,4 +31,12 @@ public class PolicyTypesController : ControllerBase
         try { return Ok(await _service.CalculatePremiumAsync(dto)); }
         catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
     }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var deleted = await _service.DeletePolicyTypeAsync(id);
+        return deleted ? NoContent() : NotFound(new { message = "Policy type not found." });
+    }
 }

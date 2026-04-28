@@ -1,6 +1,8 @@
+using MassTransit;
 using PolicyService.DTOs;
 using PolicyService.Models;
 using PolicyService.Repositories;
+using SmartSure.Contracts;
 
 namespace PolicyService.Services;
 
@@ -10,17 +12,20 @@ public class PolicyService : IPolicyService
     private readonly IPolicyTypeRepository _typeRepo;
     private readonly IPremiumRepository _premiumRepo;
     private readonly IPaymentRepository _paymentRepo;
+    private readonly IPublishEndpoint _publish;
 
     public PolicyService(
         IPolicyRepository policyRepo,
         IPolicyTypeRepository typeRepo,
         IPremiumRepository premiumRepo,
-        IPaymentRepository paymentRepo)
+        IPaymentRepository paymentRepo,
+        IPublishEndpoint publish)
     {
         _policyRepo = policyRepo;
         _typeRepo = typeRepo;
         _premiumRepo = premiumRepo;
         _paymentRepo = paymentRepo;
+        _publish = publish;
     }
 
     public async Task<IEnumerable<PolicyTypeDto>> GetPolicyTypesAsync()
@@ -35,6 +40,9 @@ public class PolicyService : IPolicyService
         await _typeRepo.CreateAsync(pt);
         return new PolicyTypeDto(pt.Id, pt.Name, pt.Description, pt.BaseRate, pt.IsActive);
     }
+
+    public async Task<bool> DeletePolicyTypeAsync(int id) =>
+        await _typeRepo.DeleteAsync(id);
 
     public async Task<PolicyDto> BuyPolicyAsync(BuyPolicyDto dto)
     {
@@ -56,6 +64,15 @@ public class PolicyService : IPolicyService
 
         var premiumAmount = dto.CoverageAmount * (policyType.BaseRate / 100);
         await _premiumRepo.CreateAsync(new Premium { PolicyId = policy.Id, Amount = premiumAmount });
+
+        // Publish event for saga (non-blocking — works even if RabbitMQ is down)
+        try
+        {
+            await _publish.Publish(new PolicyCreated(
+                Guid.NewGuid(), policy.Id, policy.CustomerId, policy.PolicyTypeId,
+                policy.CoverageAmount, policy.StartDate, policy.EndDate));
+        }
+        catch { /* RabbitMQ unavailable — saga event skipped, core flow continues */ }
 
         return MapToDto(policy, policyType.Name);
     }
@@ -86,6 +103,16 @@ public class PolicyService : IPolicyService
                 PaidAt = DateTime.UtcNow
             });
         }
+
+        // Publish events for saga (non-blocking — works even if RabbitMQ is down)
+        try
+        {
+            var correlationId = Guid.NewGuid();
+            await _publish.Publish(new PolicyActivated(correlationId, policy.Id, policy.CustomerId));
+            if (premium != null)
+                await _publish.Publish(new PaymentRecorded(correlationId, policy.Id, premium.Amount, DateTime.UtcNow));
+        }
+        catch { /* RabbitMQ unavailable — saga event skipped, core flow continues */ }
 
         return MapToDto(policy, policy.PolicyType.Name);
     }

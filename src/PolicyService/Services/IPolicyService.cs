@@ -6,6 +6,7 @@ public interface IPolicyService
 {
     Task<IEnumerable<PolicyTypeDto>> GetPolicyTypesAsync();
     Task<PolicyTypeDto> CreatePolicyTypeAsync(CreatePolicyTypeDto dto);
+    Task<bool> DeletePolicyTypeAsync(int id);
     Task<PolicyDto> BuyPolicyAsync(BuyPolicyDto dto);
     Task<PolicyDto> ActivatePolicyAsync(int id, int customerId);
     Task<IEnumerable<PolicyDto>> GetCustomerPoliciesAsync(int customerId);

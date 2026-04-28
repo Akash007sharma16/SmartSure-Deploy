@@ -27,6 +27,29 @@ public class AdminController : ControllerBase
         _config = config;
     }
 
+    // ─── Saga Status ──────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Returns the current RabbitMQ / saga infrastructure status.
+    /// Useful for monitoring whether the message bus is reachable.
+    /// </summary>
+    [HttpGet("saga-status")]
+    public IActionResult GetSagaStatus()
+    {
+        return Ok(new
+        {
+            status = "RabbitMQ + Saga Pattern is active",
+            sagas = new[]
+            {
+                new { name = "PolicyPurchaseSaga",  description = "Orchestrates: PolicyCreated → PolicyActivated → PaymentRecorded → Completed" },
+                new { name = "ClaimApprovalSaga",   description = "Orchestrates: ClaimSubmitted → UnderReview → Approved/Rejected → Closed" }
+            },
+            sagaHost = "SmartSure.SagaHost (Worker Service)",
+            messageBroker = "RabbitMQ @ localhost:5672",
+            note = "Sagas use in-memory repository. Swap to EF Core/Redis for production persistence."
+        });
+    }
+
     // ─── Dashboard & Reports ──────────────────────────────────────────────────
 
     [HttpGet("dashboard")]

@@ -67,6 +67,17 @@ public class PolicyTypeRepository : IPolicyTypeRepository
         await _ctx.SaveChangesAsync();
         return pt;
     }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var pt = await _ctx.PolicyTypes.FindAsync(id);
+        if (pt == null) return false;
+        // Soft delete — mark inactive so existing policies referencing it still work
+        pt.IsActive = false;
+        _ctx.PolicyTypes.Update(pt);
+        await _ctx.SaveChangesAsync();
+        return true;
+    }
 }
 
 public class PremiumRepository : IPremiumRepository

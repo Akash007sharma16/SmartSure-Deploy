@@ -15,27 +15,19 @@
       "UpstreamHttpMethod": [ "POST" ]
     },
     {
-      "DownstreamPathTemplate": "/api/auth/{everything}",
+      "DownstreamPathTemplate": "/api/auth/users",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7001 }],
-      "UpstreamPathTemplate": "/gateway/auth/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
-    },
-    {
-      "DownstreamPathTemplate": "/api/policies",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
-      "UpstreamPathTemplate": "/gateway/policies",
+      "UpstreamPathTemplate": "/gateway/auth/users",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
     },
     {
-      "DownstreamPathTemplate": "/api/policies/{everything}",
+      "DownstreamPathTemplate": "/api/auth/users/{everything}",
       "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
-      "UpstreamPathTemplate": "/gateway/policies/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7001 }],
+      "UpstreamPathTemplate": "/gateway/auth/users/{everything}",
+      "UpstreamHttpMethod": [ "GET", "PATCH" ],
       "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
     },
     {
@@ -47,11 +39,67 @@
       "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
     },
     {
-      "DownstreamPathTemplate": "/api/policy-types/{everything}",
+      "DownstreamPathTemplate": "/api/policy-types/calculate-premium",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
-      "UpstreamPathTemplate": "/gateway/policy-types/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "UpstreamPathTemplate": "/gateway/policy-types/calculate-premium",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/policy-types/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
+      "UpstreamPathTemplate": "/gateway/policy-types/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "PATCH", "DELETE" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/policies",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
+      "UpstreamPathTemplate": "/gateway/policies",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/policies/buy",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
+      "UpstreamPathTemplate": "/gateway/policies/buy",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/policies/customer/{customerId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
+      "UpstreamPathTemplate": "/gateway/policies/customer/{customerId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/policies/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
+      "UpstreamPathTemplate": "/gateway/policies/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/policies/{id}/activate",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
+      "UpstreamPathTemplate": "/gateway/policies/{id}/activate",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/policies/{id}/status",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7002 }],
+      "UpstreamPathTemplate": "/gateway/policies/{id}/status",
+      "UpstreamHttpMethod": [ "PATCH" ],
       "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
     },
     {
@@ -63,19 +111,123 @@
       "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
     },
     {
-      "DownstreamPathTemplate": "/api/claims/{everything}",
+      "DownstreamPathTemplate": "/api/claims/customer/{customerId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7003 }],
-      "UpstreamPathTemplate": "/gateway/claims/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "UpstreamPathTemplate": "/gateway/claims/customer/{customerId}",
+      "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
     },
     {
-      "DownstreamPathTemplate": "/api/admin/{everything}",
+      "DownstreamPathTemplate": "/api/claims/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7003 }],
+      "UpstreamPathTemplate": "/gateway/claims/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/claims/{id}/submit",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7003 }],
+      "UpstreamPathTemplate": "/gateway/claims/{id}/submit",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/claims/{id}/status",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7003 }],
+      "UpstreamPathTemplate": "/gateway/claims/{id}/status",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/claims/{id}/documents",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7003 }],
+      "UpstreamPathTemplate": "/gateway/claims/{id}/documents",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/dashboard",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
-      "UpstreamPathTemplate": "/gateway/admin/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "UpstreamPathTemplate": "/gateway/admin/dashboard",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/saga-status",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
+      "UpstreamPathTemplate": "/gateway/admin/saga-status",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/reports",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
+      "UpstreamPathTemplate": "/gateway/admin/reports",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/claims",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
+      "UpstreamPathTemplate": "/gateway/admin/claims",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/claims/{id}/status",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
+      "UpstreamPathTemplate": "/gateway/admin/claims/{id}/status",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/claims/{id}/documents",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
+      "UpstreamPathTemplate": "/gateway/admin/claims/{id}/documents",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/policy-types",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
+      "UpstreamPathTemplate": "/gateway/admin/policy-types",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/policy-types/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
+      "UpstreamPathTemplate": "/gateway/admin/policy-types/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/users",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
+      "UpstreamPathTemplate": "/gateway/admin/users",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+    {
+      "DownstreamPathTemplate": "/api/admin/users/{id}/status",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 7004 }],
+      "UpstreamPathTemplate": "/gateway/admin/users/{id}/status",
+      "UpstreamHttpMethod": [ "PATCH" ],
       "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
     }
   ],

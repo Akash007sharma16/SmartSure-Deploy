@@ -2,6 +2,8 @@ using System.Diagnostics.CodeAnalysis;
 using ClaimsService.DTOs;
 using ClaimsService.Models;
 using ClaimsService.Repositories;
+using MassTransit;
+using SmartSure.Contracts;
 
 namespace ClaimsService.Services;
 
@@ -9,11 +11,13 @@ public class ClaimService : IClaimService
 {
     private readonly IClaimRepository _repo;
     private readonly IWebHostEnvironment _env;
+    private readonly IPublishEndpoint _publish;
 
-    public ClaimService(IClaimRepository repo, IWebHostEnvironment env)
+    public ClaimService(IClaimRepository repo, IWebHostEnvironment env, IPublishEndpoint publish)
     {
         _repo = repo;
         _env = env;
+        _publish = publish;
     }
 
     public async Task<ClaimDto> InitiateClaimAsync(InitiateClaimDto dto)
@@ -41,6 +45,16 @@ public class ClaimService : IClaimService
         claim.Status = ClaimStatus.Submitted;
         claim.UpdatedAt = DateTime.UtcNow;
         await _repo.UpdateAsync(claim);
+
+        // Publish event for saga (non-blocking — works even if RabbitMQ is down)
+        try
+        {
+            await _publish.Publish(new ClaimSubmitted(
+                Guid.NewGuid(), claim.Id, claim.CustomerId, claim.PolicyId,
+                claim.ClaimAmount, DateTime.UtcNow));
+        }
+        catch { /* RabbitMQ unavailable — saga event skipped, core flow continues */ }
+
         return MapToDto(claim);
     }
 
@@ -74,6 +88,31 @@ public class ClaimService : IClaimService
         claim.AdminRemarks = dto.AdminRemarks;
         claim.UpdatedAt = DateTime.UtcNow;
         await _repo.UpdateAsync(claim);
+
+        // Publish events for saga based on new status (non-blocking)
+        try
+        {
+            var correlationId = Guid.NewGuid();
+            switch (newStatus)
+            {
+                case ClaimStatus.UnderReview:
+                    await _publish.Publish(new ClaimUnderReview(correlationId, claim.Id, DateTime.UtcNow));
+                    break;
+                case ClaimStatus.Approved:
+                    await _publish.Publish(new ClaimApproved(correlationId, claim.Id, claim.CustomerId,
+                        claim.ClaimAmount, dto.AdminRemarks, DateTime.UtcNow));
+                    break;
+                case ClaimStatus.Rejected:
+                    await _publish.Publish(new ClaimRejected(correlationId, claim.Id, claim.CustomerId,
+                        dto.AdminRemarks ?? "Rejected by admin", DateTime.UtcNow));
+                    break;
+                case ClaimStatus.Closed:
+                    await _publish.Publish(new ClaimClosed(correlationId, claim.Id, DateTime.UtcNow));
+                    break;
+            }
+        }
+        catch { /* RabbitMQ unavailable — saga event skipped, core flow continues */ }
+
         return MapToDto(claim);
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../core/services/admin.service';
@@ -11,148 +11,171 @@ import Chart from 'chart.js/auto';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="page-container">
-      <!-- Page Header -->
-      <div class="page-header">
-        <div class="page-title">
-          <h2>Reports</h2>
-          <p>Generate and export platform analytics</p>
-        </div>
-        <button class="btn btn-success" (click)="exportCsv()" [disabled]="reports.length === 0">
-          ⬇ Export CSV
-        </button>
+  <div>
+    <!-- Header -->
+    <div class="ss-page-header mb-4">
+      <div>
+        <h2 class="ss-page-title">Reports & Analytics</h2>
+        <p class="ss-page-sub">Generate and export platform analytics</p>
       </div>
+      <button class="btn btn-success px-4" (click)="exportCsv()" [disabled]="reports.length === 0">
+        ⬇ Export CSV
+      </button>
+    </div>
 
-      <!-- KPI Cards -->
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-value">{{ reports.length }}</div>
-          <div class="kpi-label">Total Reports</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">{{ getCount('Claims') }}</div>
-          <div class="kpi-label">Claims Reports</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">{{ getCount('Policies') }}</div>
-          <div class="kpi-label">Policy Reports</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">{{ getCount('Users') }}</div>
-          <div class="kpi-label">User Reports</div>
+    <!-- KPI Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-lg-3">
+        <div class="ss-kpi-card">
+          <div class="ss-kpi-icon" style="background:#dbeafe">📊</div>
+          <div class="ss-kpi-num">{{ reports.length }}</div>
+          <div class="ss-kpi-lbl">Total Reports</div>
         </div>
       </div>
-
-      <!-- Generate Report Form -->
-      <div class="chart-wrapper" style="margin-bottom:1.5rem;">
-        <div class="chart-title">Generate New Report</div>
-
-        <!-- Error Message -->
-        <div *ngIf="errorMsg" class="alert alert-danger" style="margin-bottom:1rem;">
-          ⚠️ {{ errorMsg }}
+      <div class="col-6 col-lg-3">
+        <div class="ss-kpi-card">
+          <div class="ss-kpi-icon" style="background:#fee2e2">📁</div>
+          <div class="ss-kpi-num">{{ getCount('Claims') }}</div>
+          <div class="ss-kpi-lbl">Claims Reports</div>
         </div>
-        <!-- Success Message -->
-        <div *ngIf="successMsg" class="alert alert-success" style="margin-bottom:1rem;">
-          ✅ {{ successMsg }}
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="ss-kpi-card">
+          <div class="ss-kpi-icon" style="background:#d1fae5">📋</div>
+          <div class="ss-kpi-num">{{ getCount('Policies') }}</div>
+          <div class="ss-kpi-lbl">Policy Reports</div>
         </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="ss-kpi-card">
+          <div class="ss-kpi-icon" style="background:#ede9fe">👥</div>
+          <div class="ss-kpi-num">{{ getCount('Users') }}</div>
+          <div class="ss-kpi-lbl">User Reports</div>
+        </div>
+      </div>
+    </div>
 
-        <form [formGroup]="reportForm" (ngSubmit)="generate()" class="inline-form">
-          <div style="flex:1; min-width:200px;">
-            <input formControlName="title" placeholder="Report title..." class="form-control" />
+    <!-- Generate Form -->
+    <div class="ss-card mb-4">
+      <div class="ss-card-header">
+        <div>
+          <h3 class="ss-card-title">Generate New Report</h3>
+          <p class="ss-card-sub">Create a new analytics report</p>
+        </div>
+      </div>
+      <div class="p-4">
+        <div *ngIf="errorMsg" class="alert alert-danger">⚠️ {{ errorMsg }}</div>
+        <div *ngIf="successMsg" class="alert alert-success">✅ {{ successMsg }}</div>
+        <form [formGroup]="reportForm" (ngSubmit)="generate()">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-5">
+              <label class="form-label fw-semibold">Report Title</label>
+              <input formControlName="title" class="form-control" placeholder="e.g. Monthly Claims Summary" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Report Type</label>
+              <select formControlName="reportType" class="form-select">
+                <option value="Claims">Claims Report</option>
+                <option value="Policies">Policies Report</option>
+                <option value="Users">Users Report</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-primary w-100" [disabled]="reportForm.invalid || generating">
+                <span *ngIf="generating" class="spinner-border spinner-border-sm me-2"></span>
+                {{ generating ? 'Generating...' : '📊 Generate Report' }}
+              </button>
+            </div>
           </div>
-          <div style="min-width:160px;">
-            <select formControlName="reportType" class="form-control">
-              <option value="Claims">Claims Report</option>
-              <option value="Policies">Policies Report</option>
-              <option value="Users">Users Report</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-primary" [disabled]="reportForm.invalid || generating">
-            {{ generating ? '⏳ Generating...' : '📊 Generate' }}
-          </button>
         </form>
       </div>
+    </div>
 
-      <!-- Charts Row -->
-      <div class="charts-row" *ngIf="reports.length > 0">
-        <div class="chart-wrapper">
-          <div class="chart-title">Distribution by Type</div>
-          <div class="chart-canvas-wrap">
+    <!-- Charts -->
+    <div class="row g-4 mb-4" *ngIf="reports.length > 0">
+      <div class="col-md-6">
+        <div class="ss-card">
+          <div class="ss-card-header"><h3 class="ss-card-title">Distribution by Type</h3></div>
+          <div class="p-4" style="height:280px; display:flex; align-items:center; justify-content:center;">
             <canvas #doughnutCanvas></canvas>
           </div>
         </div>
-        <div class="chart-wrapper">
-          <div class="chart-title">Reports by Type</div>
-          <div class="chart-canvas-wrap">
+      </div>
+      <div class="col-md-6">
+        <div class="ss-card">
+          <div class="ss-card-header"><h3 class="ss-card-title">Reports by Type</h3></div>
+          <div class="p-4" style="height:280px;">
             <canvas #barCanvas></canvas>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Reports Table -->
-      <table class="table" *ngIf="reports.length > 0">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Generated By</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let r of reports; let i = index">
-            <td style="color:#94a3b8; font-size:0.8rem;">{{ i + 1 }}</td>
-            <td><strong>{{ r.title }}</strong></td>
-            <td><span class="badge badge-info">{{ r.reportType }}</span></td>
-            <td>Admin #{{ r.generatedBy }}</td>
-            <td style="color:#64748b; font-size:0.8rem;">{{ r.generatedAt | date:'MMM d, y · h:mm a' }}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div *ngIf="reports.length === 0 && !loading && !errorMsg" class="empty-state">
-        <div class="empty-icon">📊</div>
-        <h3>No reports yet</h3>
-        <p>Generate your first report using the form above.</p>
+    <!-- Table -->
+    <div class="ss-card" *ngIf="reports.length > 0">
+      <div class="ss-card-header">
+        <div>
+          <h3 class="ss-card-title">All Reports</h3>
+          <p class="ss-card-sub">{{ reports.length }} reports generated</p>
+        </div>
       </div>
-
-      <!-- Loading state -->
-      <div *ngIf="loading" class="empty-state">
-        <div class="spinner"></div>
-        <p>Loading reports...</p>
-      </div>
-
-      <!-- Load error state -->
-      <div *ngIf="!loading && errorMsg && reports.length === 0" class="empty-state">
-        <div class="empty-icon">❌</div>
-        <h3>Could not load reports</h3>
-        <p>{{ errorMsg }}</p>
-        <br>
-        <button class="btn btn-secondary" (click)="ngOnInit()">🔄 Retry</button>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr><th>#</th><th>Title</th><th>Type</th><th>Generated By</th><th>Date</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of reports; let i = index">
+              <td class="text-muted small">{{ i + 1 }}</td>
+              <td class="fw-bold">{{ r.title }}</td>
+              <td><span class="badge bg-info text-dark">{{ r.reportType }}</span></td>
+              <td>Admin #{{ r.generatedBy }}</td>
+              <td class="text-muted small">{{ r.generatedAt | date:'MMM d, y · h:mm a' }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- Empty -->
+    <div *ngIf="reports.length === 0 && !loading && !errorMsg" class="ss-empty">
+      <div class="ss-empty-icon">📊</div>
+      <h3>No reports yet</h3>
+      <p>Generate your first report using the form above.</p>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+      <p class="mt-3 text-muted">Loading reports...</p>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="!loading && errorMsg && reports.length === 0" class="ss-empty">
+      <div class="ss-empty-icon">❌</div>
+      <h3>Could not load reports</h3>
+      <p>{{ errorMsg }}</p>
+      <button class="btn btn-primary mt-3 px-4" (click)="ngOnInit()">🔄 Retry</button>
+    </div>
+  </div>
   `,
   styles: [`
-    .charts-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .chart-canvas-wrap {
-      position: relative;
-      height: 260px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .chart-canvas-wrap canvas {
-      max-height: 260px;
-    }
-    @media (max-width: 768px) {
-      .charts-row { grid-template-columns: 1fr; }
-    }
+    .ss-page-header { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .ss-page-title { font-size:1.5rem; font-weight:900; color:#1e3a5f; margin:0 0 0.25rem; }
+    .ss-page-sub { font-size:0.85rem; color:#64748b; margin:0; }
+    .ss-kpi-card { background:white; border:1px solid #e2e8f0; border-radius:14px; padding:1.5rem; transition:all 0.2s; &:hover { box-shadow:0 8px 24px rgba(30,58,95,0.1); transform:translateY(-3px); } }
+    .ss-kpi-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.25rem; margin-bottom:0.875rem; }
+    .ss-kpi-num { font-size:2rem; font-weight:900; color:#1e3a5f; line-height:1; }
+    .ss-kpi-lbl { font-size:0.8rem; color:#64748b; font-weight:500; margin-top:0.25rem; }
+    .ss-card { background:white; border:1px solid #e2e8f0; border-radius:14px; overflow:hidden; }
+    .ss-card-header { display:flex; justify-content:space-between; align-items:center; padding:1.25rem 1.5rem; border-bottom:1px solid #e2e8f0; background:#f8fafc; }
+    .ss-card-title { font-size:1rem; font-weight:800; color:#1e3a5f; margin:0 0 0.2rem; }
+    .ss-card-sub { font-size:0.78rem; color:#64748b; margin:0; }
+    .form-control, .form-select { border:1.5px solid #e2e8f0; border-radius:10px; &:focus { border-color:#2563eb; box-shadow:0 0 0 4px rgba(37,99,235,0.1); } }
+    .ss-empty { text-align:center; padding:4rem 2rem; background:white; border:1px solid #e2e8f0; border-radius:14px; }
+    .ss-empty-icon { font-size:3.5rem; margin-bottom:1rem; }
+    h3 { font-size:1.1rem; font-weight:800; color:#1e3a5f; margin-bottom:0.5rem; }
+    p { font-size:0.875rem; color:#64748b; margin:0; }
   `]
 })
 export class ReportsComponent implements OnInit {
@@ -168,35 +191,17 @@ export class ReportsComponent implements OnInit {
   @ViewChild('doughnutCanvas') doughnutCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('barCanvas') barCanvas!: ElementRef<HTMLCanvasElement>;
 
-  getCount(type: string): number {
-    return this.reports.filter(r => r.reportType === type).length;
-  }
+  getCount(type: string): number { return this.reports.filter(r => r.reportType === type).length; }
 
-  constructor(
-    private adminService: AdminService,
-    private authService: AuthService,
-    private fb: FormBuilder
-  ) {
-    this.reportForm = this.fb.group({
-      title: ['', Validators.required],
-      reportType: ['Claims', Validators.required]
-    });
+  constructor(private adminService: AdminService, private authService: AuthService, private fb: FormBuilder) {
+    this.reportForm = this.fb.group({ title: ['', Validators.required], reportType: ['Claims', Validators.required] });
   }
 
   ngOnInit(): void {
-    this.loading = true;
-    this.errorMsg = '';
+    this.loading = true; this.errorMsg = '';
     this.adminService.getReports().subscribe({
-      next: r => {
-        this.reports = r;
-        this.loading = false;
-        setTimeout(() => this.renderChart(), 100);
-      },
-      error: err => {
-        this.loading = false;
-        this.errorMsg = 'Failed to load reports. Make sure AdminService is running and you are logged in as Admin.';
-        console.error('Reports load error:', err);
-      }
+      next: r => { this.reports = r; this.loading = false; setTimeout(() => this.renderChart(), 100); },
+      error: () => { this.loading = false; this.errorMsg = 'Failed to load reports. Make sure AdminService is running.'; }
     });
   }
 
@@ -204,116 +209,47 @@ export class ReportsComponent implements OnInit {
     const types = ['Claims', 'Policies', 'Users'];
     const counts = types.map(t => this.getCount(t));
     const colors = ['#3b82f6', '#10b981', '#f59e0b'];
-    const borderColors = ['#1e40af', '#059669', '#d97706'];
-
-    // Doughnut chart
+    const borders = ['#1e40af', '#059669', '#d97706'];
     if (this.doughnutCanvas?.nativeElement) {
-      if (this.chartInstance) {
-        this.chartInstance.destroy();
-      }
+      this.chartInstance?.destroy();
       this.chartInstance = new Chart(this.doughnutCanvas.nativeElement, {
         type: 'doughnut',
-        data: {
-          labels: types,
-          datasets: [{
-            data: counts,
-            backgroundColor: colors,
-            borderColor: borderColors,
-            borderWidth: 2,
-            hoverOffset: 8
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: { padding: 16, font: { size: 12, family: 'Inter' } }
-            }
-          },
-          cutout: '65%'
-        }
+        data: { labels: types, datasets: [{ data: counts, backgroundColor: colors, borderColor: borders, borderWidth: 2, hoverOffset: 8 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } } }, cutout: '65%' }
       });
     }
-
-    // Bar chart
     if (this.barCanvas?.nativeElement) {
-      if (this.barChartInstance) {
-        this.barChartInstance.destroy();
-      }
+      this.barChartInstance?.destroy();
       this.barChartInstance = new Chart(this.barCanvas.nativeElement, {
         type: 'bar',
-        data: {
-          labels: types,
-          datasets: [{
-            label: 'Reports',
-            data: counts,
-            backgroundColor: colors,
-            borderColor: borderColors,
-            borderWidth: 2,
-            borderRadius: 8,
-            borderSkipped: false
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: { stepSize: 1, font: { family: 'Inter' } },
-              grid: { color: '#f1f5f9' }
-            },
-            x: {
-              ticks: { font: { family: 'Inter' } },
-              grid: { display: false }
-            }
-          }
-        }
+        data: { labels: types, datasets: [{ label: 'Reports', data: counts, backgroundColor: colors, borderColor: borders, borderWidth: 2, borderRadius: 8, borderSkipped: false as any }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
       });
     }
   }
 
   generate(): void {
     if (this.reportForm.invalid) return;
-    this.generating = true;
-    this.errorMsg = '';
-    this.successMsg = '';
-    const userId = this.authService.getUserId()!;
-    this.adminService.generateReport({ ...this.reportForm.value, generatedBy: userId }).subscribe({
+    this.generating = true; this.errorMsg = ''; this.successMsg = '';
+    this.adminService.generateReport({ ...this.reportForm.value, generatedBy: this.authService.getUserId()! }).subscribe({
       next: r => {
-        this.reports.unshift(r);
-        this.reportForm.patchValue({ title: '' });
-        this.generating = false;
-        this.successMsg = `Report "${r.title}" generated successfully.`;
+        this.reports.unshift(r); this.reportForm.patchValue({ title: '' });
+        this.generating = false; this.successMsg = `Report "${r.title}" generated successfully.`;
         setTimeout(() => { this.successMsg = ''; }, 4000);
         setTimeout(() => this.renderChart(), 100);
       },
-      error: err => {
-        this.generating = false;
-        this.errorMsg = err.error?.message || 'Failed to generate report. Make sure AdminService is running.';
-        console.error('Generate report error:', err);
-      }
+      error: err => { this.generating = false; this.errorMsg = err.error?.message || 'Failed to generate report.'; }
     });
   }
 
   exportCsv(): void {
-    if (this.reports.length === 0) return;
+    if (!this.reports.length) return;
     const headers = ['ID', 'Title', 'Type', 'Generated By', 'Date'];
-    const rows = this.reports.map(r =>
-      [r.id, `"${r.title}"`, r.reportType, `Admin #${r.generatedBy}`, new Date(r.generatedAt).toLocaleString()]
-    );
+    const rows = this.reports.map(r => [r.id, `"${r.title}"`, r.reportType, `Admin #${r.generatedBy}`, new Date(r.generatedAt).toLocaleString()]);
     const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `SmartSure_Reports_${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
+    const a = document.createElement('a'); a.href = url; a.download = `SmartSure_Reports_${new Date().toISOString().slice(0,10)}.csv`; a.click();
     URL.revokeObjectURL(url);
   }
 }

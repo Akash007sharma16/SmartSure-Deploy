@@ -1,3 +1,4 @@
+using MassTransit;
 using Moq;
 using NUnit.Framework;
 using PolicyService.DTOs;
@@ -13,6 +14,7 @@ public class PolicyServiceTests
     private Mock<IPolicyTypeRepository> _typeRepoMock = null!;
     private Mock<IPremiumRepository> _premiumRepoMock = null!;
     private Mock<IPaymentRepository> _paymentRepoMock = null!;
+    private Mock<IPublishEndpoint> _publishMock = null!;
     private PolicyService.Services.PolicyService _service = null!;
 
     [SetUp]
@@ -22,10 +24,13 @@ public class PolicyServiceTests
         _typeRepoMock = new Mock<IPolicyTypeRepository>();
         _premiumRepoMock = new Mock<IPremiumRepository>();
         _paymentRepoMock = new Mock<IPaymentRepository>();
+        _publishMock = new Mock<IPublishEndpoint>();
         _paymentRepoMock.Setup(r => r.CreateAsync(It.IsAny<Payment>()))
             .ReturnsAsync((Payment p) => p);
         _service = new PolicyService.Services.PolicyService(
-            _policyRepoMock.Object, _typeRepoMock.Object, _premiumRepoMock.Object, _paymentRepoMock.Object);
+            _policyRepoMock.Object, _typeRepoMock.Object,
+            _premiumRepoMock.Object, _paymentRepoMock.Object,
+            _publishMock.Object);
     }
 
     [Test]

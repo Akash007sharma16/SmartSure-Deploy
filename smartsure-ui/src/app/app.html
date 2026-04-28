@@ -1,57 +1,50 @@
-<nav class="navbar" *ngIf="authService.isLoggedIn()">
-  <a class="nav-brand" routerLink="/">
-    <div class="brand-icon">🛡️</div>
-    <span class="brand-text">SmartSure</span>
-  </a>
+<ng-container [ngSwitch]="layoutMode">
 
-  <div class="nav-links">
-    <ng-container *ngIf="authService.getRole() === 'Customer'">
-      <a routerLink="/customer/dashboard" routerLinkActive="active">
-        <span>📊</span> Dashboard
+  <!-- ── AUTHENTICATED LAYOUT (dashboard pages) ── -->
+  <ng-container *ngSwitchCase="'app'">
+    <nav class="app-navbar">
+      <a class="nav-brand" [routerLink]="authService.getRole()==='Admin' ? '/admin/dashboard' : '/customer/dashboard'">
+        <div class="brand-icon">🛡️</div>
+        <span class="brand-text">SmartSure</span>
       </a>
-      <a routerLink="/customer/policies" routerLinkActive="active">
-        <span>📋</span> My Policies
-      </a>
-      <a routerLink="/customer/buy-policy" routerLinkActive="active">
-        <span>🛡️</span> Buy Policy
-      </a>
-      <a routerLink="/claims/track" routerLinkActive="active">
-        <span>📁</span> Claims
-      </a>
-    </ng-container>
-    <ng-container *ngIf="authService.getRole() === 'Admin'">
-      <a routerLink="/admin/dashboard" routerLinkActive="active">
-        <span>📊</span> Dashboard
-      </a>
-      <a routerLink="/admin/claims" routerLinkActive="active">
-        <span>📁</span> Claims
-      </a>
-      <a routerLink="/admin/policies" routerLinkActive="active">
-        <span>📋</span> Policies
-      </a>
-      <a routerLink="/admin/users" routerLinkActive="active">
-        <span>👥</span> Users
-      </a>
-      <a routerLink="/reports" routerLinkActive="active">
-        <span>📈</span> Reports
-      </a>
-    </ng-container>
-  </div>
-
-  <div class="nav-right">
-    <div class="user-info">
-      <div class="user-avatar">{{ authService.getFullName().charAt(0).toUpperCase() || 'U' }}</div>
-      <div>
-        <div class="user-name">{{ authService.getFullName() }}</div>
-        <span class="badge" [class]="authService.getRole() === 'Admin' ? 'badge-admin' : 'badge-customer'" style="font-size:0.65rem;">
-          {{ authService.getRole() }}
-        </span>
+      <div class="nav-links">
+        <ng-container *ngIf="authService.getRole() === 'Customer'">
+          <a routerLink="/customer/dashboard" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/customer/policies" routerLinkActive="active">My Policies</a>
+          <a routerLink="/customer/buy-policy" routerLinkActive="active">Buy Policy</a>
+          <a routerLink="/claims/track" routerLinkActive="active">My Claims</a>
+        </ng-container>
+        <ng-container *ngIf="authService.getRole() === 'Admin'">
+          <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/admin/claims" routerLinkActive="active">Claims</a>
+          <a routerLink="/admin/policies" routerLinkActive="active">Policies</a>
+          <a routerLink="/admin/users" routerLinkActive="active">Users</a>
+          <a routerLink="/reports" routerLinkActive="active">Reports</a>
+        </ng-container>
       </div>
-    </div>
-    <button class="btn btn-secondary btn-sm" (click)="authService.logout()">Logout</button>
-  </div>
-</nav>
+      <div class="nav-right">
+        <div class="d-flex align-items-center gap-2">
+          <div class="user-avatar">{{ authService.getFullName().charAt(0).toUpperCase() }}</div>
+          <div>
+            <div class="user-name">{{ authService.getFullName() }}</div>
+            <span class="badge"
+              [class]="authService.getRole()==='Admin' ? 'bg-primary' : 'bg-info text-dark'"
+              style="font-size:0.62rem;">
+              {{ authService.getRole() }}
+            </span>
+          </div>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm ms-2" (click)="authService.logout()">Logout</button>
+      </div>
+    </nav>
+    <main class="main-content">
+      <router-outlet />
+    </main>
+  </ng-container>
 
-<main class="main-content">
-  <router-outlet />
-</main>
+  <!-- ── PUBLIC LAYOUT (landing, login, register — full viewport, no navbar) ── -->
+  <ng-container *ngSwitchDefault>
+    <router-outlet />
+  </ng-container>
+
+</ng-container>

@@ -9,153 +9,158 @@ import { Claim } from '../../core/models/claim.models';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="page-container">
-      <div class="page-header">
-        <div class="page-title">
-          <h2>Claim Review</h2>
-          <p>Review and update claim statuses</p>
-        </div>
-        <span class="badge badge-info" style="font-size:0.8rem; padding:0.4rem 0.75rem;">
-          {{ claims.length }} claims
-        </span>
+  <div>
+    <div class="ss-page-header mb-4">
+      <div>
+        <h2 class="ss-page-title">Claim Review</h2>
+        <p class="ss-page-sub">Review and update claim statuses</p>
       </div>
+      <span class="badge bg-primary rounded-pill px-3 py-2">{{ claims.length }} claims</span>
+    </div>
 
-      <div *ngIf="claims.length === 0" class="empty-state">
-        <div class="empty-icon">📁</div>
-        <h3>No claims to review</h3>
-        <p>Claims will appear here once customers start filing them.</p>
-      </div>
+    <div *ngIf="claims.length === 0" class="ss-empty">
+      <div class="ss-empty-icon">📁</div>
+      <h3>No claims to review</h3>
+      <p>Claims will appear here once customers start filing them.</p>
+    </div>
 
-      <div class="split-layout" *ngIf="claims.length > 0">
-
-        <!-- Left: Claims List -->
-        <div class="split-left">
-          <div style="padding:1rem; border-bottom:1px solid #e2e8f0; background:#f8fafc;">
-            <div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em;">All Claims</div>
+    <div class="ss-split" *ngIf="claims.length > 0">
+      <!-- Left list -->
+      <div class="ss-split-left">
+        <div class="ss-list-header">All Claims</div>
+        <div *ngFor="let c of claims" class="ss-list-item"
+             [class.ss-list-active]="selectedClaimId===c.id"
+             (click)="openReview(c)">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="ss-li-id">Claim #{{ c.id }}</div>
+              <div class="ss-li-sub">Customer #{{ c.customerId }}</div>
+            </div>
+            <span class="ss-badge" [ngClass]="badgeClass(c.status)">{{ c.status }}</span>
           </div>
-          <div *ngFor="let c of claims"
-               class="claim-list-item"
-               [class.selected]="selectedClaimId === c.id"
-               (click)="openReview(c)">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div class="d-flex justify-content-between mt-2">
+            <span class="ss-li-amount">{{ c.claimAmount | currency:'INR':'symbol':'1.0-0' }}</span>
+            <span class="ss-li-policy">Policy #{{ c.policyId }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="ss-split-right">
+        <div *ngIf="!selectedClaim" class="ss-empty" style="border:none;">
+          <div class="ss-empty-icon">👈</div>
+          <h3>Select a claim</h3>
+          <p>Click on a claim from the list to review it.</p>
+        </div>
+
+        <div *ngIf="selectedClaim as c">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h3 class="ss-detail-title">Claim #{{ c.id }}</h3>
+              <p class="ss-detail-sub">Policy #{{ c.policyId }} · Customer #{{ c.customerId }}</p>
+            </div>
+            <span class="ss-badge" [ngClass]="badgeClass(c.status)">{{ c.status }}</span>
+          </div>
+
+          <div class="ss-info-box mb-3">
+            <div class="ss-info-label">Claim Details</div>
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <div class="ss-info-key">Amount</div>
+                <div class="ss-info-val">{{ c.claimAmount | currency:'INR':'symbol':'1.0-0' }}</div>
+              </div>
+              <div class="col-6">
+                <div class="ss-info-key">Current Status</div>
+                <div class="ss-info-val">{{ c.status }}</div>
+              </div>
+            </div>
+            <div class="ss-info-key">Description</div>
+            <p class="ss-info-desc">{{ c.description }}</p>
+          </div>
+
+          <!-- Documents -->
+          <div *ngIf="selectedClaimDocuments.length > 0" class="mb-3">
+            <div class="ss-info-label mb-2">Uploaded Documents</div>
+            <div *ngFor="let doc of selectedClaimDocuments" class="ss-doc-item">
+              <span>📄</span>
               <div>
-                <div style="font-weight:700; font-size:0.9rem;">Claim #{{ c.id }}</div>
-                <div style="font-size:0.75rem; color:#64748b; margin-top:0.15rem;">Customer #{{ c.customerId }}</div>
+                <div class="ss-doc-name">{{ doc.fileName }}</div>
+                <div class="ss-doc-meta">{{ doc.fileType }} · {{ doc.uploadedAt | date:'mediumDate' }}</div>
               </div>
-              <span class="badge badge-{{ c.status.toLowerCase() }}" style="font-size:0.7rem;">{{ c.status }}</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-top:0.5rem;">
-              <span style="font-size:0.8rem; color:#475569;">{{ c.claimAmount | currency }}</span>
-              <span style="font-size:0.75rem; color:#94a3b8;">Policy #{{ c.policyId }}</span>
             </div>
           </div>
-        </div>
+          <p *ngIf="selectedClaimDocuments.length === 0" class="text-muted small mb-3">No documents uploaded for this claim.</p>
 
-        <!-- Right: Review Panel -->
-        <div class="split-right">
-          <div *ngIf="!selectedClaimId" class="empty-state" style="padding:3rem 1rem;">
-            <div class="empty-icon">👈</div>
-            <h3>Select a claim</h3>
-            <p>Click on a claim from the list to review it.</p>
-          </div>
-
-          <div *ngIf="selectedClaimId">
-            <ng-container *ngFor="let c of claims">
-              <div *ngIf="c.id === selectedClaimId">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-                  <div>
-                    <h3 style="font-size:1.1rem; font-weight:800;">Claim #{{ c.id }}</h3>
-                    <p style="font-size:0.8rem; color:#64748b;">Policy #{{ c.policyId }} · Customer #{{ c.customerId }}</p>
-                  </div>
-                  <span class="badge badge-{{ c.status.toLowerCase() }}">{{ c.status }}</span>
-                </div>
-
-                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; margin-bottom:1.25rem;">
-                  <div style="font-size:0.7rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">Claim Details</div>
-                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
-                    <div>
-                      <div style="font-size:0.75rem; color:#64748b;">Amount</div>
-                      <div style="font-weight:700;">{{ c.claimAmount | currency }}</div>
-                    </div>
-                    <div>
-                      <div style="font-size:0.75rem; color:#64748b;">Status</div>
-                      <div style="font-weight:700;">{{ c.status }}</div>
-                    </div>
-                  </div>
-                  <div style="margin-top:0.75rem;">
-                    <div style="font-size:0.75rem; color:#64748b; margin-bottom:0.25rem;">Description</div>
-                    <p style="font-size:0.875rem;">{{ c.description }}</p>
-                  </div>
-                </div>
-
-                <!-- Documents Section -->
-                <div *ngIf="selectedClaimDocuments.length > 0" style="margin-bottom:1.25rem;">
-                  <div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.75rem;">Uploaded Documents</div>
-                  <div *ngFor="let doc of selectedClaimDocuments" class="doc-list-item">
-                    <span style="font-size:1rem;">📄</span>
-                    <div style="flex:1;">
-                      <div style="font-size:0.875rem; font-weight:600;">{{ doc.fileName }}</div>
-                      <div style="font-size:0.75rem; color:#64748b;">{{ doc.fileType }} · {{ doc.uploadedAt | date:'mediumDate' }}</div>
-                    </div>
-                  </div>
-                </div>
-                <p *ngIf="selectedClaimDocuments.length === 0" style="font-size:0.8rem; color:#94a3b8; margin-bottom:1.25rem;">No documents uploaded for this claim.</p>
-
-                <!-- Review Form -->
-                <div class="review-form">
-                  <div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1rem;">Update Status</div>
-                  <form [formGroup]="reviewForm" (ngSubmit)="submitReview(c.id)">
-                    <div class="form-group">
-                      <label>New Status</label>
-                      <select formControlName="status" class="form-control">
-                        <option value="UnderReview">Under Review</option>
-                        <option value="Approved">Approved</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Closed">Closed</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Admin Remarks</label>
-                      <textarea formControlName="adminRemarks" class="form-control" rows="3"
-                                placeholder="Add notes or remarks..."></textarea>
-                    </div>
-                    <div style="display:flex; gap:0.75rem;">
-                      <button type="submit" class="btn btn-success" [disabled]="reviewForm.invalid">
-                        ✅ Update Status
-                      </button>
-                      <button type="button" class="btn btn-secondary" (click)="selectedClaimId = null">
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </div>
+          <!-- Review Form -->
+          <div class="ss-review-form">
+            <div class="ss-info-label mb-3">Update Status</div>
+            <form [formGroup]="reviewForm" (ngSubmit)="submitReview(c.id)">
+              <div class="mb-3">
+                <label class="form-label fw-semibold">New Status</label>
+                <select formControlName="status" class="form-select">
+                  <option value="UnderReview">Under Review</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Closed">Closed</option>
+                </select>
               </div>
-            </ng-container>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Admin Remarks</label>
+                <textarea formControlName="adminRemarks" class="form-control" rows="3"
+                          placeholder="Add notes or remarks..."></textarea>
+              </div>
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success" [disabled]="reviewForm.invalid">✅ Update Status</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="selectedClaimId=null">Cancel</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
+  </div>
   `,
   styles: [`
-    .claim-list-item {
-      padding: 1rem;
-      border-bottom: 1px solid #e2e8f0;
-      cursor: pointer;
-      transition: all 0.15s;
+    .ss-page-header { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .ss-page-title { font-size:1.5rem; font-weight:900; color:#1e3a5f; margin:0 0 0.25rem; }
+    .ss-page-sub { font-size:0.85rem; color:#64748b; margin:0; }
+    .ss-split { display:grid; grid-template-columns:340px 1fr; gap:1.5rem; align-items:start; }
+    .ss-split-left { background:white; border:1px solid #e2e8f0; border-radius:14px; overflow:hidden; max-height:calc(100vh - 160px); overflow-y:auto; }
+    .ss-split-right { background:white; border:1px solid #e2e8f0; border-radius:14px; padding:1.5rem; }
+    .ss-list-header { padding:0.875rem 1rem; background:#f8fafc; border-bottom:1px solid #e2e8f0; font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; }
+    .ss-list-item { padding:1rem; border-bottom:1px solid #e2e8f0; cursor:pointer; transition:all 0.15s;
+      &:hover { background:#f8fafc; }
+      &:last-child { border-bottom:none; }
     }
-    .claim-list-item:hover { background: #f8fafc; }
-    .claim-list-item.selected { background: rgba(30,64,175,0.05); border-left: 3px solid #1e40af; }
-    .claim-list-item:last-child { border-bottom: none; }
-    .doc-list-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.625rem 0.875rem;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-    }
+    .ss-list-active { background:#eff6ff !important; border-left:3px solid #2563eb; }
+    .ss-li-id { font-size:0.9rem; font-weight:800; color:#1e3a5f; }
+    .ss-li-sub { font-size:0.75rem; color:#64748b; margin-top:0.1rem; }
+    .ss-li-amount { font-size:0.8rem; color:#475569; font-weight:600; }
+    .ss-li-policy { font-size:0.75rem; color:#94a3b8; }
+    .ss-detail-title { font-size:1.1rem; font-weight:900; color:#1e3a5f; margin:0 0 0.25rem; }
+    .ss-detail-sub { font-size:0.8rem; color:#64748b; margin:0; }
+    .ss-info-box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:1rem; }
+    .ss-info-label { font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.75rem; }
+    .ss-info-key { font-size:0.75rem; color:#64748b; }
+    .ss-info-val { font-size:0.9rem; font-weight:700; color:#1e293b; margin-top:0.15rem; }
+    .ss-info-desc { font-size:0.875rem; color:#475569; margin:0.25rem 0 0; }
+    .ss-doc-item { display:flex; align-items:center; gap:0.75rem; padding:0.625rem 0.875rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; margin-bottom:0.5rem; }
+    .ss-doc-name { font-size:0.875rem; font-weight:600; color:#1e293b; }
+    .ss-doc-meta { font-size:0.75rem; color:#64748b; }
+    .ss-review-form { background:#f0f7ff; border:1px solid #bfdbfe; border-radius:12px; padding:1.25rem; }
+    .ss-badge { display:inline-flex; align-items:center; padding:0.3rem 0.875rem; border-radius:100px; font-size:0.72rem; font-weight:700; }
+    .ss-badge-draft { background:#f1f5f9; color:#64748b; }
+    .ss-badge-submitted { background:#dbeafe; color:#1e40af; }
+    .ss-badge-underreview { background:#fef3c7; color:#92400e; }
+    .ss-badge-approved { background:#d1fae5; color:#065f46; }
+    .ss-badge-rejected { background:#fee2e2; color:#991b1b; }
+    .ss-badge-closed { background:#f1f5f9; color:#475569; }
+    .ss-empty { text-align:center; padding:4rem 2rem; background:white; border:1px solid #e2e8f0; border-radius:14px; }
+    .ss-empty-icon { font-size:3.5rem; margin-bottom:1rem; }
+    h3 { font-size:1.1rem; font-weight:800; color:#1e3a5f; margin-bottom:0.5rem; }
+    p { font-size:0.875rem; color:#64748b; margin:0; }
+    .form-select, .form-control { border:1.5px solid #e2e8f0; border-radius:10px; &:focus { border-color:#2563eb; box-shadow:0 0 0 4px rgba(37,99,235,0.1); } }
+    @media(max-width:1024px) { .ss-split { grid-template-columns:1fr; } }
   `]
 })
 export class ClaimReviewComponent implements OnInit {
@@ -164,32 +169,45 @@ export class ClaimReviewComponent implements OnInit {
   selectedClaimDocuments: any[] = [];
   reviewForm: FormGroup;
 
+  // Computed once — no more *ngFor inside the right panel
+  get selectedClaim(): Claim | null {
+    return this.claims.find(c => c.id === this.selectedClaimId) ?? null;
+  }
+
+  // Safe badge class — handles null/undefined status
+  badgeClass(status: string | undefined): string {
+    return 'ss-badge-' + (status ?? 'draft').toLowerCase().replace(' ', '');
+  }
+
   constructor(private adminService: AdminService, private fb: FormBuilder) {
-    this.reviewForm = this.fb.group({
-      status: ['UnderReview', Validators.required],
-      adminRemarks: ['']
-    });
+    this.reviewForm = this.fb.group({ status: ['UnderReview', Validators.required], adminRemarks: [''] });
   }
 
   ngOnInit(): void {
-    this.adminService.getAllClaims().subscribe(c => this.claims = c);
+    this.adminService.getAllClaims().subscribe({
+      next: c => this.claims = c,
+      error: () => this.claims = []
+    });
   }
 
   openReview(claim: Claim): void {
     this.selectedClaimId = claim.id;
-    this.reviewForm.patchValue({ status: claim.status, adminRemarks: claim.adminRemarks ?? '' });
+    this.reviewForm.patchValue({ status: claim.status ?? 'UnderReview', adminRemarks: claim.adminRemarks ?? '' });
     this.adminService.getClaimDocuments(claim.id).subscribe({
-      next: docs => this.selectedClaimDocuments = docs,
+      next: d => this.selectedClaimDocuments = d ?? [],
       error: () => this.selectedClaimDocuments = []
     });
   }
 
   submitReview(claimId: number): void {
-    this.adminService.updateClaimStatus(claimId, this.reviewForm.value).subscribe(updated => {
-      const idx = this.claims.findIndex(c => c.id === claimId);
-      if (idx !== -1) this.claims[idx] = updated;
-      this.selectedClaimId = null;
-      this.selectedClaimDocuments = [];
+    this.adminService.updateClaimStatus(claimId, this.reviewForm.value).subscribe({
+      next: updated => {
+        const idx = this.claims.findIndex(c => c.id === claimId);
+        if (idx !== -1) this.claims[idx] = updated;
+        this.selectedClaimId = null;
+        this.selectedClaimDocuments = [];
+      },
+      error: () => {}
     });
   }
 }

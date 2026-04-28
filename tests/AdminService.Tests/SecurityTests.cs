@@ -4,11 +4,18 @@ using NUnit.Framework;
 namespace AdminService.Tests;
 
 /// <summary>
-/// Integration test — requires all 5 services running.
-/// Run manually after starting the full stack: dotnet test --filter SecurityTests
+/// Integration test — requires ALL 5 services running on their HTTPS ports.
+///
+/// HOW TO RUN (only when services are running):
+///   dotnet test tests/AdminService.Tests/AdminService.Tests.csproj
+///          --filter "FullyQualifiedName~SecurityTests" --no-build --settings tests.runsettings
+///
+/// This test is marked [Explicit] so it NEVER runs in the normal test suite.
+/// It only runs when called by name explicitly.
 /// </summary>
 [TestFixture]
 [Category("Integration")]
+[Explicit("Requires all 5 services running on localhost. Run manually only.")]
 public class SecurityTests
 {
     private HttpClient _client = null!;
@@ -18,14 +25,17 @@ public class SecurityTests
     {
         _client = new HttpClient(new HttpClientHandler
         {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         })
         {
-            BaseAddress = new Uri("https://localhost:7000")
+            BaseAddress = new Uri("https://localhost:7000"),
+            Timeout = TimeSpan.FromSeconds(10)
         };
     }
 
     [Test]
+    [Timeout(15000)]
     public async Task AdminEndpoint_WithCustomerJwt_Returns403()
     {
         // Step 1: Register a test customer (idempotent — ignore conflict)

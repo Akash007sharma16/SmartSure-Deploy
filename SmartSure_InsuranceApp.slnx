@@ -5,6 +5,9 @@
     <Project Path="src/ClaimsService/ClaimsService.csproj" />
     <Project Path="src/IdentityService/IdentityService.csproj" />
     <Project Path="src/PolicyService/PolicyService.csproj" />
+    <Project Path="src/SmartSure.Contracts/SmartSure.Contracts.csproj" />
+    <Project Path="src/SmartSure.Sagas/SmartSure.Sagas.csproj" />
+    <Project Path="src/SmartSure.SagaHost/SmartSure.SagaHost.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/AdminService.Tests/AdminService.Tests.csproj" />

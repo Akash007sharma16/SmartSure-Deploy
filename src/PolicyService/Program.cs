@@ -1,8 +1,10 @@
 using System.Text;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PolicyService.Consumers;
 using PolicyService.Data;
 using PolicyService.Repositories;
 using PolicyService.Services;
@@ -50,11 +52,39 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddCors(opt =>
-    opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+    opt.AddPolicy("AllowAngular", p =>
+        p.WithOrigins("http://localhost:4200", "https://localhost:4200",
+                      "https://localhost:7000", "http://localhost:5000")
+         .AllowAnyMethod()
+         .AllowAnyHeader()
+         .AllowCredentials()));
+
+// ── MassTransit + RabbitMQ ────────────────────────────────────────────────────
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<CancelPolicyConsumer>();
+
+    x.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQ:Host"] ?? "localhost", "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+            h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
+        });
+
+        // Retry so a temporary RabbitMQ outage doesn't crash the service
+        cfg.UseMessageRetry(r => r.Intervals(
+            TimeSpan.FromSeconds(5),
+            TimeSpan.FromSeconds(15),
+            TimeSpan.FromSeconds(30)));
+
+        cfg.ConfigureEndpoints(ctx);
+    });
+});
 
 var app = builder.Build();
 app.UseSwagger(); app.UseSwaggerUI();
-app.UseCors("AllowAll");
+app.UseCors("AllowAngular");
 app.UseAuthentication(); app.UseAuthorization();
 app.MapControllers();
 app.Run();

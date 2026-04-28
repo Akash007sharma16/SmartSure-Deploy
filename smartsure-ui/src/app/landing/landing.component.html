@@ -1,0 +1,250 @@
+<div class="lp">
+
+  <!-- ── HEADER ── -->
+  <header class="lp-header">
+    <div class="lp-header-inner">
+      <a routerLink="/" class="lp-logo">
+        <span class="lp-logo-icon">🛡️</span>
+        <span class="lp-logo-name">SmartSure</span>
+      </a>
+      <nav class="lp-nav">
+        <a href="#products">Products</a>
+        <a href="#features">Why Us</a>
+        <a href="#how">How It Works</a>
+      </nav>
+      <div class="lp-header-cta">
+        <a routerLink="/auth/login" class="lp-btn-outline">Login</a>
+        <a routerLink="/auth/register" class="lp-btn-fill">Get Started Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="lp-hero">
+    <div class="lp-blob lp-blob-1"></div>
+    <div class="lp-blob lp-blob-2"></div>
+    <div class="lp-blob lp-blob-3"></div>
+    <div class="lp-hero-inner">
+
+      <div class="lp-hero-left">
+        <div class="lp-pill">
+          <span class="lp-pill-dot"></span>
+          Trusted by 1 Crore+ Indians
+        </div>
+        <h1 class="lp-h1">
+          Insurance that<br>
+          <span class="lp-grad">actually works</span>
+        </h1>
+        <p class="lp-hero-desc">
+          Health, Life, Auto & more — instant quotes, paperless activation,
+          24×7 claims support. Starting at just <strong>₹2,094/year.</strong>
+        </p>
+
+        <!-- Quote Widget -->
+        <div class="lp-widget">
+          <div class="lp-widget-tabs">
+            <button [class.active]="tab==='auto'"   (click)="tab='auto';   inp=''">🚗 Auto</button>
+            <button [class.active]="tab==='health'" (click)="tab='health'; inp=''">🏥 Health</button>
+            <button [class.active]="tab==='life'"   (click)="tab='life';   inp=''">🛡️ Life</button>
+            <button [class.active]="tab==='travel'" (click)="tab='travel'; inp=''">✈️ Travel</button>
+          </div>
+          <div class="lp-widget-body">
+            <div class="lp-input-row">
+              <input [(ngModel)]="inp" [placeholder]="placeholder" class="lp-input" />
+              <button class="lp-quote-btn" (click)="goRegister()">
+                Get Free Quote
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+            <p class="lp-widget-note">No spam · No credit card · Instant results</p>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="lp-quick-links">
+          <a routerLink="/auth/register" class="lp-ql">
+            <span class="lp-ql-icon">🔄</span>
+            <span><strong>Renew</strong> existing policy</span>
+            <span class="lp-ql-arr">→</span>
+          </a>
+          <a routerLink="/auth/register" class="lp-ql">
+            <span class="lp-ql-icon">🆕</span>
+            <span><strong>Buy</strong> new policy</span>
+            <span class="lp-ql-arr">→</span>
+          </a>
+          <a routerLink="/auth/register" class="lp-ql">
+            <span class="lp-ql-icon">📋</span>
+            <span><strong>Track</strong> your claim</span>
+            <span class="lp-ql-arr">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Visual -->
+      <div class="lp-hero-right">
+        <div class="lp-visual">
+          <div class="lp-fc lp-fc-1">
+            <div class="lp-fc-dot green"></div>
+            <div>
+              <div class="lp-fc-title">Policy Active</div>
+              <div class="lp-fc-sub">Health Insurance · ₹10L</div>
+            </div>
+          </div>
+          <div class="lp-fc lp-fc-2">
+            <div class="lp-fc-dot blue"></div>
+            <div>
+              <div class="lp-fc-title">Claim Approved</div>
+              <div class="lp-fc-sub">₹45,000 settled in 2 days</div>
+            </div>
+          </div>
+          <div class="lp-fc lp-fc-3">
+            <div class="lp-fc-dot orange"></div>
+            <div>
+              <div class="lp-fc-title">Premium Due</div>
+              <div class="lp-fc-sub">₹2,094 · Auto Insurance</div>
+            </div>
+          </div>
+          <div class="lp-policy-card">
+            <div class="lp-pc-top">
+              <span class="lp-pc-brand">🛡️ SmartSure</span>
+              <span class="lp-pc-status">ACTIVE</span>
+            </div>
+            <div class="lp-pc-name">Akash Sharma</div>
+            <div class="lp-pc-type">Comprehensive Health Plan</div>
+            <div class="lp-pc-stats">
+              <div><div class="lp-pc-lbl">Coverage</div><div class="lp-pc-val">₹10,00,000</div></div>
+              <div><div class="lp-pc-lbl">Premium</div><div class="lp-pc-val">₹2,094/yr</div></div>
+              <div><div class="lp-pc-lbl">Valid Till</div><div class="lp-pc-val">Dec 2026</div></div>
+            </div>
+            <div class="lp-pc-bar"><div class="lp-pc-bar-fill" style="width:72%"></div></div>
+            <div class="lp-pc-bar-lbl">72% coverage utilised</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TRUST BAR ── -->
+  <section class="lp-trust">
+    <div class="lp-trust-inner">
+      <div class="lp-trust-item" *ngFor="let t of trustItems">
+        <div class="lp-trust-num">{{ t.num }}</div>
+        <div class="lp-trust-lbl">{{ t.lbl }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRODUCTS ── -->
+  <section id="products" class="lp-section lp-products">
+    <div class="lp-section-inner">
+      <div class="lp-section-head">
+        <h2>What would you like to insure?</h2>
+        <p>Choose from our wide range of insurance products</p>
+      </div>
+      <div class="lp-products-grid">
+        <div class="lp-prod-card" *ngFor="let p of products" (click)="goRegister()">
+          <div class="lp-prod-icon" [style.background]="p.bg">{{ p.icon }}</div>
+          <div class="lp-prod-name">{{ p.name }}</div>
+          <div class="lp-prod-price">From {{ p.price }}</div>
+          <div class="lp-prod-arr">→</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHY US ── -->
+  <section id="features" class="lp-section lp-why">
+    <div class="lp-section-inner">
+      <div class="lp-section-head">
+        <h2>Why 1 Crore+ Indians choose SmartSure</h2>
+        <p>Simple, transparent, and affordable insurance for everyone</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4" *ngFor="let f of features">
+          <div class="lp-feat-card h-100">
+            <div class="lp-feat-icon" [ngClass]="f.color">{{ f.icon }}</div>
+            <h4>{{ f.title }}</h4>
+            <p>{{ f.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section id="how" class="lp-section lp-how">
+    <div class="lp-section-inner">
+      <div class="lp-section-head">
+        <h2>Get insured in 3 simple steps</h2>
+        <p>From signup to active coverage in under 5 minutes</p>
+      </div>
+      <div class="lp-steps">
+        <div class="lp-step" *ngFor="let s of steps; let i = index">
+          <div class="lp-step-num">{{ i + 1 }}</div>
+          <div class="lp-step-icon">{{ s.icon }}</div>
+          <h4>{{ s.title }}</h4>
+          <p>{{ s.desc }}</p>
+        </div>
+      </div>
+      <div class="text-center mt-5 d-flex gap-3 justify-content-center flex-wrap">
+        <a routerLink="/auth/register" class="lp-btn-fill lp-btn-lg">Start Your Journey →</a>
+        <a routerLink="/auth/login" class="lp-btn-outline lp-btn-lg">Already a member?</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="lp-cta">
+    <div class="lp-cta-inner">
+      <div>
+        <h2>Ready to get protected?</h2>
+        <p>Join 1 Crore+ Indians who trust SmartSure for their insurance needs.</p>
+      </div>
+      <div class="lp-cta-btns">
+        <a routerLink="/auth/register" class="lp-btn-white">Get Started Free</a>
+        <a routerLink="/auth/login" class="lp-btn-ghost-white">Sign In</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="lp-footer">
+    <div class="lp-footer-inner">
+      <div class="lp-footer-brand">
+        <div class="lp-logo mb-3">
+          <span class="lp-logo-icon">🛡️</span>
+          <span class="lp-logo-name" style="color:white">SmartSure</span>
+        </div>
+        <p>Modern insurance for modern India. Secure, fast, and reliable coverage for everyone.</p>
+      </div>
+      <div class="lp-footer-links">
+        <div class="lp-footer-col">
+          <h5>Products</h5>
+          <a href="#">Health Insurance</a>
+          <a href="#">Life Insurance</a>
+          <a href="#">Auto Insurance</a>
+          <a href="#">Travel Insurance</a>
+        </div>
+        <div class="lp-footer-col">
+          <h5>Company</h5>
+          <a href="#">About Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Press</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="lp-footer-col">
+          <h5>Support</h5>
+          <a href="#">Help Center</a>
+          <a href="#">Claims</a>
+          <a href="#">FAQs</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="lp-footer-bottom">
+      <span>© {{ year }} SmartSure Insurance. All rights reserved.</span>
+      <span>IRDAI Reg. No. 123 | CIN: U66010MH2024PLC000001</span>
+    </div>
+  </footer>
+
+</div>
