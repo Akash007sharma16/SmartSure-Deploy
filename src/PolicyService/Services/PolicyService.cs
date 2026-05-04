@@ -3,6 +3,7 @@ using PolicyService.DTOs;
 using PolicyService.Models;
 using PolicyService.Repositories;
 using SmartSure.Contracts;
+using System.Text.Json;
 
 namespace PolicyService.Services;
 
@@ -13,19 +14,28 @@ public class PolicyService : IPolicyService
     private readonly IPremiumRepository _premiumRepo;
     private readonly IPaymentRepository _paymentRepo;
     private readonly IPublishEndpoint _publish;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration _config;
+    private readonly ILogger<PolicyService> _logger;
 
     public PolicyService(
         IPolicyRepository policyRepo,
         IPolicyTypeRepository typeRepo,
         IPremiumRepository premiumRepo,
         IPaymentRepository paymentRepo,
-        IPublishEndpoint publish)
+        IPublishEndpoint publish,
+        IHttpClientFactory httpClientFactory,
+        IConfiguration config,
+        ILogger<PolicyService> logger)
     {
         _policyRepo = policyRepo;
         _typeRepo = typeRepo;
         _premiumRepo = premiumRepo;
         _paymentRepo = paymentRepo;
         _publish = publish;
+        _httpClientFactory = httpClientFactory;
+        _config = config;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<PolicyTypeDto>> GetPolicyTypesAsync()
@@ -65,16 +75,49 @@ public class PolicyService : IPolicyService
         var premiumAmount = dto.CoverageAmount * (policyType.BaseRate / 100);
         await _premiumRepo.CreateAsync(new Premium { PolicyId = policy.Id, Amount = premiumAmount });
 
+        // Fetch customer details from IdentityService for email notifications (non-blocking)
+        var (customerEmail, customerName) = await GetCustomerDetailsAsync(dto.CustomerId);
+
         // Publish event for saga (non-blocking — works even if RabbitMQ is down)
         try
         {
             await _publish.Publish(new PolicyCreated(
                 Guid.NewGuid(), policy.Id, policy.CustomerId, policy.PolicyTypeId,
-                policy.CoverageAmount, policy.StartDate, policy.EndDate));
+                policy.CoverageAmount, policy.StartDate, policy.EndDate,
+                customerEmail, customerName, policyType.Name));
         }
         catch { /* RabbitMQ unavailable — saga event skipped, core flow continues */ }
 
         return MapToDto(policy, policyType.Name);
+    }
+
+    /// <summary>
+    /// Fetches customer email and name from IdentityService via internal API.
+    /// Returns empty strings on failure — email is best-effort, never blocks the purchase.
+    /// </summary>
+    private async Task<(string Email, string Name)> GetCustomerDetailsAsync(int customerId)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("IdentityService");
+            var internalKey = _config["InternalApi:Key"] ?? "";
+            client.DefaultRequestHeaders.Add("X-Internal-Key", internalKey);
+
+            var response = await client.GetAsync($"api/internal/users/{customerId}");
+            if (!response.IsSuccessStatusCode) return ("", "");
+
+            var json = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+            var email = root.TryGetProperty("email", out var e) ? e.GetString() ?? "" : "";
+            var name  = root.TryGetProperty("fullName", out var n) ? n.GetString() ?? "" : "";
+            return (email, name);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Could not fetch customer details for CustomerId {Id} — email notification skipped", customerId);
+            return ("", "");
+        }
     }
 
     public async Task<PolicyDto> ActivatePolicyAsync(int id, int customerId)
@@ -153,6 +196,19 @@ public class PolicyService : IPolicyService
 
         if (!Enum.TryParse<PolicyStatus>(status, true, out var newStatus))
             throw new ArgumentException("Invalid status.");
+
+        // ── Lifecycle transition guard ────────────────────────────────────────
+        var validTransitions = new Dictionary<PolicyStatus, PolicyStatus[]>
+        {
+            [PolicyStatus.Draft]     = [PolicyStatus.Active],
+            [PolicyStatus.Active]    = [PolicyStatus.Expired, PolicyStatus.Cancelled],
+            [PolicyStatus.Expired]   = [],
+            [PolicyStatus.Cancelled] = []
+        };
+
+        if (!validTransitions.TryGetValue(policy.Status, out var allowed) || !allowed.Contains(newStatus))
+            throw new InvalidOperationException(
+                $"Cannot transition from {policy.Status} to {newStatus}.");
 
         policy.Status = newStatus;
         await _policyRepo.UpdateAsync(policy);

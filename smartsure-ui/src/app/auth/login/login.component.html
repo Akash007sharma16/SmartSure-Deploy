@@ -1,0 +1,103 @@
+<div class="auth-page">
+  <!-- Left Panel -->
+  <div class="auth-left">
+    <div class="auth-brand">
+      <div class="auth-brand-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <span class="auth-brand-name">SmartSure</span>
+    </div>
+    <div class="auth-left-content">
+      <h1>Insurance made<br><span class="auth-grad">simple &amp; smart</span></h1>
+      <p>Manage all your policies and claims from one powerful platform.</p>
+      <div class="auth-features">
+        <div class="auth-feat">
+          <div class="af-icon"><i class="fa-solid fa-bolt"></i></div>
+          <span>Instant policy activation</span>
+        </div>
+        <div class="auth-feat">
+          <div class="af-icon"><i class="fa-solid fa-file-lines"></i></div>
+          <span>Easy claims filing &amp; tracking</span>
+        </div>
+        <div class="auth-feat">
+          <div class="af-icon"><i class="fa-solid fa-lock"></i></div>
+          <span>Bank-grade security</span>
+        </div>
+        <div class="auth-feat">
+          <div class="af-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <span>Real-time dashboard insights</span>
+        </div>
+      </div>
+      <div class="auth-trust">
+        <div class="at-item"><strong>1 Cr+</strong><span>Customers</span></div>
+        <div class="at-item"><strong>99.2%</strong><span>Claims Settled</span></div>
+        <div class="at-item"><strong>4.8 <i class="fa-solid fa-star" style="font-size:0.9rem;color:#fbbf24"></i></strong><span>Rating</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <h2>Welcome back</h2>
+        <p>Sign in to your SmartSure account</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Email address</label>
+          <input type="email" formControlName="email"
+            class="form-control form-control-lg"
+            [class.is-invalid]="isInvalid('email')"
+            [class.is-valid]="isValid('email')"
+            placeholder="you@example.com"
+            autocomplete="email" />
+          <div class="invalid-feedback">{{ err('email') }}</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <div class="input-group">
+            <input [type]="showPwd ? 'text' : 'password'" formControlName="password"
+              class="form-control form-control-lg"
+              [class.is-invalid]="isInvalid('password')"
+              [class.is-valid]="isValid('password')"
+              placeholder="Enter your password"
+              autocomplete="current-password" />
+            <button class="btn btn-outline-secondary" type="button"
+                    (click)="showPwd = !showPwd" tabindex="-1">
+              <i [class]="showPwd ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+            </button>
+          </div>
+          <div class="invalid-feedback d-block" *ngIf="isInvalid('password')">
+            {{ err('password') }}
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="remember">
+            <label class="form-check-label text-muted" for="remember" style="font-size:0.875rem;">Remember me</label>
+          </div>
+          <a routerLink="/auth/forgot-password" class="forgot-link text-decoration-none">Forgot password?</a>
+        </div>
+
+        <div *ngIf="errorMsg" class="alert alert-danger py-2 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-circle-exclamation"></i> {{ errorMsg }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 btn-lg fw-semibold"
+                [disabled]="form.invalid || loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          <i *ngIf="!loading" class="fa-solid fa-arrow-right-to-bracket me-2"></i>
+          {{ loading ? 'Signing in...' : 'Sign In' }}
+        </button>
+      </form>
+
+      <div class="auth-divider"><span>or</span></div>
+      <p class="text-center text-muted mb-0 register-link">
+        Don't have an account?
+        <a routerLink="/auth/register" class="fw-bold text-decoration-none" style="color:#4f46e5;">Create one free</a>
+      </p>
+    </div>
+  </div>
+</div>

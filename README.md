@@ -21,6 +21,7 @@ A full-stack insurance management platform built with a .NET 8 microservices bac
 11. [Troubleshooting](#11-troubleshooting)
 12. [Ports Quick Reference](#12-ports-quick-reference)
 13. [Project Folder Structure](#13-project-folder-structure)
+14. [Changelog](#14-changelog)
 ---
 
 ## 1. Prerequisites
@@ -44,7 +45,7 @@ Before running SmartSure, ensure every tool below is installed and working. Miss
 
 When installing Visual Studio 2022, ensure the following workload is selected:
 
-- **ASP.NET and web development** — required for running and debugging .NET 8 microservices
+- **ASP.NET and web development** ï¿½ required for running and debugging .NET 8 microservices
 
 ### 1.3 EF Core CLI Tools
 
@@ -176,7 +177,7 @@ found 0 vulnerabilities
 
 ## 3. Database Setup
 
-SmartSure uses four separate SQL Server databases — one per microservice. Each database is created and migrated independently using Entity Framework Core.
+SmartSure uses four separate SQL Server databases ï¿½ one per microservice. Each database is created and migrated independently using Entity Framework Core.
 
 ### 3.1 SQL Server Instance
 
@@ -214,7 +215,7 @@ Data Source=YOUR_SERVER\SQLEXPRESS;Initial Catalog=DATABASE_NAME;Integrated Secu
 Open a terminal at the solution root and run each command in order:
 
 ```bash
-# Step 1 — Identity database (creates SmartSureAppDb_Identity)
+# Step 1 ï¿½ Identity database (creates SmartSureAppDb_Identity)
 dotnet ef database update --project src/IdentityService
 ```
 
@@ -227,7 +228,7 @@ Done.
 ```
 
 ```bash
-# Step 2 — Policy database (creates SmartSureAppDb_Policy + seeds 3 PolicyTypes)
+# Step 2 ï¿½ Policy database (creates SmartSureAppDb_Policy + seeds 3 PolicyTypes)
 dotnet ef database update --project src/PolicyService
 ```
 
@@ -244,7 +245,7 @@ Done.
 ```
 
 ```bash
-# Step 3 — Claims database (creates SmartSureAppDb_Claims)
+# Step 3 ï¿½ Claims database (creates SmartSureAppDb_Claims)
 dotnet ef database update --project src/ClaimsService
 ```
 
@@ -259,7 +260,7 @@ Done.
 ```
 
 ```bash
-# Step 4 — Admin database (creates SmartSureAppDb_Admin)
+# Step 4 ï¿½ Admin database (creates SmartSureAppDb_Admin)
 dotnet ef database update --project src/AdminService
 ```
 
@@ -396,7 +397,7 @@ Open each `appsettings.json` file and replace `YOUR_SERVER\SQLEXPRESS` with your
 }
 ```
 
-### 4.2 JWT Settings — Critical Rules
+### 4.2 JWT Settings ï¿½ Critical Rules
 
 The following JWT values are used by every service to sign and validate tokens. They **must be identical** across all five projects (IdentityService, PolicyService, ClaimsService, AdminService, and ApiGateway):
 
@@ -441,7 +442,7 @@ The ClaimsService handles document uploads for claim evidence. The following lim
 
 Files exceeding 10 MB or with disallowed types will be rejected with a `400 Bad Request` response.
 
-### 4.5 ApiGateway — ocelot.json Route Summary
+### 4.5 ApiGateway ï¿½ ocelot.json Route Summary
 
 The gateway routes are defined in `src/ApiGateway/ocelot.json`. The complete routing table is:
 
@@ -466,15 +467,15 @@ Routes marked "No" for auth are publicly accessible. All other routes require a 
 
 The backend consists of five .NET 8 projects that must all be running simultaneously: ApiGateway, IdentityService, PolicyService, ClaimsService, and AdminService.
 
-### 5.1 Option A — Visual Studio 2022 (Recommended)
+### 5.1 Option A ï¿½ Visual Studio 2022 (Recommended)
 
 This is the easiest method. Visual Studio launches all five projects at once.
 
-**Step 1 — Open the solution**
+**Step 1 ï¿½ Open the solution**
 
 Open `SmartSure_InsuranceApp.slnx` in Visual Studio 2022.
 
-**Step 2 — Configure Multiple Startup Projects**
+**Step 2 ï¿½ Configure Multiple Startup Projects**
 
 1. Right-click the solution node (top of Solution Explorer) ? **Properties**.
 2. Select **Common Properties ? Startup Project**.
@@ -491,17 +492,17 @@ Open `SmartSure_InsuranceApp.slnx` in Visual Studio 2022.
 
 5. Click **OK**.
 
-**Step 3 — Start the application**
+**Step 3 ï¿½ Start the application**
 
 Press **F5** (with debugging) or **Ctrl+F5** (without debugging).
 
-Visual Studio will build all projects and launch five browser tabs — one for each service's Swagger UI.
+Visual Studio will build all projects and launch five browser tabs ï¿½ one for each service's Swagger UI.
 
-### 5.2 Option B — .NET CLI (Five Terminals)
+### 5.2 Option B ï¿½ .NET CLI (Five Terminals)
 
 Open five separate terminal windows (PowerShell, Command Prompt, or Windows Terminal tabs). Run one command per terminal, all from the solution root:
 
-**Terminal 1 — API Gateway**
+**Terminal 1 ï¿½ API Gateway**
 ```bash
 dotnet run --project src/ApiGateway
 ```
@@ -514,7 +515,7 @@ info: Microsoft.Hosting.Lifetime[0]
       Application started. Press Ctrl+C to shut down.
 ```
 
-**Terminal 2 — Identity Service**
+**Terminal 2 ï¿½ Identity Service**
 ```bash
 dotnet run --project src/IdentityService
 ```
@@ -527,7 +528,7 @@ info: Microsoft.Hosting.Lifetime[0]
       Application started. Press Ctrl+C to shut down.
 ```
 
-**Terminal 3 — Policy Service**
+**Terminal 3 ï¿½ Policy Service**
 ```bash
 dotnet run --project src/PolicyService
 ```
@@ -540,7 +541,7 @@ info: Microsoft.Hosting.Lifetime[0]
       Application started. Press Ctrl+C to shut down.
 ```
 
-**Terminal 4 — Claims Service**
+**Terminal 4 ï¿½ Claims Service**
 ```bash
 dotnet run --project src/ClaimsService
 ```
@@ -553,7 +554,7 @@ info: Microsoft.Hosting.Lifetime[0]
       Application started. Press Ctrl+C to shut down.
 ```
 
-**Terminal 5 — Admin Service**
+**Terminal 5 ï¿½ Admin Service**
 ```bash
 dotnet run --project src/AdminService
 ```
@@ -605,7 +606,7 @@ cd smartsure-ui
 npm install
 ```
 
-This reads `package.json` and installs all dependencies into `node_modules/`. The process takes 30–90 seconds on first run.
+This reads `package.json` and installs all dependencies into `node_modules/`. The process takes 30ï¿½90 seconds on first run.
 
 Expected final output:
 ```
@@ -670,7 +671,7 @@ The application is organized into the following Angular modules:
 
 | Module | Location | Purpose |
 |--------|----------|---------|
-| `CoreModule` | `src/app/core/` | Services, guards, interceptors, models — imported once in AppModule |
+| `CoreModule` | `src/app/core/` | Services, guards, interceptors, models ï¿½ imported once in AppModule |
 | `SharedModule` | `src/app/shared/` | Reusable components and pipes shared across feature modules |
 | `AuthModule` | `src/app/auth/` | Login and Register pages |
 | `CustomerModule` | `src/app/customer/` | Customer dashboard, policy purchase, policy list, policy detail, document upload |
@@ -708,11 +709,11 @@ The `CoreModule` registers a JWT interceptor at `src/app/core/interceptors/jwt.i
 
 Follow these steps in exact order the very first time you set up SmartSure on a new machine.
 
-### Step 1 — Install Prerequisites
+### Step 1 ï¿½ Install Prerequisites
 
 Install all tools listed in Section 1. Verify each with the commands in Section 1.4.
 
-### Step 2 — Clone or Extract the Project
+### Step 2 ï¿½ Clone or Extract the Project
 
 ```bash
 git clone <repository-url>
@@ -721,13 +722,13 @@ cd SmartSure_InsuranceApp
 
 Or extract the ZIP and navigate to the folder.
 
-### Step 3 — Restore .NET Tools
+### Step 3 ï¿½ Restore .NET Tools
 
 ```bash
 dotnet tool restore
 ```
 
-### Step 4 — Update Connection Strings
+### Step 4 ï¿½ Update Connection Strings
 
 Open each `appsettings.json` file and replace `YOUR_SERVER\SQLEXPRESS` with your actual SQL Server instance name. Files to update:
 
@@ -738,7 +739,7 @@ Open each `appsettings.json` file and replace `YOUR_SERVER\SQLEXPRESS` with your
 
 See Section 4.1 for the exact JSON structure.
 
-### Step 5 — Run All Database Migrations
+### Step 5 ï¿½ Run All Database Migrations
 
 ```bash
 dotnet ef database update --project src/IdentityService
@@ -749,11 +750,11 @@ dotnet ef database update --project src/AdminService
 
 All four commands should end with `Done.`
 
-### Step 6 — Verify Databases in SSMS
+### Step 6 ï¿½ Verify Databases in SSMS
 
 Open SSMS, connect to your instance, and confirm all four databases exist with their tables. Specifically verify that `SmartSureAppDb_Policy ? Tables ? PolicyTypes` contains 3 rows.
 
-### Step 7 — Trust the Development SSL Certificate
+### Step 7 ï¿½ Trust the Development SSL Certificate
 
 ```bash
 dotnet dev-certs https --trust
@@ -761,7 +762,7 @@ dotnet dev-certs https --trust
 
 Click **Yes** when prompted to trust the certificate.
 
-### Step 8 — Install Angular Dependencies
+### Step 8 ï¿½ Install Angular Dependencies
 
 ```bash
 cd smartsure-ui
@@ -769,35 +770,35 @@ npm install
 cd ..
 ```
 
-### Step 9 — Start All Backend Services
+### Step 9 ï¿½ Start All Backend Services
 
 Open `SmartSure_InsuranceApp.slnx` in Visual Studio 2022, configure Multiple Startup Projects (all five set to Start), and press **F5**.
 
 Or use five terminals as described in Section 5.2.
 
-### Step 10 — Start the Angular Frontend
+### Step 10 ï¿½ Start the Angular Frontend
 
 ```bash
 cd smartsure-ui
 ng serve
 ```
 
-### Step 11 — Open the Application
+### Step 11 ï¿½ Open the Application
 
 Navigate to `http://localhost:4200` in your browser.
 
-### Step 12 — Register Your First User
+### Step 12 ï¿½ Register Your First User
 
 1. Click **Get Started** or navigate to `http://localhost:4200/auth/register`.
 2. Fill in the registration form:
-   - **Full Name** — your name
-   - **Email** — a valid email address (used as login username)
-   - **Password** — must meet the password policy
-   - **Confirm Password** — must match Password
+   - **Full Name** ï¿½ your name
+   - **Email** ï¿½ a valid email address (used as login username)
+   - **Password** ï¿½ must meet the password policy
+   - **Confirm Password** ï¿½ must match Password
 3. Click **Register**.
 4. On success, you will be redirected to the login page.
 
-### Step 13 — Log In
+### Step 13 ï¿½ Log In
 
 1. Navigate to `http://localhost:4200/auth/login`.
 2. Enter your email and password.
@@ -816,10 +817,10 @@ The JWT token is stored in the browser's local storage and automatically attache
 
 1. Navigate to `http://localhost:4200/auth/register`.
 2. Complete the registration form:
-   - **Full Name** — e.g., `Jane Smith`
-   - **Email** — e.g., `jane.smith@example.com`
-   - **Password** — e.g., `Password123!`
-   - **Confirm Password** — `Password123!`
+   - **Full Name** ï¿½ e.g., `Jane Smith`
+   - **Email** ï¿½ e.g., `jane.smith@example.com`
+   - **Password** ï¿½ e.g., `Password123!`
+   - **Confirm Password** ï¿½ `Password123!`
 3. Click **Register**.
 4. The Angular app sends:
    ```
@@ -859,13 +860,13 @@ The JWT token is stored in the browser's local storage and automatically attache
 
 ---
 
-### 8.3 Buy Policy — 3-Step Wizard
+### 8.3 Buy Policy ï¿½ 3-Step Wizard
 
 **Goal:** Purchase an insurance policy.
 
 Navigate to `/customer/buy-policy` or click **Buy Policy** on the Customer Dashboard.
 
-**Step 1 — Select Policy Type**
+**Step 1 ï¿½ Select Policy Type**
 
 The wizard calls:
 ```
@@ -882,16 +883,16 @@ This returns the three seeded policy types:
 ```
 Select a policy type and click **Next**.
 
-**Step 2 — Enter Coverage Details**
+**Step 2 ï¿½ Enter Coverage Details**
 
 Fill in:
-- **Coverage Amount** — the insured sum (e.g., `100000`)
-- **Start Date** — policy effective date
-- **End Date** — policy expiry date
+- **Coverage Amount** ï¿½ the insured sum (e.g., `100000`)
+- **Start Date** ï¿½ policy effective date
+- **End Date** ï¿½ policy expiry date
 
 The premium is calculated based on the selected policy type's `BaseRate` and the coverage amount. Click **Next**.
 
-**Step 3 — Review and Confirm**
+**Step 3 ï¿½ Review and Confirm**
 
 Review the policy summary:
 - Policy Type
@@ -953,28 +954,28 @@ On success, the document is stored and linked to the claim.
 
 ---
 
-### 8.6 Initiate Claim — 4-Step Wizard
+### 8.6 Initiate Claim ï¿½ 4-Step Wizard
 
 **Goal:** Submit an insurance claim.
 
 Navigate to `/claims/initiate` or click **File a Claim** on the dashboard.
 
-**Step 1 — Select Policy**
+**Step 1 ï¿½ Select Policy**
 
 Choose the policy against which you are filing the claim from a dropdown of your active policies.
 
-**Step 2 — Describe the Incident**
+**Step 2 ï¿½ Describe the Incident**
 
 Fill in:
-- **Incident Date** — when the incident occurred
-- **Description** — detailed description of the incident (required)
-- **Claim Amount** — the amount being claimed
+- **Incident Date** ï¿½ when the incident occurred
+- **Description** ï¿½ detailed description of the incident (required)
+- **Claim Amount** ï¿½ the amount being claimed
 
-**Step 3 — Upload Supporting Documents**
+**Step 3 ï¿½ Upload Supporting Documents**
 
 Attach one or more supporting documents (PDF, JPG, PNG, DOC, DOCX, max 10 MB each). These are uploaded alongside the claim.
 
-**Step 4 — Review and Submit**
+**Step 4 ï¿½ Review and Submit**
 
 Review all entered information. Click **Submit Claim**.
 
@@ -1012,7 +1013,7 @@ Returns all claims for the logged-in user. Each claim shows:
 
 ---
 
-### 8.8 Admin — Review Claims
+### 8.8 Admin ï¿½ Review Claims
 
 Admin users navigate to `/admin/claim-review`.
 
@@ -1040,7 +1041,7 @@ Authorization: Bearer <token>
 
 ---
 
-### 8.9 Admin — Policy Management
+### 8.9 Admin ï¿½ Policy Management
 
 Navigate to `/admin/policy-management`.
 
@@ -1054,7 +1055,7 @@ DELETE https://localhost:7000/gateway/policy-types/{id}
 
 ---
 
-### 8.10 Admin — User Management
+### 8.10 Admin ï¿½ User Management
 
 Navigate to `/admin/user-management`.
 
@@ -1066,7 +1067,7 @@ Authorization: Bearer <token>
 
 ---
 
-### 8.11 Admin — Reports
+### 8.11 Admin ï¿½ Reports
 
 Navigate to `/reports`.
 
@@ -1097,42 +1098,29 @@ SmartSure includes two test suites: NUnit tests for the .NET backend (49 total) 
 | Project | Test Count | What Is Tested |
 |---------|-----------|----------------|
 | `IdentityService.Tests` | 13 | User registration, login, password hashing, JWT generation, duplicate email handling, invalid credentials |
-| `PolicyService.Tests` | 18 | Policy creation, retrieval, update, cancellation, premium calculation, payment processing, policy type CRUD |
-| `ClaimsService.Tests` | 13 | Claim submission, status transitions, document attachment, claim retrieval by user, claim retrieval by admin |
-| `AdminService.Tests` | 5 + SecurityTests | Admin dashboard aggregation, report generation, internal API key validation, unauthorized access rejection |
+| `IdentityService.Tests` | 19 | Register, login, duplicate email, invalid password, JWT generation, OTP flow, user repository CRUD, password hashing |
+| `PolicyService.Tests` | 22 | Policy creation, retrieval, update, cancellation, premium calculation, payment processing, policy type CRUD, lifecycle transition guards |
+| `ClaimsService.Tests` | 17 | Claim submission, status transitions, transition guard (invalid transitions rejected), document attachment, claim retrieval by user, claim retrieval by admin, ownership check |
+| `AdminService.Tests` | 5 | Admin dashboard aggregation, report generation, internal API key validation, unauthorized access rejection |
 
-**Total backend tests: 49**
+**Total backend tests: 63 (all passing)**
 
 #### Run All Backend Tests
 
 From the solution root:
 
 ```bash
-dotnet test
+dotnet test --no-build
 ```
+
+> Use `--no-build` if services are currently running to avoid file-lock errors.
 
 Expected output:
 ```
-Test run for IdentityService.Tests.dll (.NETCoreApp,Version=v8.0)
-Microsoft (R) Test Execution Command Line Tool Version 17.x
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Starting test execution, please wait...
-A total of 13 test files matched the specified pattern.
-
-Passed!  - Failed: 0, Passed: 13, Skipped: 0, Total: 13, Duration: 1.2s
-
-Test run for PolicyService.Tests.dll (.NETCoreApp,Version=v8.0)
-...
-Passed!  - Failed: 0, Passed: 18, Skipped: 0, Total: 18, Duration: 2.1s
-
-Test run for ClaimsService.Tests.dll (.NETCoreApp,Version=v8.0)
-...
-Passed!  - Failed: 0, Passed: 13, Skipped: 0, Total: 13, Duration: 1.8s
-
-Test run for AdminService.Tests.dll (.NETCoreApp,Version=v8.0)
-...
-Passed!  - Failed: 0, Passed: 5, Skipped: 0, Total: 5, Duration: 0.9s
+Passed!  - Failed: 0, Passed:  5, Skipped: 0, Total:  5, Duration: 456 ms - AdminService.Tests.dll (net8.0)
+Passed!  - Failed: 0, Passed: 17, Skipped: 0, Total: 17, Duration: 351 ms - ClaimsService.Tests.dll (net8.0)
+Passed!  - Failed: 0, Passed: 22, Skipped: 0, Total: 22, Duration: 410 ms - PolicyService.Tests.dll (net8.0)
+Passed!  - Failed: 0, Passed: 19, Skipped: 0, Total: 19, Duration: 1 s   - IdentityService.Tests.dll (net8.0)
 ```
 
 #### Run Individual Test Projects
@@ -1166,32 +1154,39 @@ This prints each test name and its pass/fail status individually.
 3. Tests are grouped by project. Expand each project to see individual test names.
 4. Green checkmarks = passed. Red X = failed. Click a failed test to see the error message and stack trace.
 
-### 9.2 Frontend Jasmine/Karma Tests
+### 9.2 Frontend Vitest Tests
+
+The frontend uses **Vitest** (not Karma/Jasmine) for unit testing, configured via `vitest.config.ts` in the `smartsure-ui` folder.
 
 #### Test Files Summary
 
 | Spec File | Test Count | What Is Tested |
 |-----------|-----------|----------------|
-| `auth.service.spec.ts` | 5 | Login HTTP call, token storage, logout, token retrieval, isLoggedIn state |
-| `auth.guard.spec.ts` | 4 | Redirect to login when unauthenticated, allow access when authenticated, role-based guard behavior |
-| `login.component.spec.ts` | 5 | Component creation, form validation, successful login redirect, failed login error display, loading state |
+| `auth.service.spec.ts` | 18 | login(), register(), logout(), getToken(), getUserId(), getRole(), isLoggedIn(), token storage/retrieval, error handling |
+| `jwt.interceptor.spec.ts` | 9 | Token attachment to requests, requests without token pass through, Authorization header format |
+| `auth.guard.spec.ts` | 16 | `authGuard` (unauthenticated redirect), `customerGuard` (role check), `adminGuard` (admin-only), all 3 guards with valid tokens |
+| `login.component.spec.ts` | 16 | Component creation, form validation, successful login redirect, failed login error display, loading state, form field binding |
+| `app.spec.ts` | 2 | Root app component creation, router outlet presence |
 
-**Total frontend tests: 14**
+**Total frontend tests: 61 (all passing)**
 
 #### Run All Frontend Tests (Single Run)
 
 ```bash
 cd smartsure-ui
-ng test --watch=false
+npx vitest run
 ```
-
-The `--watch=false` flag runs tests once and exits (instead of watching for file changes).
 
 Expected output:
 ```
-Chrome Headless 120.0.0.0 / Windows 10.0.0 SUMMARY:
-SUMMARY:
-? 14 tests completed
+ âœ“ src/app/core/services/auth.service.spec.ts (18)
+ âœ“ src/app/core/interceptors/jwt.interceptor.spec.ts (9)
+ âœ“ src/app/core/guards/auth.guard.spec.ts (16)
+ âœ“ src/app/auth/login/login.component.spec.ts (16)
+ âœ“ src/app/app.spec.ts (2)
+
+ Test Files  5 passed (5)
+      Tests  61 passed (61)
 ```
 
 #### Run Tests in Watch Mode (Development)
@@ -1238,7 +1233,7 @@ Each microservice exposes a Swagger UI for interactive API testing. This is usef
 
 ### 10.2 Testing Authentication (IdentityService Swagger)
 
-**Step 1 — Register a user**
+**Step 1 ï¿½ Register a user**
 
 1. Open https://localhost:7001/swagger.
 2. Expand `POST /api/auth/register`.
@@ -1254,7 +1249,7 @@ Each microservice exposes a Swagger UI for interactive API testing. This is usef
 5. Click **Execute**.
 6. Expected response: `201 Created` with the new user's ID.
 
-**Step 2 — Login and get a JWT**
+**Step 2 ï¿½ Login and get a JWT**
 
 1. Expand `POST /api/auth/login`.
 2. Click **Try it out**.
@@ -1269,7 +1264,7 @@ Each microservice exposes a Swagger UI for interactive API testing. This is usef
 5. Expected response: `200 OK` with a JSON body containing `"token": "eyJ..."`.
 6. Copy the token value (without the surrounding quotes).
 
-**Step 3 — Authorize Swagger**
+**Step 3 ï¿½ Authorize Swagger**
 
 1. Click the **Authorize** button (padlock icon) at the top right of the Swagger page.
 2. In the **Value** field, enter: `Bearer eyJ...` (paste your token after "Bearer ").
@@ -1281,7 +1276,7 @@ All subsequent requests from this Swagger session will include the JWT.
 
 1. Open https://localhost:7002/swagger.
 2. Authorize with your JWT (same steps as above).
-3. Test `GET /api/policy-types` — returns the 3 seeded policy types.
+3. Test `GET /api/policy-types` ï¿½ returns the 3 seeded policy types.
 4. Test `POST /api/policies` to create a policy:
    ```json
    {
@@ -1292,8 +1287,8 @@ All subsequent requests from this Swagger session will include the JWT.
    }
    ```
 5. Expected response: `201 Created` with the new policy object including its generated ID.
-6. Test `GET /api/policies` — returns all policies for the authenticated user.
-7. Test `GET /api/policies/{id}` — returns a single policy by ID.
+6. Test `GET /api/policies` ï¿½ returns all policies for the authenticated user.
+7. Test `GET /api/policies/{id}` ï¿½ returns a single policy by ID.
 
 ### 10.4 Testing Claims Endpoints (ClaimsService Swagger)
 
@@ -1309,17 +1304,17 @@ All subsequent requests from this Swagger session will include the JWT.
    }
    ```
 4. Expected response: `201 Created` with the new claim object and `"status": "Pending"`.
-5. Test `GET /api/claims` — returns all claims for the authenticated user.
-6. Test `GET /api/claims/{id}` — returns a single claim by ID.
+5. Test `GET /api/claims` ï¿½ returns all claims for the authenticated user.
+6. Test `GET /api/claims/{id}` ï¿½ returns a single claim by ID.
 
 ### 10.5 Testing Admin Endpoints (AdminService Swagger)
 
 1. Open https://localhost:7004/swagger.
 2. Authorize with your JWT.
-3. Test `GET /api/admin/dashboard` — returns aggregated statistics (requires all other services to be running, as AdminService makes internal calls).
-4. Test `GET /api/admin/claims` — returns all claims across all users.
-5. Test `PUT /api/admin/claims/{id}/approve` — approves a claim.
-6. Test `PUT /api/admin/claims/{id}/reject` — rejects a claim.
+3. Test `GET /api/admin/dashboard` ï¿½ returns aggregated statistics (requires all other services to be running, as AdminService makes internal calls).
+4. Test `GET /api/admin/claims` ï¿½ returns all claims across all users.
+5. Test `PUT /api/admin/claims/{id}/approve` ï¿½ approves a claim.
+6. Test `PUT /api/admin/claims/{id}/reject` ï¿½ rejects a claim.
 
 ### 10.6 Testing Internal Endpoints
 
@@ -1351,12 +1346,12 @@ Expected responses are plain integers, e.g., `5`.
 To test routes through the Ocelot gateway (as the Angular app does), use curl or Postman:
 
 ```bash
-# Register (public — no token needed)
+# Register (public ï¿½ no token needed)
 curl -k -X POST https://localhost:7000/gateway/auth/register \
   -H "Content-Type: application/json" \
   -d '{"fullName":"Test","email":"test@example.com","password":"Password123!"}'
 
-# Login (public — no token needed)
+# Login (public ï¿½ no token needed)
 curl -k -X POST https://localhost:7000/gateway/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"Password123!"}'
@@ -1587,7 +1582,7 @@ If the table is still empty after running migrations, check that the migration f
 
 | Service | HTTPS Port | HTTP Port | Swagger UI |
 |---------|-----------|----------|------------|
-| Angular Frontend | 4200 | — | http://localhost:4200 |
+| Angular Frontend | 4200 | ï¿½ | http://localhost:4200 |
 | API Gateway (Ocelot) | 7000 | 5000 | https://localhost:7000 |
 | IdentityService | 7001 | 5001 | https://localhost:7001/swagger |
 | PolicyService | 7002 | 5002 | https://localhost:7002/swagger |
@@ -1646,241 +1641,241 @@ SmartSure_InsuranceApp/
 +-- SmartSure_InsuranceApp.slnx          # Visual Studio solution file
 +-- README.md                            # This file
 +-- dotnet-tools.json                    # EF Core CLI tool manifest
-¦
+ï¿½
 +-- src/
-¦   ¦
-¦   +-- ApiGateway/                      # Ocelot API Gateway — port 7000 (HTTPS) / 5000 (HTTP)
-¦   ¦   +-- Properties/
-¦   ¦   ¦   +-- launchSettings.json      # Port configuration (7000/5000)
-¦   ¦   +-- ocelot.json                  # All route definitions (upstream ? downstream mappings)
-¦   ¦   +-- Program.cs                   # Gateway startup: Ocelot middleware, JWT validation, CORS
-¦   ¦   +-- appsettings.json             # JWT settings (must match all services)
-¦   ¦   +-- ApiGateway.csproj
-¦   ¦
-¦   +-- IdentityService/                 # Authentication microservice — port 7001 (HTTPS) / 5001 (HTTP)
-¦   ¦   +-- Controllers/
-¦   ¦   ¦   +-- AuthController.cs        # POST /api/auth/register, POST /api/auth/login
-¦   ¦   ¦   +-- InternalController.cs    # GET /api/internal/users/count (X-Internal-Key protected)
-¦   ¦   +-- Data/
-¦   ¦   ¦   +-- IdentityDbContext.cs     # EF Core DbContext for SmartSureAppDb_Identity
-¦   ¦   +-- DTOs/
-¦   ¦   ¦   +-- AuthDtos.cs              # RegisterDto, LoginDto, AuthResponseDto
-¦   ¦   +-- Migrations/
-¦   ¦   ¦   +-- 20260405170330_InitialCreate.cs
-¦   ¦   +-- Models/
-¦   ¦   ¦   +-- User.cs                  # User entity: Id, FullName, Email, PasswordHash, CreatedAt
-¦   ¦   +-- Repositories/
-¦   ¦   ¦   +-- IUserRepository.cs
-¦   ¦   ¦   +-- UserRepository.cs        # GetByEmail, Add, GetCount
-¦   ¦   +-- Services/
-¦   ¦   ¦   +-- IAuthService.cs
-¦   ¦   ¦   +-- AuthService.cs           # Register, Login, GenerateJwt
-¦   ¦   +-- Properties/
-¦   ¦   ¦   +-- launchSettings.json
-¦   ¦   +-- Program.cs                   # Service startup: EF Core, Identity, JWT, Swagger
-¦   ¦   +-- appsettings.json             # ConnectionStrings, JwtSettings, InternalApiKey
-¦   ¦   +-- IdentityService.csproj
-¦   ¦
-¦   +-- PolicyService/                   # Policy microservice — port 7002 (HTTPS) / 5002 (HTTP)
-¦   ¦   +-- Controllers/
-¦   ¦   ¦   +-- PoliciesController.cs    # GET/POST/PUT/DELETE /api/policies
-¦   ¦   ¦   +-- PolicyTypesController.cs # GET/POST/PUT/DELETE /api/policy-types
-¦   ¦   ¦   +-- InternalController.cs    # GET /api/internal/policies/count (X-Internal-Key protected)
-¦   ¦   +-- Data/
-¦   ¦   ¦   +-- PolicyDbContext.cs       # EF Core DbContext for SmartSureAppDb_Policy (includes seed)
-¦   ¦   +-- DTOs/
-¦   ¦   ¦   +-- PolicyDtos.cs            # CreatePolicyDto, PolicyResponseDto, PolicyTypeDto, etc.
-¦   ¦   +-- Migrations/
-¦   ¦   ¦   +-- 20260405170954_InitialCreate.cs
-¦   ¦   ¦   +-- 20260406045954_AddDecimalPrecision.cs
-¦   ¦   ¦   +-- 20260406063612_ExplicitForeignKeys.cs
-¦   ¦   ¦   +-- 20260406072825_AddPremiumsNavigation.cs
-¦   ¦   ¦   +-- 20260406090112_SeedPolicyTypes.cs    # Inserts 3 default policy types
-¦   ¦   +-- Models/
-¦   ¦   ¦   +-- Policy.cs                # Policy entity: Id, UserId, PolicyTypeId, CoverageAmount, Status, Dates
-¦   ¦   ¦   +-- PolicyType.cs            # PolicyType entity: Id, Name, Description, BaseRate
-¦   ¦   ¦   +-- Premium.cs               # Premium entity: Id, PolicyId, Amount, DueDate, PaidDate
-¦   ¦   ¦   +-- Payment.cs               # Payment entity: Id, PremiumId, Amount, PaidAt, Method
-¦   ¦   +-- Repositories/
-¦   ¦   ¦   +-- IPolicyRepository.cs
-¦   ¦   ¦   +-- PolicyRepository.cs
-¦   ¦   ¦   +-- IPolicyTypeRepository.cs
-¦   ¦   ¦   +-- PolicyTypeRepository.cs
-¦   ¦   ¦   +-- IPremiumRepository.cs
-¦   ¦   ¦   +-- PremiumRepository.cs
-¦   ¦   ¦   +-- IPaymentRepository.cs
-¦   ¦   ¦   +-- PaymentRepository.cs
-¦   ¦   +-- Services/
-¦   ¦   ¦   +-- IPolicyService.cs
-¦   ¦   ¦   +-- PolicyService.cs         # CreatePolicy, GetPolicies, GetById, Cancel, CalculatePremium
-¦   ¦   +-- Properties/
-¦   ¦   ¦   +-- launchSettings.json
-¦   ¦   +-- Program.cs
-¦   ¦   +-- appsettings.json
-¦   ¦   +-- PolicyService.csproj
-¦   ¦
-¦   +-- ClaimsService/                   # Claims microservice — port 7003 (HTTPS) / 5003 (HTTP)
-¦   ¦   +-- Controllers/
-¦   ¦   ¦   +-- ClaimsController.cs      # GET/POST /api/claims, GET/PUT /api/claims/{id}
-¦   ¦   ¦   +-- InternalController.cs    # GET /api/internal/claims/count, /pending/count
-¦   ¦   +-- Data/
-¦   ¦   ¦   +-- ClaimsDbContext.cs       # EF Core DbContext for SmartSureAppDb_Claims
-¦   ¦   +-- DTOs/
-¦   ¦   ¦   +-- ClaimDtos.cs             # CreateClaimDto, ClaimResponseDto, ClaimDocumentDto
-¦   ¦   +-- Migrations/
-¦   ¦   ¦   +-- 20260405172618_InitialCreate.cs
-¦   ¦   ¦   +-- 20260406050019_AddDecimalPrecision.cs
-¦   ¦   ¦   +-- 20260406063412_ExplicitForeignKeys.cs
-¦   ¦   +-- Models/
-¦   ¦   ¦   +-- Claim.cs                 # Claim entity: Id, UserId, PolicyId, Description, Amount, Status, Dates
-¦   ¦   ¦   +-- ClaimDocument.cs         # ClaimDocument entity: Id, ClaimId, FileName, FilePath, UploadedAt
-¦   ¦   +-- Repositories/
-¦   ¦   ¦   +-- IClaimRepository.cs
-¦   ¦   ¦   +-- ClaimRepository.cs       # GetByUser, GetAll, GetById, Add, UpdateStatus, GetCount, GetPendingCount
-¦   ¦   +-- Services/
-¦   ¦   ¦   +-- IClaimService.cs
-¦   ¦   ¦   +-- ClaimService.cs          # SubmitClaim, GetClaims, GetById, UpdateStatus, AttachDocument
-¦   ¦   +-- Properties/
-¦   ¦   ¦   +-- launchSettings.json
-¦   ¦   +-- Program.cs
-¦   ¦   +-- appsettings.json
-¦   ¦   +-- ClaimsService.csproj
-¦   ¦
-¦   +-- AdminService/                    # Admin microservice — port 7004 (HTTPS) / 5004 (HTTP)
-¦       +-- Controllers/
-¦       ¦   +-- AdminController.cs       # Unified controller: dashboard, claims, policies, users, reports
-¦       +-- Data/
-¦       ¦   +-- AdminDbContext.cs        # EF Core DbContext for SmartSureAppDb_Admin
-¦       +-- DTOs/
-¦       ¦   +-- AdminDtos.cs             # DashboardDto, ReportDto, ClaimReviewDto
-¦       +-- Migrations/
-¦       ¦   +-- 20260405172734_InitialCreate.cs
-¦       +-- Models/
-¦       ¦   +-- Report.cs                # Report entity: Id, GeneratedAt, ReportData, GeneratedBy
-¦       +-- Repositories/
-¦       ¦   +-- IReportRepository.cs
-¦       ¦   +-- ReportRepository.cs
-¦       +-- Services/
-¦       ¦   +-- IAdminService.cs
-¦       ¦   +-- AdminService.cs          # GetDashboard (calls internal APIs), GenerateReport, ReviewClaim
-¦       +-- Properties/
-¦       ¦   +-- launchSettings.json
-¦       +-- Program.cs
-¦       +-- appsettings.json
-¦       +-- AdminService.csproj
-¦
+ï¿½   ï¿½
+ï¿½   +-- ApiGateway/                      # Ocelot API Gateway ï¿½ port 7000 (HTTPS) / 5000 (HTTP)
+ï¿½   ï¿½   +-- Properties/
+ï¿½   ï¿½   ï¿½   +-- launchSettings.json      # Port configuration (7000/5000)
+ï¿½   ï¿½   +-- ocelot.json                  # All route definitions (upstream ? downstream mappings)
+ï¿½   ï¿½   +-- Program.cs                   # Gateway startup: Ocelot middleware, JWT validation, CORS
+ï¿½   ï¿½   +-- appsettings.json             # JWT settings (must match all services)
+ï¿½   ï¿½   +-- ApiGateway.csproj
+ï¿½   ï¿½
+ï¿½   +-- IdentityService/                 # Authentication microservice ï¿½ port 7001 (HTTPS) / 5001 (HTTP)
+ï¿½   ï¿½   +-- Controllers/
+ï¿½   ï¿½   ï¿½   +-- AuthController.cs        # POST /api/auth/register, POST /api/auth/login
+ï¿½   ï¿½   ï¿½   +-- InternalController.cs    # GET /api/internal/users/count (X-Internal-Key protected)
+ï¿½   ï¿½   +-- Data/
+ï¿½   ï¿½   ï¿½   +-- IdentityDbContext.cs     # EF Core DbContext for SmartSureAppDb_Identity
+ï¿½   ï¿½   +-- DTOs/
+ï¿½   ï¿½   ï¿½   +-- AuthDtos.cs              # RegisterDto, LoginDto, AuthResponseDto
+ï¿½   ï¿½   +-- Migrations/
+ï¿½   ï¿½   ï¿½   +-- 20260405170330_InitialCreate.cs
+ï¿½   ï¿½   +-- Models/
+ï¿½   ï¿½   ï¿½   +-- User.cs                  # User entity: Id, FullName, Email, PasswordHash, CreatedAt
+ï¿½   ï¿½   +-- Repositories/
+ï¿½   ï¿½   ï¿½   +-- IUserRepository.cs
+ï¿½   ï¿½   ï¿½   +-- UserRepository.cs        # GetByEmail, Add, GetCount
+ï¿½   ï¿½   +-- Services/
+ï¿½   ï¿½   ï¿½   +-- IAuthService.cs
+ï¿½   ï¿½   ï¿½   +-- AuthService.cs           # Register, Login, GenerateJwt
+ï¿½   ï¿½   +-- Properties/
+ï¿½   ï¿½   ï¿½   +-- launchSettings.json
+ï¿½   ï¿½   +-- Program.cs                   # Service startup: EF Core, Identity, JWT, Swagger
+ï¿½   ï¿½   +-- appsettings.json             # ConnectionStrings, JwtSettings, InternalApiKey
+ï¿½   ï¿½   +-- IdentityService.csproj
+ï¿½   ï¿½
+ï¿½   +-- PolicyService/                   # Policy microservice ï¿½ port 7002 (HTTPS) / 5002 (HTTP)
+ï¿½   ï¿½   +-- Controllers/
+ï¿½   ï¿½   ï¿½   +-- PoliciesController.cs    # GET/POST/PUT/DELETE /api/policies
+ï¿½   ï¿½   ï¿½   +-- PolicyTypesController.cs # GET/POST/PUT/DELETE /api/policy-types
+ï¿½   ï¿½   ï¿½   +-- InternalController.cs    # GET /api/internal/policies/count (X-Internal-Key protected)
+ï¿½   ï¿½   +-- Data/
+ï¿½   ï¿½   ï¿½   +-- PolicyDbContext.cs       # EF Core DbContext for SmartSureAppDb_Policy (includes seed)
+ï¿½   ï¿½   +-- DTOs/
+ï¿½   ï¿½   ï¿½   +-- PolicyDtos.cs            # CreatePolicyDto, PolicyResponseDto, PolicyTypeDto, etc.
+ï¿½   ï¿½   +-- Migrations/
+ï¿½   ï¿½   ï¿½   +-- 20260405170954_InitialCreate.cs
+ï¿½   ï¿½   ï¿½   +-- 20260406045954_AddDecimalPrecision.cs
+ï¿½   ï¿½   ï¿½   +-- 20260406063612_ExplicitForeignKeys.cs
+ï¿½   ï¿½   ï¿½   +-- 20260406072825_AddPremiumsNavigation.cs
+ï¿½   ï¿½   ï¿½   +-- 20260406090112_SeedPolicyTypes.cs    # Inserts 3 default policy types
+ï¿½   ï¿½   +-- Models/
+ï¿½   ï¿½   ï¿½   +-- Policy.cs                # Policy entity: Id, UserId, PolicyTypeId, CoverageAmount, Status, Dates
+ï¿½   ï¿½   ï¿½   +-- PolicyType.cs            # PolicyType entity: Id, Name, Description, BaseRate
+ï¿½   ï¿½   ï¿½   +-- Premium.cs               # Premium entity: Id, PolicyId, Amount, DueDate, PaidDate
+ï¿½   ï¿½   ï¿½   +-- Payment.cs               # Payment entity: Id, PremiumId, Amount, PaidAt, Method
+ï¿½   ï¿½   +-- Repositories/
+ï¿½   ï¿½   ï¿½   +-- IPolicyRepository.cs
+ï¿½   ï¿½   ï¿½   +-- PolicyRepository.cs
+ï¿½   ï¿½   ï¿½   +-- IPolicyTypeRepository.cs
+ï¿½   ï¿½   ï¿½   +-- PolicyTypeRepository.cs
+ï¿½   ï¿½   ï¿½   +-- IPremiumRepository.cs
+ï¿½   ï¿½   ï¿½   +-- PremiumRepository.cs
+ï¿½   ï¿½   ï¿½   +-- IPaymentRepository.cs
+ï¿½   ï¿½   ï¿½   +-- PaymentRepository.cs
+ï¿½   ï¿½   +-- Services/
+ï¿½   ï¿½   ï¿½   +-- IPolicyService.cs
+ï¿½   ï¿½   ï¿½   +-- PolicyService.cs         # CreatePolicy, GetPolicies, GetById, Cancel, CalculatePremium
+ï¿½   ï¿½   +-- Properties/
+ï¿½   ï¿½   ï¿½   +-- launchSettings.json
+ï¿½   ï¿½   +-- Program.cs
+ï¿½   ï¿½   +-- appsettings.json
+ï¿½   ï¿½   +-- PolicyService.csproj
+ï¿½   ï¿½
+ï¿½   +-- ClaimsService/                   # Claims microservice ï¿½ port 7003 (HTTPS) / 5003 (HTTP)
+ï¿½   ï¿½   +-- Controllers/
+ï¿½   ï¿½   ï¿½   +-- ClaimsController.cs      # GET/POST /api/claims, GET/PUT /api/claims/{id}
+ï¿½   ï¿½   ï¿½   +-- InternalController.cs    # GET /api/internal/claims/count, /pending/count
+ï¿½   ï¿½   +-- Data/
+ï¿½   ï¿½   ï¿½   +-- ClaimsDbContext.cs       # EF Core DbContext for SmartSureAppDb_Claims
+ï¿½   ï¿½   +-- DTOs/
+ï¿½   ï¿½   ï¿½   +-- ClaimDtos.cs             # CreateClaimDto, ClaimResponseDto, ClaimDocumentDto
+ï¿½   ï¿½   +-- Migrations/
+ï¿½   ï¿½   ï¿½   +-- 20260405172618_InitialCreate.cs
+ï¿½   ï¿½   ï¿½   +-- 20260406050019_AddDecimalPrecision.cs
+ï¿½   ï¿½   ï¿½   +-- 20260406063412_ExplicitForeignKeys.cs
+ï¿½   ï¿½   +-- Models/
+ï¿½   ï¿½   ï¿½   +-- Claim.cs                 # Claim entity: Id, UserId, PolicyId, Description, Amount, Status, Dates
+ï¿½   ï¿½   ï¿½   +-- ClaimDocument.cs         # ClaimDocument entity: Id, ClaimId, FileName, FilePath, UploadedAt
+ï¿½   ï¿½   +-- Repositories/
+ï¿½   ï¿½   ï¿½   +-- IClaimRepository.cs
+ï¿½   ï¿½   ï¿½   +-- ClaimRepository.cs       # GetByUser, GetAll, GetById, Add, UpdateStatus, GetCount, GetPendingCount
+ï¿½   ï¿½   +-- Services/
+ï¿½   ï¿½   ï¿½   +-- IClaimService.cs
+ï¿½   ï¿½   ï¿½   +-- ClaimService.cs          # SubmitClaim, GetClaims, GetById, UpdateStatus, AttachDocument
+ï¿½   ï¿½   +-- Properties/
+ï¿½   ï¿½   ï¿½   +-- launchSettings.json
+ï¿½   ï¿½   +-- Program.cs
+ï¿½   ï¿½   +-- appsettings.json
+ï¿½   ï¿½   +-- ClaimsService.csproj
+ï¿½   ï¿½
+ï¿½   +-- AdminService/                    # Admin microservice ï¿½ port 7004 (HTTPS) / 5004 (HTTP)
+ï¿½       +-- Controllers/
+ï¿½       ï¿½   +-- AdminController.cs       # Unified controller: dashboard, claims, policies, users, reports
+ï¿½       +-- Data/
+ï¿½       ï¿½   +-- AdminDbContext.cs        # EF Core DbContext for SmartSureAppDb_Admin
+ï¿½       +-- DTOs/
+ï¿½       ï¿½   +-- AdminDtos.cs             # DashboardDto, ReportDto, ClaimReviewDto
+ï¿½       +-- Migrations/
+ï¿½       ï¿½   +-- 20260405172734_InitialCreate.cs
+ï¿½       +-- Models/
+ï¿½       ï¿½   +-- Report.cs                # Report entity: Id, GeneratedAt, ReportData, GeneratedBy
+ï¿½       +-- Repositories/
+ï¿½       ï¿½   +-- IReportRepository.cs
+ï¿½       ï¿½   +-- ReportRepository.cs
+ï¿½       +-- Services/
+ï¿½       ï¿½   +-- IAdminService.cs
+ï¿½       ï¿½   +-- AdminService.cs          # GetDashboard (calls internal APIs), GenerateReport, ReviewClaim
+ï¿½       +-- Properties/
+ï¿½       ï¿½   +-- launchSettings.json
+ï¿½       +-- Program.cs
+ï¿½       +-- appsettings.json
+ï¿½       +-- AdminService.csproj
+ï¿½
 +-- tests/
-¦   +-- IdentityService.Tests/           # 13 NUnit tests
-¦   ¦   +-- AuthServiceTests.cs          # Register, Login, duplicate email, invalid password
-¦   ¦   +-- UserRepositoryTests.cs       # GetByEmail, Add, GetCount
-¦   ¦   +-- IdentityService.Tests.csproj
-¦   ¦
-¦   +-- PolicyService.Tests/             # 18 NUnit tests
-¦   ¦   +-- PolicyServiceTests.cs        # Create, Get, Cancel, premium calculation
-¦   ¦   +-- PolicyTypeTests.cs           # CRUD for policy types
-¦   ¦   +-- PaymentTests.cs              # Payment processing
-¦   ¦   +-- PolicyService.Tests.csproj
-¦   ¦
-¦   +-- ClaimsService.Tests/             # 13 NUnit tests
-¦   ¦   +-- ClaimServiceTests.cs         # Submit, retrieve, status transitions
-¦   ¦   +-- ClaimDocumentTests.cs        # Document attachment and retrieval
-¦   ¦   +-- ClaimsService.Tests.csproj
-¦   ¦
-¦   +-- AdminService.Tests/              # 5 NUnit tests + SecurityTests
-¦       +-- AdminServiceTests.cs         # Dashboard aggregation, report generation
-¦       +-- SecurityTests.cs             # Internal key validation, unauthorized access
-¦       +-- AdminService.Tests.csproj
-¦
-+-- smartsure-ui/                        # Angular 21 frontend — port 4200
+ï¿½   +-- IdentityService.Tests/           # 19 NUnit tests
+ï¿½   ï¿½   +-- AuthServiceTests.cs          # Register, login, duplicate email, invalid password, JWT generation, OTP flow
+ï¿½   ï¿½   +-- UserRepositoryTests.cs       # GetByEmail, Add, GetCount
+ï¿½   ï¿½   +-- IdentityService.Tests.csproj
+ï¿½   ï¿½
+ï¿½   +-- PolicyService.Tests/             # 22 NUnit tests
+ï¿½   ï¿½   +-- PolicyServiceTests.cs        # Create, Get, Cancel, premium calculation, lifecycle transition guards
+ï¿½   ï¿½   +-- PolicyTypeTests.cs           # CRUD for policy types
+ï¿½   ï¿½   +-- PaymentTests.cs              # Payment processing
+ï¿½   ï¿½   +-- PolicyService.Tests.csproj
+ï¿½   ï¿½
+ï¿½   +-- ClaimsService.Tests/             # 17 NUnit tests
+ï¿½   ï¿½   +-- ClaimServiceTests.cs         # Submit, retrieve, status transitions, transition guards, ownership check
+ï¿½   ï¿½   +-- ClaimDocumentTests.cs        # Document attachment and retrieval
+ï¿½   ï¿½   +-- ClaimsService.Tests.csproj
+ï¿½   ï¿½
+ï¿½   +-- AdminService.Tests/              # 5 NUnit tests
+ï¿½       +-- AdminServiceTests.cs         # Dashboard aggregation, report generation
+ï¿½       +-- SecurityTests.cs             # Internal key validation, unauthorized access
+ï¿½       +-- AdminService.Tests.csproj
+ï¿½
++-- smartsure-ui/                        # Angular 21 frontend ï¿½ port 4200
     +-- src/
-    ¦   +-- app/
-    ¦   ¦   +-- app.ts                   # Root component
-    ¦   ¦   +-- app.html                 # Root template
-    ¦   ¦   +-- app.routes.ts            # Top-level route definitions
-    ¦   ¦   +-- app.config.ts            # App configuration (providers, interceptors)
-    ¦   ¦   +-- app.scss                 # Root styles
-    ¦   ¦   ¦
-    ¦   ¦   +-- core/                    # CoreModule — singleton services and guards
-    ¦   ¦   ¦   +-- core-module.ts
-    ¦   ¦   ¦   +-- guards/
-    ¦   ¦   ¦   ¦   +-- auth.guard.ts    # Redirects unauthenticated users to /auth/login
-    ¦   ¦   ¦   ¦   +-- auth.guard.spec.ts
-    ¦   ¦   ¦   +-- interceptors/
-    ¦   ¦   ¦   ¦   +-- jwt.interceptor.ts  # Attaches Authorization: Bearer header
-    ¦   ¦   ¦   +-- models/
-    ¦   ¦   ¦   ¦   +-- auth.models.ts   # LoginRequest, RegisterRequest, AuthResponse
-    ¦   ¦   ¦   ¦   +-- claim.models.ts  # Claim, CreateClaimRequest, ClaimDocument
-    ¦   ¦   ¦   ¦   +-- policy.models.ts # Policy, PolicyType, CreatePolicyRequest
-    ¦   ¦   ¦   ¦   +-- report.models.ts # Report, DashboardStats
-    ¦   ¦   ¦   +-- services/
-    ¦   ¦   ¦       +-- auth.service.ts      # login(), register(), logout(), getToken()
-    ¦   ¦   ¦       +-- auth.service.spec.ts # 5 Jasmine tests
-    ¦   ¦   ¦       +-- policy.service.ts    # getPolicies(), getPolicyTypes(), createPolicy()
-    ¦   ¦   ¦       +-- claim.service.ts     # getClaims(), submitClaim(), uploadDocument()
-    ¦   ¦   ¦       +-- admin.service.ts     # getDashboard(), getReports(), reviewClaim()
-    ¦   ¦   ¦
-    ¦   ¦   +-- auth/                    # AuthModule
-    ¦   ¦   ¦   +-- auth-module.ts
-    ¦   ¦   ¦   +-- auth-routing-module.ts
-    ¦   ¦   ¦   +-- login/
-    ¦   ¦   ¦   ¦   +-- login.component.ts
-    ¦   ¦   ¦   ¦   +-- login.component.spec.ts  # 5 Jasmine tests
-    ¦   ¦   ¦   +-- register/
-    ¦   ¦   ¦       +-- register.component.ts
-    ¦   ¦   ¦
-    ¦   ¦   +-- customer/                # CustomerModule
-    ¦   ¦   ¦   +-- customer-module.ts
-    ¦   ¦   ¦   +-- customer-routing-module.ts
-    ¦   ¦   ¦   +-- dashboard/
-    ¦   ¦   ¦   ¦   +-- dashboard.component.ts   # Summary cards, quick links
-    ¦   ¦   ¦   +-- buy-policy/
-    ¦   ¦   ¦   ¦   +-- buy-policy.component.ts  # 3-step wizard
-    ¦   ¦   ¦   +-- policies/
-    ¦   ¦   ¦   ¦   +-- policies.component.ts    # Policy list
-    ¦   ¦   ¦   +-- policy-detail/
-    ¦   ¦   ¦   ¦   +-- policy-detail.component.ts
-    ¦   ¦   ¦   +-- upload-documents/
-    ¦   ¦   ¦       +-- upload-documents.component.ts
-    ¦   ¦   ¦
-    ¦   ¦   +-- claims/                  # ClaimsModule
-    ¦   ¦   ¦   +-- claims-module.ts
-    ¦   ¦   ¦   +-- claims-routing-module.ts
-    ¦   ¦   ¦   +-- initiate-claim/
-    ¦   ¦   ¦   ¦   +-- initiate-claim.component.ts  # 4-step wizard
-    ¦   ¦   ¦   +-- claim-tracking/
-    ¦   ¦   ¦       +-- claim-tracking.component.ts
-    ¦   ¦   ¦
-    ¦   ¦   +-- admin/                   # AdminModule
-    ¦   ¦   ¦   +-- admin-module.ts
-    ¦   ¦   ¦   +-- admin-routing-module.ts
-    ¦   ¦   ¦   +-- dashboard/
-    ¦   ¦   ¦   ¦   +-- admin-dashboard.component.ts
-    ¦   ¦   ¦   +-- claim-review/
-    ¦   ¦   ¦   ¦   +-- claim-review.component.ts
-    ¦   ¦   ¦   +-- policy-management/
-    ¦   ¦   ¦   ¦   +-- policy-management.component.ts
-    ¦   ¦   ¦   +-- user-management/
-    ¦   ¦   ¦       +-- user-management.component.ts
-    ¦   ¦   ¦
-    ¦   ¦   +-- reports/                 # ReportsModule
-    ¦   ¦   ¦   +-- reports-module.ts
-    ¦   ¦   ¦   +-- reports-routing-module.ts
-    ¦   ¦   ¦   +-- reports.component.ts # Charts + CSV export
-    ¦   ¦   ¦
-    ¦   ¦   +-- shared/                  # SharedModule
-    ¦   ¦   ¦   +-- shared-module.ts
-    ¦   ¦   ¦
-    ¦   ¦   +-- landing/
-    ¦   ¦       +-- landing.component.ts # Public landing page
-    ¦   ¦
-    ¦   +-- environments/
-    ¦   ¦   +-- environment.ts           # { production: false, gatewayUrl: 'https://localhost:7000' }
-    ¦   ¦   +-- environment.prod.ts      # Production environment config
-    ¦   ¦
-    ¦   +-- index.html                   # HTML entry point
-    ¦   +-- main.ts                      # Angular bootstrap
-    ¦   +-- styles.scss                  # Global SCSS styles
-    ¦
+    ï¿½   +-- app/
+    ï¿½   ï¿½   +-- app.ts                   # Root component
+    ï¿½   ï¿½   +-- app.html                 # Root template
+    ï¿½   ï¿½   +-- app.routes.ts            # Top-level route definitions
+    ï¿½   ï¿½   +-- app.config.ts            # App configuration (providers, interceptors)
+    ï¿½   ï¿½   +-- app.scss                 # Root styles
+    ï¿½   ï¿½   ï¿½
+    ï¿½   ï¿½   +-- core/                    # CoreModule ï¿½ singleton services and guards
+    ï¿½   ï¿½   ï¿½   +-- core-module.ts
+    ï¿½   ï¿½   ï¿½   +-- guards/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- auth.guard.ts    # Redirects unauthenticated users to /auth/login
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- auth.guard.spec.ts
+    ï¿½   ï¿½   ï¿½   +-- interceptors/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- jwt.interceptor.ts  # Attaches Authorization: Bearer header
+    ï¿½   ï¿½   ï¿½   +-- models/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- auth.models.ts   # LoginRequest, RegisterRequest, AuthResponse
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- claim.models.ts  # Claim, CreateClaimRequest, ClaimDocument
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- policy.models.ts # Policy, PolicyType, CreatePolicyRequest
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- report.models.ts # Report, DashboardStats
+    ï¿½   ï¿½   ï¿½   +-- services/
+    ï¿½   ï¿½   ï¿½       +-- auth.service.ts      # login(), register(), logout(), getToken(), getUserId(), getRole()
+    ï¿½   ï¿½   ï¿½       +-- auth.service.spec.ts # 18 Vitest tests
+    ï¿½   ï¿½   ï¿½       +-- policy.service.ts    # getPolicies(), getPolicyTypes(), createPolicy(), activatePolicy()
+    ï¿½   ï¿½   ï¿½       +-- claim.service.ts     # getClaims(), submitClaim(), uploadDocument()
+    ï¿½   ï¿½   ï¿½       +-- admin.service.ts     # getDashboard(), getReports(), reviewClaim(), getAllClaims()
+    ï¿½   ï¿½   ï¿½
+    ï¿½   ï¿½   +-- auth/                    # AuthModule
+    ï¿½   ï¿½   ï¿½   +-- auth-module.ts
+    ï¿½   ï¿½   ï¿½   +-- auth-routing-module.ts
+    ï¿½   ï¿½   ï¿½   +-- login/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- login.component.ts
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- login.component.spec.ts  # 16 Vitest tests
+    ï¿½   ï¿½   ï¿½   +-- register/
+    ï¿½   ï¿½   ï¿½       +-- register.component.ts
+    ï¿½   ï¿½   ï¿½
+    ï¿½   ï¿½   +-- customer/                # CustomerModule
+    ï¿½   ï¿½   ï¿½   +-- customer-module.ts
+    ï¿½   ï¿½   ï¿½   +-- customer-routing-module.ts
+    ï¿½   ï¿½   ï¿½   +-- dashboard/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- dashboard.component.ts   # Summary cards, quick links
+    ï¿½   ï¿½   ï¿½   +-- buy-policy/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- buy-policy.component.ts  # 3-step wizard
+    ï¿½   ï¿½   ï¿½   +-- policies/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- policies.component.ts    # Policy list
+    ï¿½   ï¿½   ï¿½   +-- policy-detail/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- policy-detail.component.ts
+    ï¿½   ï¿½   ï¿½   +-- upload-documents/
+    ï¿½   ï¿½   ï¿½       +-- upload-documents.component.ts
+    ï¿½   ï¿½   ï¿½
+    ï¿½   ï¿½   +-- claims/                  # ClaimsModule
+    ï¿½   ï¿½   ï¿½   +-- claims-module.ts
+    ï¿½   ï¿½   ï¿½   +-- claims-routing-module.ts
+    ï¿½   ï¿½   ï¿½   +-- initiate-claim/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- initiate-claim.component.ts  # 4-step wizard
+    ï¿½   ï¿½   ï¿½   +-- claim-tracking/
+    ï¿½   ï¿½   ï¿½       +-- claim-tracking.component.ts
+    ï¿½   ï¿½   ï¿½
+    ï¿½   ï¿½   +-- admin/                   # AdminModule
+    ï¿½   ï¿½   ï¿½   +-- admin-module.ts
+    ï¿½   ï¿½   ï¿½   +-- admin-routing-module.ts
+    ï¿½   ï¿½   ï¿½   +-- dashboard/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- admin-dashboard.component.ts
+    ï¿½   ï¿½   ï¿½   +-- claim-review/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- claim-review.component.ts
+    ï¿½   ï¿½   ï¿½   +-- policy-management/
+    ï¿½   ï¿½   ï¿½   ï¿½   +-- policy-management.component.ts
+    ï¿½   ï¿½   ï¿½   +-- user-management/
+    ï¿½   ï¿½   ï¿½       +-- user-management.component.ts
+    ï¿½   ï¿½   ï¿½
+    ï¿½   ï¿½   +-- reports/                 # ReportsModule
+    ï¿½   ï¿½   ï¿½   +-- reports-module.ts
+    ï¿½   ï¿½   ï¿½   +-- reports-routing-module.ts
+    ï¿½   ï¿½   ï¿½   +-- reports.component.ts # Charts + CSV export
+    ï¿½   ï¿½   ï¿½
+    ï¿½   ï¿½   +-- shared/                  # SharedModule
+    ï¿½   ï¿½   ï¿½   +-- shared-module.ts
+    ï¿½   ï¿½   ï¿½
+    ï¿½   ï¿½   +-- landing/
+    ï¿½   ï¿½       +-- landing.component.ts # Public landing page
+    ï¿½   ï¿½
+    ï¿½   +-- environments/
+    ï¿½   ï¿½   +-- environment.ts           # { production: false, gatewayUrl: 'https://localhost:7000' }
+    ï¿½   ï¿½   +-- environment.prod.ts      # Production environment config
+    ï¿½   ï¿½
+    ï¿½   +-- index.html                   # HTML entry point
+    ï¿½   +-- main.ts                      # Angular bootstrap
+    ï¿½   +-- styles.scss                  # Global SCSS styles
+    ï¿½
     +-- angular.json                     # Angular CLI workspace configuration
     +-- package.json                     # npm dependencies (@angular/cli ^21.2.6)
     +-- tsconfig.json                    # TypeScript base config
@@ -1890,4 +1885,67 @@ SmartSure_InsuranceApp/
 
 ---
 
-*SmartSure Insurance Management System — built with .NET 8 and Angular 21.*
+
+## 14. Changelog
+
+### v1.6 â€” UI Bug Fixes & Claim Review Deep-Link (May 2026)
+
+**Frontend fixes:**
+
+- **Upload button scope** â€” Document upload button now only appears for `Draft` claims. `Submitted` claims show an informational message instead of the upload button.
+- **Buy Policy success message** â€” After confirming a policy purchase, a green success banner displays "Policy activated successfully! Redirecting to your policies..." with a 2-second delay before navigating to `/customer/policies`.
+- **Submit Claim success message** â€” After submitting a claim, a green success banner displays "Claim submitted successfully! Redirecting to your claims..." with a 2-second delay before navigating to `/claims/track`.
+- **Claim Review deep-link** â€” The "Review" button on the Admin Dashboard now passes `?claimId=X` as a query parameter. `ClaimReviewComponent.ngOnInit()` reads this parameter and auto-selects the specific claim in the review panel.
+- **Claim Review stale data** â€” `openReview()` now fetches fresh claim data from the server on every selection. `submitReview()` reloads the full claims list after every status update.
+- **Smart status dropdown** â€” The status dropdown in Claim Review only shows valid next statuses based on the claim's current status (using the `transitions` map).
+
+---
+
+### v1.5 â€” Security & Lifecycle Hardening (April 2026)
+
+- Claim lifecycle transition guard in `ClaimService.UpdateClaimStatusAsync()` â€” invalid transitions return HTTP 400
+- Policy lifecycle transition guard in `PolicyService.UpdatePolicyStatusAsync()` â€” same pattern
+- Claim submit ownership check â€” JWT `UserId` must match `claim.CustomerId`, otherwise HTTP 403
+- Email credentials moved to `appsettings.Development.json` (gitignored)
+- MailKit upgraded to 4.16.0
+- `DangerousAcceptAnyServerCertificateValidator` wrapped in `#if DEBUG` only
+- Confirmation modals added for admin destructive actions (Approve, Reject, Close)
+- 8 new NUnit tests for transition guards added
+
+---
+
+### v1.4 â€” Frontend Tests (April 2026)
+
+- Migrated frontend test runner from Karma/Jasmine to **Vitest**
+- 61 Vitest tests across 5 spec files (auth.service, jwt.interceptor, auth.guard, login.component, app)
+
+---
+
+### v1.3 â€” Full UI Redesign (April 2026)
+
+- Sidebar + topbar layout, Font Awesome 6 icons, Bootstrap 5.3 + custom SCSS
+- All admin and customer pages redesigned
+- Reports page with Chart.js bar/pie charts
+- Landing page with animated hero section
+
+---
+
+### v1.2 â€” Event-Driven Architecture (April 2026)
+
+- MassTransit + RabbitMQ with PolicyPurchaseSaga and ClaimApprovalSaga
+- SmartSure.SagaHost worker service and SmartSure.Contracts shared library
+- MailKit email notifications (OTP + policy confirmation)
+
+---
+
+### v1.1 â€” Core Platform (April 2026)
+
+- 4 ASP.NET Core 8 microservices, Ocelot API Gateway, Angular 21 frontend
+- SQL Server with EF Core Code-First (4 separate databases)
+- JWT authentication, BCrypt password hashing, OTP forgot-password flow
+- Document upload (PDF, JPG, PNG, DOC, DOCX, max 10 MB)
+- NUnit test suite
+
+---
+
+*SmartSure Insurance Management System ï¿½ built with .NET 8 and Angular 21.*

@@ -54,5 +54,6 @@ public class PoliciesController : ControllerBase
         try { return Ok(await _service.UpdatePolicyStatusAsync(id, status)); }
         catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
         catch (ArgumentException ex) { return BadRequest(new { message = ex.Message }); }
+        catch (InvalidOperationException ex) { return BadRequest(new { message = ex.Message }); }
     }
 }

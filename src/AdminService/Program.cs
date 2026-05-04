@@ -21,9 +21,11 @@ builder.Services.AddHttpClient("InternalClient")
     .ConfigurePrimaryHttpMessageHandler(() =>
     {
         var handler = new HttpClientHandler();
-        if (builder.Environment.IsDevelopment())
-            handler.ServerCertificateCustomValidationCallback =
-                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+#if DEBUG
+        // Allow self-signed dev certificates — remove before production deployment
+        handler.ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+#endif
         return handler;
     });
 

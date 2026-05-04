@@ -2,6 +2,7 @@ using ClaimsService.DTOs;
 using ClaimsService.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ClaimsService.Controllers;
 
@@ -24,6 +25,17 @@ public class ClaimsController : ControllerBase
     [Authorize(Roles = "Customer")]
     public async Task<IActionResult> Submit(int id)
     {
+        // Ownership check — verify the claim belongs to the authenticated customer
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdClaim, out var authenticatedUserId))
+            return Unauthorized(new { message = "Invalid token." });
+
+        var claim = await _service.GetClaimByIdAsync(id);
+        if (claim == null) return NotFound(new { message = "Claim not found." });
+
+        if (claim.CustomerId != authenticatedUserId)
+            return StatusCode(403, new { message = "You are not authorised to submit this claim." });
+
         try { return Ok(await _service.SubmitClaimAsync(id)); }
         catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
         catch (InvalidOperationException ex) { return BadRequest(new { message = ex.Message }); }
@@ -53,6 +65,7 @@ public class ClaimsController : ControllerBase
         try { return Ok(await _service.UpdateClaimStatusAsync(id, dto)); }
         catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
         catch (ArgumentException ex) { return BadRequest(new { message = ex.Message }); }
+        catch (InvalidOperationException ex) { return BadRequest(new { message = ex.Message }); }
     }
 
     [HttpPost("{id}/documents")]

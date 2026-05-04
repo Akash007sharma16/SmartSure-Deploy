@@ -10,7 +10,11 @@ public record PolicyCreated(
     int PolicyTypeId,
     decimal CoverageAmount,
     DateTime StartDate,
-    DateTime EndDate);
+    DateTime EndDate,
+    // Customer details for email notifications
+    string CustomerEmail = "",
+    string CustomerName = "",
+    string PolicyTypeName = "");
 
 /// <summary>Published by PolicyService when a policy moves to Active.</summary>
 public record PolicyActivated(
@@ -36,11 +40,22 @@ public record PolicyPurchaseCompleted(
     Guid CorrelationId,
     int PolicyId,
     int CustomerId,
-    DateTime CompletedAt);
+    DateTime CompletedAt,
+    // Customer/policy details forwarded from PolicyCreated for email
+    string CustomerEmail = "",
+    string CustomerName = "",
+    string PolicyTypeName = "",
+    decimal CoverageAmount = 0,
+    decimal PremiumAmount = 0,
+    DateTime StartDate = default,
+    DateTime EndDate = default);
 
 /// <summary>Published by SagaHost when the purchase flow fails.</summary>
 public record PolicyPurchaseFailed(
     Guid CorrelationId,
     int PolicyId,
     string Reason,
-    DateTime FailedAt);
+    DateTime FailedAt,
+    // Customer details for failure notification email
+    string CustomerEmail = "",
+    string CustomerName = "");

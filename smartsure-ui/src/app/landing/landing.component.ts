@@ -45,27 +45,27 @@ export class LandingComponent implements OnInit {
   ];
 
   products = [
-    { icon: '🚗', name: 'Car Insurance',    price: '₹2,094/yr', bg: '#dbeafe' },
-    { icon: '🏍️', name: 'Bike Insurance',   price: '₹538/yr',  bg: '#fef3c7' },
-    { icon: '🏥', name: 'Health Insurance', price: '₹3,999/yr', bg: '#d1fae5' },
-    { icon: '🛡️', name: 'Life Insurance',   price: '₹799/yr',  bg: '#ede9fe' },
-    { icon: '✈️', name: 'Travel Insurance', price: '₹299/trip', bg: '#cffafe' },
-    { icon: '🏠', name: 'Home Insurance',   price: '₹1,499/yr', bg: '#fee2e2' }
+    { icon: 'fa-solid fa-car',          name: 'Car Insurance',    price: '₹2,094/yr', bg: '#dbeafe', iconColor: '#2563eb' },
+    { icon: 'fa-solid fa-motorcycle',   name: 'Bike Insurance',   price: '₹538/yr',  bg: '#fef3c7', iconColor: '#d97706' },
+    { icon: 'fa-solid fa-heart-pulse',  name: 'Health Insurance', price: '₹3,999/yr', bg: '#dcfce7', iconColor: '#16a34a' },
+    { icon: 'fa-solid fa-shield-halved',name: 'Life Insurance',   price: '₹799/yr',  bg: '#ede9fe', iconColor: '#7c3aed' },
+    { icon: 'fa-solid fa-plane',        name: 'Travel Insurance', price: '₹299/trip', bg: '#cffafe', iconColor: '#0891b2' },
+    { icon: 'fa-solid fa-house',        name: 'Home Insurance',   price: '₹1,499/yr', bg: '#fee2e2', iconColor: '#dc2626' }
   ];
 
   features = [
-    { icon: '⚡', title: 'Instant Policy',      desc: 'Get your policy document in your inbox within 5 minutes. No paperwork, no waiting.',  color: 'f-blue'   },
-    { icon: '💰', title: 'Lowest Premiums',     desc: 'We compare 20+ insurers to get you the best price. Save up to 50% on your premium.',  color: 'f-green'  },
-    { icon: '📋', title: 'Hassle-free Claims',  desc: 'File a claim in 3 clicks. Our team handles everything and settles 99.2% of claims.',   color: 'f-orange' },
-    { icon: '🔒', title: 'Secure & Trusted',    desc: 'Bank-grade 256-bit encryption. IRDAI registered. Your data is always safe with us.',   color: 'f-purple' },
-    { icon: '📱', title: 'Manage Anywhere',     desc: 'Access your policies, claims, and documents from any device, anytime, anywhere.',       color: 'f-teal'   },
-    { icon: '🤝', title: '24×7 Expert Support', desc: 'Talk to our insurance experts anytime. We\'re here to help you make the right choice.', color: 'f-red'    }
+    { icon: 'fa-solid fa-bolt',         title: 'Instant Policy',      desc: 'Get your policy document in your inbox within 5 minutes. No paperwork, no waiting.',  color: 'f-blue'   },
+    { icon: 'fa-solid fa-indian-rupee-sign', title: 'Lowest Premiums', desc: 'We compare 20+ insurers to get you the best price. Save up to 50% on your premium.', color: 'f-green'  },
+    { icon: 'fa-solid fa-file-circle-check', title: 'Hassle-free Claims', desc: 'File a claim in 3 clicks. Our team handles everything and settles 99.2% of claims.', color: 'f-orange' },
+    { icon: 'fa-solid fa-lock',         title: 'Secure & Trusted',    desc: 'Bank-grade 256-bit encryption. IRDAI registered. Your data is always safe with us.',   color: 'f-purple' },
+    { icon: 'fa-solid fa-mobile-screen',title: 'Manage Anywhere',     desc: 'Access your policies, claims, and documents from any device, anytime, anywhere.',       color: 'f-teal'   },
+    { icon: 'fa-solid fa-headset',      title: '24×7 Expert Support', desc: 'Talk to our insurance experts anytime. We\'re here to help you make the right choice.', color: 'f-red'    }
   ];
 
   steps = [
-    { icon: '📝', title: 'Enter Your Details',   desc: 'Tell us about yourself and what you want to insure. Takes less than 2 minutes.' },
-    { icon: '🔍', title: 'Compare & Choose',     desc: 'We show you the best plans from top insurers. Pick the one that fits your needs.' },
-    { icon: '✅', title: 'Pay & Get Protected',  desc: 'Pay securely online. Your policy is active instantly. Download your document.' }
+    { icon: 'fa-solid fa-pen-to-square', title: 'Enter Your Details',  desc: 'Tell us about yourself and what you want to insure. Takes less than 2 minutes.' },
+    { icon: 'fa-solid fa-magnifying-glass', title: 'Compare & Choose', desc: 'We show you the best plans from top insurers. Pick the one that fits your needs.' },
+    { icon: 'fa-solid fa-circle-check',  title: 'Pay & Get Protected', desc: 'Pay securely online. Your policy is active instantly. Download your document.' }
   ];
 
   goRegister(): void {

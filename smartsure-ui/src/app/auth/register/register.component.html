@@ -1,0 +1,115 @@
+<div class="auth-page">
+  <!-- Left Panel -->
+  <div class="auth-left">
+    <div class="auth-brand">
+      <div class="auth-brand-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <span class="auth-brand-name">SmartSure</span>
+    </div>
+    <div class="auth-left-content">
+      <h1>Join 1 Crore+<br><span class="auth-grad">protected Indians</span></h1>
+      <p>Create your free account and get covered in minutes. No paperwork, no waiting.</p>
+      <div class="auth-features">
+        <div class="auth-feat">
+          <div class="af-icon"><i class="fa-solid fa-rocket"></i></div>
+          <span>Get started in under 5 minutes</span>
+        </div>
+        <div class="auth-feat">
+          <div class="af-icon"><i class="fa-solid fa-credit-card"></i></div>
+          <span>No credit card required</span>
+        </div>
+        <div class="auth-feat">
+          <div class="af-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <span>Multiple policy types available</span>
+        </div>
+        <div class="auth-feat">
+          <div class="af-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+          <span>Manage everything online</span>
+        </div>
+      </div>
+      <div class="auth-trust">
+        <div class="at-item"><strong>1 Cr+</strong><span>Customers</span></div>
+        <div class="at-item"><strong>99.2%</strong><span>Claims Settled</span></div>
+        <div class="at-item"><strong>4.8 <i class="fa-solid fa-star" style="font-size:0.9rem;color:#fbbf24"></i></strong><span>Rating</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <h2>Create your account</h2>
+        <p>Start protecting what matters most</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Full Name</label>
+          <input type="text" formControlName="fullName" class="form-control form-control-lg"
+                 [class.is-invalid]="isInvalid('fullName')"
+                 [class.is-valid]="isValid('fullName')"
+                 placeholder="Akash Sharma" autocomplete="name" />
+          <div class="invalid-feedback">{{ err('fullName') }}</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email address</label>
+          <input type="email" formControlName="email" class="form-control form-control-lg"
+                 [class.is-invalid]="isInvalid('email')"
+                 [class.is-valid]="isValid('email')"
+                 placeholder="you@example.com" autocomplete="email" />
+          <div class="invalid-feedback">{{ err('email') }}</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <div class="input-group">
+            <input [type]="showPwd ? 'text' : 'password'" formControlName="password"
+                   class="form-control form-control-lg"
+                   [class.is-invalid]="isInvalid('password')"
+                   [class.is-valid]="isValid('password')"
+                   placeholder="Min 8 chars, uppercase, number, special"
+                   autocomplete="new-password" />
+            <button class="btn btn-outline-secondary" type="button"
+                    (click)="showPwd = !showPwd" tabindex="-1">
+              <i [class]="showPwd ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+            </button>
+          </div>
+          <div *ngIf="isInvalid('password')" class="mt-2">
+            <div class="pwd-hint" [class.pwd-ok]="!pwdErr('minLength')"  [class.pwd-fail]="pwdErr('minLength')">
+              <i [class]="pwdErr('minLength') ? 'fa-solid fa-xmark' : 'fa-solid fa-check'"></i> At least 8 characters
+            </div>
+            <div class="pwd-hint" [class.pwd-ok]="!pwdErr('uppercase')" [class.pwd-fail]="pwdErr('uppercase')">
+              <i [class]="pwdErr('uppercase') ? 'fa-solid fa-xmark' : 'fa-solid fa-check'"></i> One uppercase letter
+            </div>
+            <div class="pwd-hint" [class.pwd-ok]="!pwdErr('lowercase')" [class.pwd-fail]="pwdErr('lowercase')">
+              <i [class]="pwdErr('lowercase') ? 'fa-solid fa-xmark' : 'fa-solid fa-check'"></i> One lowercase letter
+            </div>
+            <div class="pwd-hint" [class.pwd-ok]="!pwdErr('digit')"     [class.pwd-fail]="pwdErr('digit')">
+              <i [class]="pwdErr('digit') ? 'fa-solid fa-xmark' : 'fa-solid fa-check'"></i> One number
+            </div>
+            <div class="pwd-hint" [class.pwd-ok]="!pwdErr('special')"   [class.pwd-fail]="pwdErr('special')">
+              <i [class]="pwdErr('special') ? 'fa-solid fa-xmark' : 'fa-solid fa-check'"></i> One special character (!&#64;#$...)
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="errorMsg" class="alert alert-danger py-2 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-circle-exclamation"></i> {{ errorMsg }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 btn-lg fw-semibold"
+                [disabled]="form.invalid || loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          <i *ngIf="!loading" class="fa-solid fa-user-plus me-2"></i>
+          {{ loading ? 'Creating account...' : 'Create Account' }}
+        </button>
+      </form>
+
+      <p class="text-center text-muted mt-3 mb-0 signin-link">
+        Already have an account?
+        <a routerLink="/auth/login" class="fw-bold text-decoration-none" style="color:#4f46e5;">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,223 @@
+<div class="bp-wrap">
+  <div class="bp-wizard">
+
+    <!-- ── Header ── -->
+    <div class="bp-wizard-header">
+      <div class="bp-wizard-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div>
+        <h2 class="bp-wizard-title">Buy Insurance Policy</h2>
+        <p class="bp-wizard-sub">Complete the steps below to get covered instantly</p>
+      </div>
+    </div>
+
+    <!-- ── Stepper ── -->
+    <div class="bp-stepper">
+      <div class="bp-step" [class.bp-step-active]="step===1" [class.bp-step-done]="step>1">
+        <div class="bp-step-circle">
+          <i *ngIf="step>1" class="fa-solid fa-check"></i>
+          <span *ngIf="step<=1">1</span>
+        </div>
+        <div class="bp-step-label">Select Type</div>
+      </div>
+      <div class="bp-step-line" [class.bp-line-done]="step>1"></div>
+      <div class="bp-step" [class.bp-step-active]="step===2" [class.bp-step-done]="step>2">
+        <div class="bp-step-circle">
+          <i *ngIf="step>2" class="fa-solid fa-check"></i>
+          <span *ngIf="step<=2">2</span>
+        </div>
+        <div class="bp-step-label">Coverage Details</div>
+      </div>
+      <div class="bp-step-line" [class.bp-line-done]="step>2"></div>
+      <div class="bp-step" [class.bp-step-active]="step===3">
+        <div class="bp-step-circle">3</div>
+        <div class="bp-step-label">Confirm &amp; Pay</div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 1: Select Policy Type ══ -->
+    <div *ngIf="step===1">
+      <h3 class="bp-step-heading">
+        <i class="fa-solid fa-tags me-2" style="color:#4f46e5;font-size:1rem;"></i>
+        Choose a policy type
+      </h3>
+
+      <!-- Loading -->
+      <div *ngIf="policyTypes.length===0" class="bp-loading">
+        <div class="bp-spinner"></div>
+        <p>Loading policy types...</p>
+      </div>
+
+      <!-- Policy Type Grid -->
+      <div class="bp-type-grid" *ngIf="policyTypes.length>0">
+        <div *ngFor="let pt of policyTypes"
+             class="bp-type-card"
+             [class.bp-type-selected]="selectedTypeId===pt.id"
+             (click)="selectType(pt)">
+          <div class="bp-type-check" *ngIf="selectedTypeId===pt.id">
+            <i class="fa-solid fa-check"></i>
+          </div>
+          <div class="bp-type-icon" [class.bp-type-icon-selected]="selectedTypeId===pt.id">
+            <i [class]="getTypeIcon(pt.name)"></i>
+          </div>
+          <h4 class="bp-type-name">{{ pt.name }}</h4>
+          <p class="bp-type-desc">{{ pt.description }}</p>
+          <span class="bp-rate-badge">
+            <i class="fa-solid fa-percent" style="font-size:0.6rem;"></i>
+            {{ pt.baseRate }}% base rate
+          </span>
+        </div>
+      </div>
+
+      <div class="bp-step-footer">
+        <div></div>
+        <button class="bp-btn-next" [disabled]="!selectedTypeId" (click)="step=2">
+          Continue <i class="fa-solid fa-arrow-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ STEP 2: Coverage Details ══ -->
+    <div *ngIf="step===2">
+      <h3 class="bp-step-heading">
+        <i class="fa-solid fa-sliders me-2" style="color:#4f46e5;font-size:1rem;"></i>
+        Coverage details
+      </h3>
+
+      <!-- Selected type reminder -->
+      <div class="bp-selected-type-pill" *ngIf="selectedType">
+        <div class="bp-stp-icon"><i [class]="getTypeIcon(selectedType.name)"></i></div>
+        <span>{{ selectedType.name }}</span>
+        <span class="bp-stp-rate">{{ selectedType.baseRate }}% rate</span>
+      </div>
+
+      <form [formGroup]="detailsForm">
+        <div class="bp-form-group">
+          <label class="bp-form-label">Coverage Amount (₹)</label>
+          <div class="bp-amount-wrap">
+            <span class="bp-amount-prefix"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+            <input type="number" formControlName="coverageAmount"
+                   class="bp-input bp-input-amount"
+                   [class.bp-input-error]="isInvalid('coverageAmount')"
+                   placeholder="e.g. 500000" />
+          </div>
+          <div class="bp-error" *ngIf="isInvalid('coverageAmount')">{{ err('coverageAmount') }}</div>
+          <div class="bp-hint">Range: ₹1,000 – ₹10,00,00,000</div>
+        </div>
+
+        <div class="bp-date-row">
+          <div class="bp-form-group">
+            <label class="bp-form-label">
+              <i class="fa-regular fa-calendar me-1"></i> Start Date
+            </label>
+            <input type="date" formControlName="startDate"
+                   class="bp-input"
+                   [class.bp-input-error]="isInvalid('startDate') || hasDateError('startInPast')"
+                   [min]="today" />
+            <div class="bp-error" *ngIf="isInvalid('startDate')">Start date is required.</div>
+            <div class="bp-error" *ngIf="hasDateError('startInPast')">Start date cannot be in the past.</div>
+          </div>
+          <div class="bp-form-group">
+            <label class="bp-form-label">
+              <i class="fa-regular fa-calendar me-1"></i> End Date
+            </label>
+            <input type="date" formControlName="endDate"
+                   class="bp-input"
+                   [class.bp-input-error]="isInvalid('endDate') || hasDateError('endBeforeStart')"
+                   [min]="today" />
+            <div class="bp-error" *ngIf="isInvalid('endDate')">End date is required.</div>
+            <div class="bp-error" *ngIf="hasDateError('endBeforeStart')">End date must be after start date.</div>
+          </div>
+        </div>
+
+        <!-- Premium Estimate -->
+        <div *ngIf="estimatedPremium" class="bp-premium-box">
+          <div class="bp-pb-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+          <div>
+            <div class="bp-pb-label">Estimated Annual Premium</div>
+            <div class="bp-pb-amount">{{ estimatedPremium | currency:'INR':'symbol':'1.0-0' }}</div>
+            <div class="bp-pb-note">Based on {{ selectedType?.baseRate }}% of your coverage amount</div>
+          </div>
+        </div>
+      </form>
+
+      <div class="bp-step-footer">
+        <button class="bp-btn-back" (click)="step=1">
+          <i class="fa-solid fa-arrow-left me-1"></i> Back
+        </button>
+        <button class="bp-btn-next" [disabled]="detailsForm.invalid" (click)="calculateAndNext()">
+          Calculate &amp; Continue <i class="fa-solid fa-arrow-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ STEP 3: Confirm & Pay ══ -->
+    <div *ngIf="step===3">
+      <h3 class="bp-step-heading">
+        <i class="fa-solid fa-circle-check me-2" style="color:#4f46e5;font-size:1rem;"></i>
+        Review &amp; Confirm
+      </h3>
+
+      <div class="bp-summary">
+        <div class="bp-summary-header">
+          <div class="bp-summary-header-icon">
+            <i [class]="getTypeIcon(selectedType?.name || '')"></i>
+          </div>
+          <div>
+            <div class="bp-summary-type">{{ selectedType?.name }}</div>
+            <div class="bp-summary-sub">Insurance Policy</div>
+          </div>
+        </div>
+        <div class="bp-summary-rows">
+          <div class="bp-summary-row">
+            <span class="bp-sr-lbl"><i class="fa-solid fa-shield-halved bp-sr-icon"></i> Policy Type</span>
+            <strong>{{ selectedType?.name }}</strong>
+          </div>
+          <div class="bp-summary-row">
+            <span class="bp-sr-lbl"><i class="fa-solid fa-indian-rupee-sign bp-sr-icon"></i> Coverage Amount</span>
+            <strong>{{ detailsForm.value.coverageAmount | currency:'INR':'symbol':'1.0-0' }}</strong>
+          </div>
+          <div class="bp-summary-row">
+            <span class="bp-sr-lbl"><i class="fa-regular fa-calendar bp-sr-icon"></i> Start Date</span>
+            <strong>{{ detailsForm.value.startDate | date:'mediumDate' }}</strong>
+          </div>
+          <div class="bp-summary-row">
+            <span class="bp-sr-lbl"><i class="fa-regular fa-calendar bp-sr-icon"></i> End Date</span>
+            <strong>{{ detailsForm.value.endDate | date:'mediumDate' }}</strong>
+          </div>
+        </div>
+        <div class="bp-summary-total">
+          <span>Total Annual Premium</span>
+          <span class="bp-total-amount">{{ estimatedPremium | currency:'INR':'symbol':'1.0-0' }}</span>
+        </div>
+      </div>
+
+      <div class="bp-confirm-note">
+        <i class="fa-solid fa-circle-info"></i>
+        Your policy will be activated immediately after payment. You'll receive a confirmation on your dashboard.
+      </div>
+
+      <div *ngIf="errorMsg" class="bp-error-alert">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ errorMsg }}
+      </div>
+
+      <!-- Success message -->
+      <div *ngIf="successMsg" class="bp-success-alert">
+        <i class="fa-solid fa-circle-check"></i> {{ successMsg }}
+      </div>
+
+      <div class="bp-step-footer" *ngIf="!successMsg">
+        <button class="bp-btn-back" (click)="step=2" [disabled]="loading">
+          <i class="fa-solid fa-arrow-left me-1"></i> Back
+        </button>
+        <button class="bp-btn-confirm" [disabled]="loading" (click)="confirmPurchase()">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+          <i *ngIf="!loading" class="fa-solid fa-lock"></i>
+          {{ loading ? 'Processing...' : 'Confirm & Activate' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

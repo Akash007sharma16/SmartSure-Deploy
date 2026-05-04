@@ -1,0 +1,122 @@
+<div class="po-root">
+
+  <!-- ── Page Header ── -->
+  <div class="po-header">
+    <div class="po-header-left">
+      <div class="po-header-badge">
+        <i class="fa-solid fa-file-shield"></i> Insurance Portfolio
+      </div>
+      <h1 class="po-header-title">My Policies</h1>
+      <p class="po-header-sub">Manage and view all your insurance policies</p>
+    </div>
+    <div class="po-header-right">
+      <div class="po-stat-pill" *ngIf="policies.length > 0">
+        <i class="fa-solid fa-layer-group"></i>
+        {{ policies.length }} Policies
+      </div>
+      <a routerLink="/customer/buy-policy" class="po-buy-btn">
+        <i class="fa-solid fa-plus"></i> Buy New Policy
+      </a>
+    </div>
+  </div>
+
+  <!-- ── Filter Bar ── -->
+  <div class="po-filter-bar" *ngIf="policies.length > 0">
+    <div class="po-search-wrap">
+      <i class="fa-solid fa-magnifying-glass po-search-icon"></i>
+      <input type="text" class="po-search-input"
+             placeholder="Search by policy number or type..."
+             [(ngModel)]="searchTerm" />
+    </div>
+    <div class="po-filter-right">
+      <select class="po-select" [(ngModel)]="statusFilter">
+        <option value="">All Statuses</option>
+        <option value="Active">Active</option>
+        <option value="Draft">Draft</option>
+        <option value="Expired">Expired</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+      <div class="po-results-count" *ngIf="searchTerm || statusFilter">
+        {{ filteredPolicies.length }} result{{ filteredPolicies.length !== 1 ? 's' : '' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Empty: no policies ── -->
+  <div *ngIf="policies.length === 0" class="po-empty">
+    <div class="po-empty-icon"><i class="fa-solid fa-file-shield"></i></div>
+    <h3>No policies yet</h3>
+    <p>You haven't purchased any policies yet. Get covered in minutes.</p>
+    <a routerLink="/customer/buy-policy" class="po-empty-btn">
+      <i class="fa-solid fa-plus me-2"></i>Buy Your First Policy
+    </a>
+  </div>
+
+  <!-- ── Empty: no filter results ── -->
+  <div *ngIf="filteredPolicies.length === 0 && policies.length > 0" class="po-empty">
+    <div class="po-empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+    <h3>No results found</h3>
+    <p>Try adjusting your search or filter criteria.</p>
+    <button class="po-empty-btn" (click)="searchTerm = ''; statusFilter = ''">
+      <i class="fa-solid fa-rotate-right me-2"></i>Clear Filters
+    </button>
+  </div>
+
+  <!-- ── Policy Cards Grid ── -->
+  <div class="po-grid" *ngIf="filteredPolicies.length > 0">
+    <div class="po-card" *ngFor="let p of filteredPolicies"
+         [class.po-card-active]="p.status === 'Active'"
+         [class.po-card-expired]="p.status === 'Expired'"
+         [class.po-card-cancelled]="p.status === 'Cancelled'"
+         [class.po-card-draft]="p.status === 'Draft'">
+
+      <!-- Card Header -->
+      <div class="po-card-header">
+        <div class="po-card-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="po-card-title-block">
+          <div class="po-card-num">{{ p.policyNumber }}</div>
+          <div class="po-card-type">{{ p.policyType }}</div>
+        </div>
+        <span class="po-badge" [ngClass]="badge(p.status)">
+          <span class="po-badge-dot"></span>
+          {{ p.status }}
+        </span>
+      </div>
+
+      <!-- Card Body -->
+      <div class="po-card-body">
+        <div class="po-card-row">
+          <span class="po-card-lbl">
+            <i class="fa-solid fa-indian-rupee-sign po-row-icon"></i> Coverage
+          </span>
+          <span class="po-card-val">{{ p.coverageAmount | currency:'INR':'symbol':'1.0-0' }}</span>
+        </div>
+        <div class="po-card-row">
+          <span class="po-card-lbl">
+            <i class="fa-solid fa-receipt po-row-icon"></i> Premium
+          </span>
+          <span class="po-card-val po-premium">{{ p.premiumAmount | currency:'INR':'symbol':'1.0-0' }}/yr</span>
+        </div>
+        <div class="po-card-row po-card-row-last">
+          <span class="po-card-lbl">
+            <i class="fa-regular fa-calendar po-row-icon"></i> Valid
+          </span>
+          <span class="po-card-val po-dates">
+            {{ p.startDate | date:'MMM d, y' }} – {{ p.endDate | date:'MMM d, y' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Card Footer -->
+      <div class="po-card-footer">
+        <a [routerLink]="['/customer/policies', p.id]" class="po-details-btn">
+          <i class="fa-solid fa-eye me-2"></i>View Details
+          <i class="fa-solid fa-arrow-right po-btn-arr"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>

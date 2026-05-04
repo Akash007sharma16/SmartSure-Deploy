@@ -1,0 +1,146 @@
+<div class="cd-root">
+
+  <!-- ── Welcome Banner ── -->
+  <div class="cd-banner">
+    <div class="cd-banner-left">
+      <div class="cd-banner-avatar">{{ userName.charAt(0).toUpperCase() }}</div>
+      <div class="cd-banner-text">
+        <div class="cd-banner-greeting">Good day,</div>
+        <h2 class="cd-banner-name">{{ userName }}</h2>
+        <p class="cd-banner-date">
+          <i class="fa-regular fa-calendar me-1"></i>{{ today }}
+        </p>
+      </div>
+    </div>
+    <div class="cd-banner-right">
+      <div class="cd-banner-summary">
+        <div class="cd-bs-item">
+          <div class="cd-bs-value">{{ activePolicies }}</div>
+          <div class="cd-bs-label">Active Policies</div>
+        </div>
+        <div class="cd-bs-divider"></div>
+        <div class="cd-bs-item">
+          <div class="cd-bs-value">{{ pendingClaims }}</div>
+          <div class="cd-bs-label">Pending Claims</div>
+        </div>
+      </div>
+      <a routerLink="/customer/buy-policy" class="cd-banner-btn">
+        <i class="fa-solid fa-plus"></i> Buy New Policy
+      </a>
+    </div>
+  </div>
+
+  <!-- ── Stat Cards ── -->
+  <div class="cd-stats-grid">
+    <div class="cd-stat-card">
+      <div class="cd-stat-top">
+        <div class="cd-stat-icon blue"><i class="fa-solid fa-file-shield"></i></div>
+        <a routerLink="/customer/policies" class="cd-stat-link">
+          View all <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="cd-stat-value">{{ policies.length }}</div>
+      <div class="cd-stat-label">My Policies</div>
+    </div>
+    <div class="cd-stat-card">
+      <div class="cd-stat-top">
+        <div class="cd-stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+        <a routerLink="/customer/policies" class="cd-stat-link">
+          View all <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="cd-stat-value">{{ activePolicies }}</div>
+      <div class="cd-stat-label">Active Policies</div>
+    </div>
+    <div class="cd-stat-card">
+      <div class="cd-stat-top">
+        <div class="cd-stat-icon orange"><i class="fa-solid fa-file-lines"></i></div>
+        <a routerLink="/claims/track" class="cd-stat-link">
+          View all <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="cd-stat-value">{{ claims.length }}</div>
+      <div class="cd-stat-label">My Claims</div>
+    </div>
+    <div class="cd-stat-card">
+      <div class="cd-stat-top">
+        <div class="cd-stat-icon red"><i class="fa-solid fa-clock"></i></div>
+        <a routerLink="/claims/track" class="cd-stat-link">
+          View all <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="cd-stat-value">{{ pendingClaims }}</div>
+      <div class="cd-stat-label">Pending Claims</div>
+    </div>
+  </div>
+
+  <!-- ── Quick Actions ── -->
+  <div class="cd-section-label">Quick Actions</div>
+  <div class="cd-actions-grid">
+    <a [routerLink]="a.link" class="cd-action-card" *ngFor="let a of actions">
+      <div class="cd-action-icon" [style.background]="a.bg" [style.color]="a.iconColor">
+        <i [class]="a.icon"></i>
+      </div>
+      <span class="cd-action-label">{{ a.label }}</span>
+      <i class="fa-solid fa-chevron-right cd-action-arr"></i>
+    </a>
+  </div>
+
+  <!-- ── Recent Policies ── -->
+  <div class="cd-card" *ngIf="policies.length > 0">
+    <div class="cd-card-header">
+      <div class="cd-card-title-row">
+        <div class="cd-card-icon">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+        <div>
+          <h3 class="cd-card-title">Recent Policies</h3>
+          <p class="cd-card-sub">Your latest insurance policies</p>
+        </div>
+      </div>
+      <a routerLink="/customer/policies" class="cd-view-all">
+        View All <i class="fa-solid fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+    <div class="table-responsive">
+      <table class="cd-table">
+        <thead>
+          <tr>
+            <th>Policy Number</th>
+            <th>Type</th>
+            <th>Coverage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of policies.slice(0, 5)">
+            <td>
+              <div class="cd-policy-num-cell">
+                <div class="cd-policy-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <span class="cd-policy-num">{{ p.policyNumber }}</span>
+              </div>
+            </td>
+            <td class="cd-policy-type">{{ p.policyType }}</td>
+            <td class="cd-coverage">{{ p.coverageAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+            <td>
+              <span class="cd-badge" [ngClass]="badge(p.status)">
+                <span class="cd-badge-dot"></span>{{ p.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Empty State ── -->
+  <div *ngIf="policies.length === 0" class="cd-empty">
+    <div class="cd-empty-icon"><i class="fa-solid fa-shield-halved"></i></div>
+    <h3>No policies yet</h3>
+    <p>Get started by purchasing your first insurance policy.</p>
+    <a routerLink="/customer/buy-policy" class="cd-empty-btn">
+      <i class="fa-solid fa-plus me-2"></i>Buy Your First Policy
+    </a>
+  </div>
+
+</div>

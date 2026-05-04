@@ -164,4 +164,54 @@ public class ClaimServiceTests
         Assert.That(result.Count, Is.EqualTo(1));
         Assert.That(result[0].FileName, Is.EqualTo("doc.pdf"));
     }
+
+    // ── Lifecycle Transition Guard Tests ──────────────────────────────────────
+
+    [Test]
+    public async Task UpdateClaimStatus_ValidTransition_Submitted_To_UnderReview_Succeeds()
+    {
+        var claim = new Claim { Id = 1, Status = ClaimStatus.Submitted };
+        _repoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(claim);
+        _repoMock.Setup(r => r.UpdateAsync(It.IsAny<Claim>())).ReturnsAsync((Claim c) => c);
+
+        var result = await _service.UpdateClaimStatusAsync(1, new UpdateClaimStatusDto("UnderReview", null));
+
+        Assert.That(result.Status, Is.EqualTo("UnderReview"));
+    }
+
+    [Test]
+    public async Task UpdateClaimStatus_ValidTransition_UnderReview_To_Approved_Succeeds()
+    {
+        var claim = new Claim { Id = 1, Status = ClaimStatus.UnderReview };
+        _repoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(claim);
+        _repoMock.Setup(r => r.UpdateAsync(It.IsAny<Claim>())).ReturnsAsync((Claim c) => c);
+
+        var result = await _service.UpdateClaimStatusAsync(1, new UpdateClaimStatusDto("Approved", "Verified"));
+
+        Assert.That(result.Status, Is.EqualTo("Approved"));
+    }
+
+    [Test]
+    public void UpdateClaimStatus_InvalidTransition_Draft_To_Approved_ThrowsInvalidOperation()
+    {
+        var claim = new Claim { Id = 1, Status = ClaimStatus.Draft };
+        _repoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(claim);
+
+        var ex = Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _service.UpdateClaimStatusAsync(1, new UpdateClaimStatusDto("Approved", null)));
+
+        Assert.That(ex!.Message, Does.Contain("Cannot transition from Draft to Approved"));
+    }
+
+    [Test]
+    public void UpdateClaimStatus_InvalidTransition_Closed_To_Submitted_ThrowsInvalidOperation()
+    {
+        var claim = new Claim { Id = 1, Status = ClaimStatus.Closed };
+        _repoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(claim);
+
+        var ex = Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _service.UpdateClaimStatusAsync(1, new UpdateClaimStatusDto("Submitted", null)));
+
+        Assert.That(ex!.Message, Does.Contain("Cannot transition from Closed to Submitted"));
+    }
 }

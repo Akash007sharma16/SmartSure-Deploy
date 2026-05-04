@@ -4,7 +4,7 @@
   <header class="lp-header">
     <div class="lp-header-inner">
       <a routerLink="/" class="lp-logo">
-        <span class="lp-logo-icon">🛡️</span>
+        <div class="lp-logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
         <span class="lp-logo-name">SmartSure</span>
       </a>
       <nav class="lp-nav">
@@ -24,8 +24,10 @@
     <div class="lp-blob lp-blob-1"></div>
     <div class="lp-blob lp-blob-2"></div>
     <div class="lp-blob lp-blob-3"></div>
+
     <div class="lp-hero-inner">
 
+      <!-- LEFT -->
       <div class="lp-hero-left">
         <div class="lp-pill">
           <span class="lp-pill-dot"></span>
@@ -36,89 +38,130 @@
           <span class="lp-grad">actually works</span>
         </h1>
         <p class="lp-hero-desc">
-          Health, Life, Auto & more — instant quotes, paperless activation,
+          Health, Life, Auto &amp; more — instant quotes, paperless activation,
           24×7 claims support. Starting at just <strong>₹2,094/year.</strong>
         </p>
 
-        <!-- Quote Widget -->
         <div class="lp-widget">
           <div class="lp-widget-tabs">
-            <button [class.active]="tab==='auto'"   (click)="tab='auto';   inp=''">🚗 Auto</button>
-            <button [class.active]="tab==='health'" (click)="tab='health'; inp=''">🏥 Health</button>
-            <button [class.active]="tab==='life'"   (click)="tab='life';   inp=''">🛡️ Life</button>
-            <button [class.active]="tab==='travel'" (click)="tab='travel'; inp=''">✈️ Travel</button>
+            <button [class.active]="tab==='auto'"   (click)="tab='auto';   inp=''"><i class="fa-solid fa-car"></i> Auto</button>
+            <button [class.active]="tab==='health'" (click)="tab='health'; inp=''"><i class="fa-solid fa-heart-pulse"></i> Health</button>
+            <button [class.active]="tab==='life'"   (click)="tab='life';   inp=''"><i class="fa-solid fa-shield-halved"></i> Life</button>
+            <button [class.active]="tab==='travel'" (click)="tab='travel'; inp=''"><i class="fa-solid fa-plane"></i> Travel</button>
           </div>
           <div class="lp-widget-body">
             <div class="lp-input-row">
               <input [(ngModel)]="inp" [placeholder]="placeholder" class="lp-input" />
               <button class="lp-quote-btn" (click)="goRegister()">
-                Get Free Quote
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                Get Free Quote <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
-            <p class="lp-widget-note">No spam · No credit card · Instant results</p>
+            <p class="lp-widget-note">No spam &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Instant results</p>
           </div>
         </div>
 
-        <!-- Quick Links -->
         <div class="lp-quick-links">
           <a routerLink="/auth/register" class="lp-ql">
-            <span class="lp-ql-icon">🔄</span>
+            <div class="lp-ql-icon"><i class="fa-solid fa-rotate-right"></i></div>
             <span><strong>Renew</strong> existing policy</span>
-            <span class="lp-ql-arr">→</span>
+            <i class="fa-solid fa-arrow-right lp-ql-arr"></i>
           </a>
           <a routerLink="/auth/register" class="lp-ql">
-            <span class="lp-ql-icon">🆕</span>
+            <div class="lp-ql-icon"><i class="fa-solid fa-plus"></i></div>
             <span><strong>Buy</strong> new policy</span>
-            <span class="lp-ql-arr">→</span>
+            <i class="fa-solid fa-arrow-right lp-ql-arr"></i>
           </a>
           <a routerLink="/auth/register" class="lp-ql">
-            <span class="lp-ql-icon">📋</span>
+            <div class="lp-ql-icon"><i class="fa-solid fa-file-lines"></i></div>
             <span><strong>Track</strong> your claim</span>
-            <span class="lp-ql-arr">→</span>
+            <i class="fa-solid fa-arrow-right lp-ql-arr"></i>
           </a>
         </div>
       </div>
 
-      <!-- Hero Visual -->
+      <!-- RIGHT: Visual -->
       <div class="lp-hero-right">
         <div class="lp-visual">
-          <div class="lp-fc lp-fc-1">
-            <div class="lp-fc-dot green"></div>
-            <div>
-              <div class="lp-fc-title">Policy Active</div>
-              <div class="lp-fc-sub">Health Insurance · ₹10L</div>
-            </div>
-          </div>
-          <div class="lp-fc lp-fc-2">
-            <div class="lp-fc-dot blue"></div>
-            <div>
-              <div class="lp-fc-title">Claim Approved</div>
-              <div class="lp-fc-sub">₹45,000 settled in 2 days</div>
-            </div>
-          </div>
-          <div class="lp-fc lp-fc-3">
-            <div class="lp-fc-dot orange"></div>
-            <div>
-              <div class="lp-fc-title">Premium Due</div>
-              <div class="lp-fc-sub">₹2,094 · Auto Insurance</div>
-            </div>
-          </div>
+
+          <!-- Rotating ring -->
+          <div class="lp-ring"></div>
+          <div class="lp-ring lp-ring-2"></div>
+
+          <!-- Dot grid -->
+          <div class="lp-dots"></div>
+
+          <!-- Central policy card -->
           <div class="lp-policy-card">
-            <div class="lp-pc-top">
-              <span class="lp-pc-brand">🛡️ SmartSure</span>
-              <span class="lp-pc-status">ACTIVE</span>
+            <div class="lp-pc-header">
+              <div class="lp-pc-brand">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>SmartSure</span>
+              </div>
+              <span class="lp-pc-badge">ACTIVE</span>
             </div>
             <div class="lp-pc-name">Akash Sharma</div>
             <div class="lp-pc-type">Comprehensive Health Plan</div>
             <div class="lp-pc-stats">
-              <div><div class="lp-pc-lbl">Coverage</div><div class="lp-pc-val">₹10,00,000</div></div>
-              <div><div class="lp-pc-lbl">Premium</div><div class="lp-pc-val">₹2,094/yr</div></div>
-              <div><div class="lp-pc-lbl">Valid Till</div><div class="lp-pc-val">Dec 2026</div></div>
+              <div class="lp-pc-stat">
+                <div class="lp-pc-stat-lbl">Coverage</div>
+                <div class="lp-pc-stat-val">₹10,00,000</div>
+              </div>
+              <div class="lp-pc-stat">
+                <div class="lp-pc-stat-lbl">Premium</div>
+                <div class="lp-pc-stat-val">₹2,094/yr</div>
+              </div>
+              <div class="lp-pc-stat">
+                <div class="lp-pc-stat-lbl">Valid Till</div>
+                <div class="lp-pc-stat-val">Dec 2026</div>
+              </div>
             </div>
-            <div class="lp-pc-bar"><div class="lp-pc-bar-fill" style="width:72%"></div></div>
-            <div class="lp-pc-bar-lbl">72% coverage utilised</div>
+            <div class="lp-pc-bar-wrap">
+              <div class="lp-pc-bar"><div class="lp-pc-bar-fill" style="width:72%"></div></div>
+              <span class="lp-pc-bar-lbl">72% coverage utilised</span>
+            </div>
           </div>
+
+          <!-- Floating notification cards -->
+          <div class="lp-notif lp-notif-1">
+            <div class="lp-notif-icon green"><i class="fa-solid fa-circle-check"></i></div>
+            <div>
+              <div class="lp-notif-title">Policy Active</div>
+              <div class="lp-notif-sub">Health Insurance · ₹10L</div>
+            </div>
+          </div>
+
+          <div class="lp-notif lp-notif-2">
+            <div class="lp-notif-icon blue"><i class="fa-solid fa-thumbs-up"></i></div>
+            <div>
+              <div class="lp-notif-title">Claim Approved</div>
+              <div class="lp-notif-sub">₹45,000 in 2 days</div>
+            </div>
+          </div>
+
+          <div class="lp-notif lp-notif-3">
+            <div class="lp-notif-icon orange"><i class="fa-solid fa-bell"></i></div>
+            <div>
+              <div class="lp-notif-title">Premium Due</div>
+              <div class="lp-notif-sub">₹2,094 · Auto Insurance</div>
+            </div>
+          </div>
+
+          <!-- Stat bubbles -->
+          <div class="lp-bubble lp-bubble-1">
+            <div class="lp-bubble-num">99.2%</div>
+            <div class="lp-bubble-lbl">Claims Settled</div>
+          </div>
+          <div class="lp-bubble lp-bubble-2">
+            <div class="lp-bubble-num">1 Cr+</div>
+            <div class="lp-bubble-lbl">Customers</div>
+          </div>
+
+          <!-- Decorative icons -->
+          <div class="lp-deco lp-deco-shield"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="lp-deco lp-deco-heart"><i class="fa-solid fa-heart"></i></div>
+          <div class="lp-deco lp-deco-star"><i class="fa-solid fa-star"></i></div>
+          <div class="lp-deco lp-deco-check"><i class="fa-solid fa-circle-check"></i></div>
+
         </div>
       </div>
     </div>
@@ -143,10 +186,12 @@
       </div>
       <div class="lp-products-grid">
         <div class="lp-prod-card" *ngFor="let p of products" (click)="goRegister()">
-          <div class="lp-prod-icon" [style.background]="p.bg">{{ p.icon }}</div>
+          <div class="lp-prod-icon" [style.background]="p.bg" [style.color]="p.iconColor">
+            <i [class]="p.icon"></i>
+          </div>
           <div class="lp-prod-name">{{ p.name }}</div>
           <div class="lp-prod-price">From {{ p.price }}</div>
-          <div class="lp-prod-arr">→</div>
+          <div class="lp-prod-arr"><i class="fa-solid fa-arrow-right"></i></div>
         </div>
       </div>
     </div>
@@ -162,7 +207,7 @@
       <div class="row g-4">
         <div class="col-md-4" *ngFor="let f of features">
           <div class="lp-feat-card h-100">
-            <div class="lp-feat-icon" [ngClass]="f.color">{{ f.icon }}</div>
+            <div class="lp-feat-icon" [ngClass]="f.color"><i [class]="f.icon"></i></div>
             <h4>{{ f.title }}</h4>
             <p>{{ f.desc }}</p>
           </div>
@@ -181,13 +226,13 @@
       <div class="lp-steps">
         <div class="lp-step" *ngFor="let s of steps; let i = index">
           <div class="lp-step-num">{{ i + 1 }}</div>
-          <div class="lp-step-icon">{{ s.icon }}</div>
+          <div class="lp-step-icon"><i [class]="s.icon"></i></div>
           <h4>{{ s.title }}</h4>
           <p>{{ s.desc }}</p>
         </div>
       </div>
       <div class="text-center mt-5 d-flex gap-3 justify-content-center flex-wrap">
-        <a routerLink="/auth/register" class="lp-btn-fill lp-btn-lg">Start Your Journey →</a>
+        <a routerLink="/auth/register" class="lp-btn-fill lp-btn-lg">Start Your Journey <i class="fa-solid fa-arrow-right ms-1"></i></a>
         <a routerLink="/auth/login" class="lp-btn-outline lp-btn-lg">Already a member?</a>
       </div>
     </div>
@@ -212,7 +257,7 @@
     <div class="lp-footer-inner">
       <div class="lp-footer-brand">
         <div class="lp-logo mb-3">
-          <span class="lp-logo-icon">🛡️</span>
+          <div class="lp-logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
           <span class="lp-logo-name" style="color:white">SmartSure</span>
         </div>
         <p>Modern insurance for modern India. Secure, fast, and reliable coverage for everyone.</p>
@@ -243,7 +288,7 @@
     </div>
     <div class="lp-footer-bottom">
       <span>© {{ year }} SmartSure Insurance. All rights reserved.</span>
-      <span>IRDAI Reg. No. 123 | CIN: U66010MH2024PLC000001</span>
+      <span>IRDAI Reg. No. 123 &nbsp;|&nbsp; CIN: U66010MH2024PLC000001</span>
     </div>
   </footer>
 

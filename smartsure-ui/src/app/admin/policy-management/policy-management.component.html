@@ -1,0 +1,197 @@
+<div class="pm-root">
+
+  <!-- ── Page Header ── -->
+  <div class="pm-header">
+    <div class="pm-header-left">
+      <div class="pm-header-badge">
+        <i class="fa-solid fa-shield-halved"></i> Policy Administration
+      </div>
+      <h1 class="pm-header-title">Policy Management</h1>
+      <p class="pm-header-sub">Manage policy types and all customer policies</p>
+    </div>
+    <div class="pm-header-right">
+      <div class="pm-stat-pill blue">
+        <i class="fa-solid fa-tags"></i>
+        {{ policyTypes.length }} Types
+      </div>
+      <div class="pm-stat-pill green">
+        <i class="fa-solid fa-file-shield"></i>
+        {{ policies.length }} Policies
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tabs ── -->
+  <div class="pm-tabs">
+    <button class="pm-tab" [class.pm-tab-active]="tab === 'types'" (click)="tab = 'types'">
+      <i class="fa-solid fa-tags"></i>
+      Policy Types
+      <span class="pm-tab-count">{{ policyTypes.length }}</span>
+    </button>
+    <button class="pm-tab" [class.pm-tab-active]="tab === 'policies'" (click)="tab = 'policies'">
+      <i class="fa-solid fa-file-shield"></i>
+      All Policies
+      <span class="pm-tab-count">{{ policies.length }}</span>
+    </button>
+  </div>
+
+  <!-- ══ POLICY TYPES TAB ══ -->
+  <div *ngIf="tab === 'types'">
+
+    <!-- Add Form Card -->
+    <div class="pm-card pm-add-card">
+      <div class="pm-card-header">
+        <div class="pm-card-header-icon">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+        <div>
+          <h3 class="pm-card-title">Add New Policy Type</h3>
+          <p class="pm-card-sub">Create a new insurance product for customers</p>
+        </div>
+      </div>
+      <div class="pm-card-body">
+        <form [formGroup]="typeForm" (ngSubmit)="createType()">
+          <div class="pm-form-row">
+            <div class="pm-form-group">
+              <label class="pm-form-label">Policy Name</label>
+              <input formControlName="name"
+                     class="pm-input"
+                     [class.pm-input-error]="isInvalid('name')"
+                     [class.pm-input-ok]="isValid('name')"
+                     placeholder="e.g. Health Insurance" />
+              <div class="pm-error" *ngIf="isInvalid('name')">{{ err('name') }}</div>
+            </div>
+            <div class="pm-form-group pm-form-group-wide">
+              <label class="pm-form-label">Description</label>
+              <input formControlName="description"
+                     class="pm-input"
+                     [class.pm-input-error]="isInvalid('description')"
+                     [class.pm-input-ok]="isValid('description')"
+                     placeholder="Brief description (min 10 characters)" />
+              <div class="pm-error" *ngIf="isInvalid('description')">{{ err('description') }}</div>
+            </div>
+            <div class="pm-form-group pm-form-group-sm">
+              <label class="pm-form-label">Base Rate (%)</label>
+              <input formControlName="baseRate" type="number"
+                     class="pm-input"
+                     [class.pm-input-error]="isInvalid('baseRate')"
+                     [class.pm-input-ok]="isValid('baseRate')"
+                     placeholder="0.1 – 100" />
+              <div class="pm-error" *ngIf="isInvalid('baseRate')">{{ err('baseRate') }}</div>
+            </div>
+            <div class="pm-form-group pm-form-group-btn">
+              <label class="pm-form-label">&nbsp;</label>
+              <button type="submit" class="pm-btn-add" [disabled]="typeForm.invalid">
+                <i class="fa-solid fa-plus"></i> Add Type
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="policyTypes.length === 0" class="pm-empty">
+      <div class="pm-empty-icon"><i class="fa-solid fa-tags"></i></div>
+      <h3>No policy types yet</h3>
+      <p>Add your first policy type using the form above.</p>
+    </div>
+
+    <!-- Policy Type Cards -->
+    <div class="pm-types-grid" *ngIf="policyTypes.length > 0">
+      <div class="pm-type-card" *ngFor="let t of policyTypes">
+        <div class="pm-type-card-top">
+          <div class="pm-type-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <button class="pm-delete-btn" (click)="deletePolicyType(t.id)" title="Delete policy type">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+        <h4 class="pm-type-name">{{ t.name }}</h4>
+        <p class="pm-type-desc">{{ t.description }}</p>
+        <div class="pm-type-footer">
+          <span class="pm-rate-badge">
+            <i class="fa-solid fa-percent"></i>
+            {{ t.baseRate }}% base rate
+          </span>
+          <span class="pm-type-status">
+            <i class="fa-solid fa-circle-check"></i> Active
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ALL POLICIES TAB ══ -->
+  <div *ngIf="tab === 'policies'">
+
+    <!-- Empty -->
+    <div *ngIf="policies.length === 0" class="pm-empty">
+      <div class="pm-empty-icon"><i class="fa-solid fa-file-shield"></i></div>
+      <h3>No policies found</h3>
+      <p>Policies will appear here once customers purchase them.</p>
+    </div>
+
+    <!-- Policies Table -->
+    <div class="pm-card" *ngIf="policies.length > 0">
+      <div class="pm-card-header pm-table-header">
+        <div class="pm-card-header-icon green">
+          <i class="fa-solid fa-file-shield"></i>
+        </div>
+        <div>
+          <h3 class="pm-card-title">All Customer Policies</h3>
+          <p class="pm-card-sub">{{ policies.length }} policies across all customers</p>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="pm-table">
+          <thead>
+            <tr>
+              <th>Policy Number</th>
+              <th>Customer</th>
+              <th>Type</th>
+              <th>Coverage</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of policies">
+              <td>
+                <span class="pm-policy-num">{{ p.policyNumber }}</span>
+              </td>
+              <td>
+                <div class="pm-customer-cell">
+                  <div class="pm-customer-avatar">C</div>
+                  <span>Customer #{{ p.customerId }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="pm-type-cell">
+                  <i class="fa-solid fa-shield-halved pm-type-cell-icon"></i>
+                  {{ p.policyType }}
+                </div>
+              </td>
+              <td class="pm-coverage">{{ p.coverageAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+              <td>
+                <span class="pm-badge" [ngClass]="badge(p.status)">
+                  <span class="pm-badge-dot"></span>
+                  {{ p.status }}
+                </span>
+              </td>
+              <td>
+                <button class="pm-cancel-btn" *ngIf="p.status === 'Active'"
+                        (click)="cancelPolicy(p.id)">
+                  <i class="fa-solid fa-ban"></i> Cancel
+                </button>
+                <span *ngIf="p.status !== 'Active'" class="pm-no-action">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

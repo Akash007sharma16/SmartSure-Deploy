@@ -1,0 +1,260 @@
+/* ── Root ── */
+.rp-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* ── Page Header ── */
+.rp-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #312e81 100%);
+  border-radius: 16px;
+  padding: 1.75rem 2.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+.rp-header::before {
+  content: '';
+  position: absolute; top: -50px; right: -50px;
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, rgba(99,102,241,0.25), transparent 70%);
+  pointer-events: none;
+}
+.rp-header-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: #a5b4fc; font-size: 0.72rem; font-weight: 600;
+  padding: 0.3rem 0.875rem; border-radius: 100px;
+  margin-bottom: 0.75rem; letter-spacing: 0.03em;
+}
+.rp-header-title {
+  font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 800;
+  color: white; margin: 0 0 0.3rem; letter-spacing: -0.02em;
+}
+.rp-header-sub { font-size: 0.875rem; color: rgba(255,255,255,0.6); margin: 0; }
+.rp-header-right { position: relative; z-index: 1; }
+.rp-export-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.625rem 1.375rem; border-radius: 10px;
+  background: linear-gradient(135deg, #15803d, #16a34a);
+  color: white; border: none; font-size: 0.875rem; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(22,163,74,0.35); font-family: inherit;
+}
+.rp-export-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(22,163,74,0.45); }
+.rp-export-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── KPI Grid ── */
+.rp-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+.rp-kpi-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.rp-kpi-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.09); transform: translateY(-3px); }
+.rp-kpi-top {
+  display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;
+}
+.rp-kpi-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+}
+.rp-kpi-icon.blue   { background: #dbeafe; color: #2563eb; }
+.rp-kpi-icon.red    { background: #fee2e2; color: #dc2626; }
+.rp-kpi-icon.green  { background: #dcfce7; color: #16a34a; }
+.rp-kpi-icon.purple { background: #ede9fe; color: #7c3aed; }
+.rp-kpi-trend { font-size: 0.75rem; color: #16a34a; font-weight: 600; }
+.rp-kpi-value {
+  font-family: 'Poppins', sans-serif; font-size: 2.25rem; font-weight: 800;
+  color: #0f172a; line-height: 1; margin-bottom: 0.375rem;
+}
+.rp-kpi-label { font-size: 0.8rem; color: #64748b; font-weight: 500; }
+
+/* ── Card ── */
+.rp-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.rp-card-header {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; background: #f8fafc;
+}
+.rp-card-header-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: linear-gradient(135deg, #1e3a5f, #4f46e5);
+  color: white; display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; flex-shrink: 0;
+}
+.rp-card-header-icon.orange { background: linear-gradient(135deg, #c2410c, #f97316); }
+.rp-card-header-icon.blue   { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
+.rp-card-header-icon.green  { background: linear-gradient(135deg, #15803d, #16a34a); }
+.rp-card-title {
+  font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 800;
+  color: #0f172a; margin: 0 0 0.2rem;
+}
+.rp-card-sub { font-size: 0.78rem; color: #94a3b8; margin: 0; }
+.rp-card-body { padding: 1.5rem; }
+
+/* ── Generate Form ── */
+.rp-alert {
+  display: flex; align-items: center; gap: 0.625rem;
+  padding: 0.75rem 1rem; border-radius: 10px;
+  font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem;
+}
+.rp-alert-error   { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+.rp-alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; }
+
+.rp-form-row {
+  display: grid;
+  grid-template-columns: 1fr 0.6fr auto;
+  gap: 1rem;
+  align-items: start;
+}
+.rp-form-group { display: flex; flex-direction: column; gap: 0.375rem; }
+.rp-form-wide { }
+.rp-form-btn { }
+.rp-form-label {
+  font-size: 0.72rem; font-weight: 700; color: #334155;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.rp-input {
+  padding: 0.625rem 0.875rem; border: 1.5px solid #e2e8f0; border-radius: 10px;
+  font-size: 0.875rem; color: #0f172a; background: #f8fafc;
+  outline: none; transition: all 0.2s; font-family: 'Inter', sans-serif; width: 100%;
+}
+.rp-input:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.12); background: white; }
+.rp-input::placeholder { color: #94a3b8; }
+.rp-input-error { border-color: #dc2626 !important; background: #fff5f5 !important; }
+.rp-input-ok    { border-color: #16a34a !important; }
+.rp-error { font-size: 0.72rem; color: #dc2626; }
+.rp-select {
+  padding: 0.625rem 0.875rem; border: 1.5px solid #e2e8f0; border-radius: 10px;
+  font-size: 0.875rem; color: #0f172a; background: #f8fafc;
+  outline: none; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; width: 100%;
+}
+.rp-select:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.12); background: white; }
+.rp-btn-generate {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.625rem 1.375rem; border-radius: 10px;
+  background: linear-gradient(135deg, #1e3a5f, #4f46e5);
+  color: white; border: none; font-size: 0.875rem; font-weight: 700;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(79,70,229,0.3); font-family: inherit; width: 100%;
+  justify-content: center;
+}
+.rp-btn-generate:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(79,70,229,0.4); }
+.rp-btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Charts Grid ── */
+.rp-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.rp-chart-wrap {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Table ── */
+.rp-table {
+  width: 100%; border-collapse: collapse; font-size: 0.875rem;
+}
+.rp-table thead tr { background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+.rp-table thead th {
+  padding: 0.875rem 1.5rem;
+  font-size: 0.72rem; font-weight: 700; color: #94a3b8;
+  text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+}
+.rp-table tbody tr { border-bottom: 1px solid #f1f5f9; transition: background 0.15s; }
+.rp-table tbody tr:last-child { border-bottom: none; }
+.rp-table tbody tr:hover { background: #f8fafc; }
+.rp-table tbody td { padding: 1rem 1.5rem; vertical-align: middle; }
+.rp-row-num { color: #94a3b8; font-size: 0.8rem; font-weight: 600; }
+
+.rp-report-title-cell { display: flex; align-items: center; gap: 0.75rem; }
+.rp-report-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: #eff6ff; color: #2563eb;
+  display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;
+}
+.rp-report-name { font-weight: 700; color: #0f172a; font-size: 0.875rem; }
+
+.rp-type-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.3rem 0.75rem; border-radius: 100px;
+  font-size: 0.72rem; font-weight: 700;
+}
+.rp-badge-claims   { background: #fee2e2; color: #991b1b; }
+.rp-badge-policies { background: #dcfce7; color: #15803d; }
+.rp-badge-users    { background: #ede9fe; color: #5b21b6; }
+
+.rp-admin-cell { display: flex; align-items: center; gap: 0.625rem; }
+.rp-admin-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, #1e3a5f, #4f46e5);
+  color: white; font-size: 0.68rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.rp-date { color: #64748b; font-size: 0.8rem; }
+.rp-date-icon { color: #94a3b8; margin-right: 0.35rem; font-size: 0.75rem; }
+
+/* ── Empty / Loading / Error ── */
+.rp-empty {
+  text-align: center; padding: 4rem 2rem;
+  background: white; border: 1px solid #e2e8f0; border-radius: 14px;
+}
+.rp-empty-icon {
+  width: 72px; height: 72px; background: #f1f5f9; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.25rem; font-size: 1.75rem; color: #94a3b8;
+}
+.rp-empty-error { background: #fef2f2 !important; color: #dc2626 !important; }
+.rp-empty h3 { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
+.rp-empty p  { font-size: 0.875rem; color: #64748b; margin: 0 0 1.25rem; }
+.rp-retry-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 1.25rem; border-radius: 10px;
+  background: linear-gradient(135deg, #1e3a5f, #4f46e5);
+  color: white; border: none; font-size: 0.875rem; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+}
+.rp-loading {
+  text-align: center; padding: 4rem 2rem;
+  background: white; border: 1px solid #e2e8f0; border-radius: 14px;
+}
+.rp-spinner {
+  width: 36px; height: 36px; border: 3px solid #e2e8f0;
+  border-top-color: #4f46e5; border-radius: 50%;
+  animation: spin 0.7s linear infinite; margin: 0 auto 1rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.rp-loading p { font-size: 0.875rem; color: #64748b; margin: 0; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .rp-kpi-grid    { grid-template-columns: repeat(2, 1fr); }
+  .rp-charts-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .rp-header { flex-direction: column; align-items: flex-start; }
+  .rp-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .rp-form-row { grid-template-columns: 1fr; }
+}

@@ -1,48 +1,131 @@
 <ng-container [ngSwitch]="layoutMode">
 
-  <!-- ── AUTHENTICATED LAYOUT (dashboard pages) ── -->
+  <!-- ── AUTHENTICATED LAYOUT — Sidebar + Topbar ── -->
   <ng-container *ngSwitchCase="'app'">
-    <nav class="app-navbar">
-      <a class="nav-brand" [routerLink]="authService.getRole()==='Admin' ? '/admin/dashboard' : '/customer/dashboard'">
-        <div class="brand-icon">🛡️</div>
-        <span class="brand-text">SmartSure</span>
-      </a>
-      <div class="nav-links">
-        <ng-container *ngIf="authService.getRole() === 'Customer'">
-          <a routerLink="/customer/dashboard" routerLinkActive="active">Dashboard</a>
-          <a routerLink="/customer/policies" routerLinkActive="active">My Policies</a>
-          <a routerLink="/customer/buy-policy" routerLinkActive="active">Buy Policy</a>
-          <a routerLink="/claims/track" routerLinkActive="active">My Claims</a>
-        </ng-container>
-        <ng-container *ngIf="authService.getRole() === 'Admin'">
-          <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
-          <a routerLink="/admin/claims" routerLinkActive="active">Claims</a>
-          <a routerLink="/admin/policies" routerLinkActive="active">Policies</a>
-          <a routerLink="/admin/users" routerLinkActive="active">Users</a>
-          <a routerLink="/reports" routerLinkActive="active">Reports</a>
-        </ng-container>
+
+    <!-- Sidebar -->
+    <aside class="app-sidebar" [class.collapsed]="sidebarCollapsed">
+
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <span class="sidebar-brand-text">SmartSure</span>
+        <button class="sidebar-collapse-btn" (click)="sidebarCollapsed = !sidebarCollapsed" title="Toggle sidebar">
+          <i class="fa-solid" [class.fa-chevron-left]="!sidebarCollapsed" [class.fa-chevron-right]="sidebarCollapsed"></i>
+        </button>
       </div>
-      <div class="nav-right">
-        <div class="d-flex align-items-center gap-2">
-          <div class="user-avatar">{{ authService.getFullName().charAt(0).toUpperCase() }}</div>
-          <div>
-            <div class="user-name">{{ authService.getFullName() }}</div>
-            <span class="badge"
-              [class]="authService.getRole()==='Admin' ? 'bg-primary' : 'bg-info text-dark'"
-              style="font-size:0.62rem;">
-              {{ authService.getRole() }}
-            </span>
+
+      <!-- User info -->
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">{{ authService.getFullName().charAt(0).toUpperCase() }}</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">{{ authService.getFullName() }}</div>
+          <span class="sidebar-user-role" [class.role-admin]="authService.getRole()==='Admin'" [class.role-customer]="authService.getRole()==='Customer'">
+            <i class="fa-solid" [class.fa-user-shield]="authService.getRole()==='Admin'" [class.fa-user]="authService.getRole()==='Customer'"></i>
+            {{ authService.getRole() }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <div class="sidebar-nav-label">Main Menu</div>
+
+        <!-- Customer nav -->
+        <ng-container *ngIf="authService.getRole() === 'Customer'">
+          <a routerLink="/customer/dashboard" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-gauge-high sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">Dashboard</span>
+          </a>
+          <a routerLink="/customer/policies" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-file-shield sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">My Policies</span>
+          </a>
+          <a routerLink="/customer/buy-policy" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-cart-plus sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">Buy Policy</span>
+          </a>
+          <a routerLink="/claims/initiate" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-pen-to-square sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">File a Claim</span>
+          </a>
+          <a routerLink="/claims/track" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-magnifying-glass sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">My Claims</span>
+          </a>
+        </ng-container>
+
+        <!-- Admin nav -->
+        <ng-container *ngIf="authService.getRole() === 'Admin'">
+          <a routerLink="/admin/dashboard" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-gauge-high sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">Dashboard</span>
+          </a>
+          <div class="sidebar-nav-label mt-2">Management</div>
+          <a routerLink="/admin/claims" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-file-circle-check sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">Claims Review</span>
+          </a>
+          <a routerLink="/admin/policies" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-shield-halved sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">Policies</span>
+          </a>
+          <a routerLink="/admin/users" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-users sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">Users</span>
+          </a>
+          <div class="sidebar-nav-label mt-2">Analytics</div>
+          <a routerLink="/reports" routerLinkActive="active" class="sidebar-nav-item">
+            <i class="fa-solid fa-chart-bar sidebar-nav-icon"></i>
+            <span class="sidebar-nav-text">Reports</span>
+          </a>
+        </ng-container>
+      </nav>
+
+      <!-- Logout at bottom -->
+      <div class="sidebar-footer">
+        <button class="sidebar-logout-btn" (click)="authService.logout()">
+          <i class="fa-solid fa-right-from-bracket sidebar-nav-icon"></i>
+          <span class="sidebar-nav-text">Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main area: topbar + content -->
+    <div class="app-main" [class.sidebar-collapsed]="sidebarCollapsed">
+
+      <!-- Topbar -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="topbar-menu-btn" (click)="sidebarCollapsed = !sidebarCollapsed">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="topbar-breadcrumb">
+            <span class="topbar-page-name">{{ currentPageName }}</span>
           </div>
         </div>
-        <button class="btn btn-outline-secondary btn-sm ms-2" (click)="authService.logout()">Logout</button>
-      </div>
-    </nav>
-    <main class="main-content">
-      <router-outlet />
-    </main>
+        <div class="topbar-right">
+          <div class="topbar-user">
+            <div class="topbar-user-avatar">{{ authService.getFullName().charAt(0).toUpperCase() }}</div>
+            <div class="topbar-user-info">
+              <div class="topbar-user-name">{{ authService.getFullName() }}</div>
+              <div class="topbar-user-role">{{ authService.getRole() }}</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page content -->
+      <main class="app-content">
+        <router-outlet />
+      </main>
+    </div>
+
   </ng-container>
 
-  <!-- ── PUBLIC LAYOUT (landing, login, register — full viewport, no navbar) ── -->
+  <!-- ── PUBLIC LAYOUT (landing, login, register) ── -->
   <ng-container *ngSwitchDefault>
     <router-outlet />
   </ng-container>

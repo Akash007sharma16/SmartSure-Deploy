@@ -3,6 +3,7 @@ using IdentityService.Models;
 using IdentityService.Repositories;
 using IdentityService.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -12,12 +13,17 @@ namespace IdentityService.Tests;
 public class AuthServiceTests
 {
     private Mock<IUserRepository> _repoMock = null!;
+    private Mock<IEmailService> _emailMock = null!;
+    private Mock<IOtpService> _otpMock = null!;
     private IAuthService _service = null!;
 
     [SetUp]
     public void Setup()
     {
-        _repoMock = new Mock<IUserRepository>();
+        _repoMock  = new Mock<IUserRepository>();
+        _emailMock = new Mock<IEmailService>();
+        _otpMock   = new Mock<IOtpService>();
+
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
@@ -25,7 +31,8 @@ public class AuthServiceTests
                 ["Jwt:Issuer"] = "SmartSureApp",
                 ["Jwt:Audience"] = "SmartSureClients"
             }).Build();
-        _service = new AuthService(_repoMock.Object, config);
+
+        _service = new AuthService(_repoMock.Object, config, _emailMock.Object, _otpMock.Object);
     }
 
     [Test]
@@ -161,8 +168,82 @@ public class AuthServiceTests
         _repoMock.Setup(r => r.CreateAsync(It.IsAny<User>()))
             .ReturnsAsync((User u) => { u.Id = 2; return u; });
 
-        var result = await _service.RegisterAsync(new RegisterDto("Admin User", "admin@test.com", "Pass123!", "Admin"));
+        // Role parameter is no longer accepted — all public registrations are hardcoded to "Customer"
+        var result = await _service.RegisterAsync(new RegisterDto("Admin User", "admin@test.com", "Pass123!"));
 
-        Assert.That(result.Role, Is.EqualTo("Admin"));
+        Assert.That(result.Role, Is.EqualTo("Customer"));
+    }
+
+    // ── Forgot Password Tests ─────────────────────────────────────────────────
+
+    [Test]
+    public async Task ForgotPassword_ExistingUser_SendsOtp()
+    {
+        var user = new User { Id = 1, FullName = "Alice", Email = "alice@test.com", IsActive = true };
+        _repoMock.Setup(r => r.GetByEmailAsync("alice@test.com")).ReturnsAsync(user);
+        _otpMock.Setup(o => o.GenerateAndStoreOtpAsync("alice@test.com")).ReturnsAsync("123456");
+        _emailMock.Setup(e => e.SendOtpEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(Task.CompletedTask);
+
+        // Should not throw
+        await _service.ForgotPasswordAsync(new ForgotPasswordDto("alice@test.com"));
+
+        _otpMock.Verify(o => o.GenerateAndStoreOtpAsync("alice@test.com"), Times.Once);
+        _emailMock.Verify(e => e.SendOtpEmailAsync("alice@test.com", "Alice", "123456"), Times.Once);
+    }
+
+    [Test]
+    public async Task ForgotPassword_NonExistentEmail_DoesNotThrow()
+    {
+        _repoMock.Setup(r => r.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync((User?)null);
+
+        // Should silently succeed (prevents email enumeration)
+        await _service.ForgotPasswordAsync(new ForgotPasswordDto("nobody@test.com"));
+
+        _otpMock.Verify(o => o.GenerateAndStoreOtpAsync(It.IsAny<string>()), Times.Never);
+    }
+
+    [Test]
+    public async Task VerifyOtp_ValidOtp_ReturnsTrue()
+    {
+        _otpMock.Setup(o => o.VerifyOtpAsync("alice@test.com", "123456")).ReturnsAsync(true);
+
+        var result = await _service.VerifyOtpAsync(new VerifyOtpDto("alice@test.com", "123456"));
+
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public async Task VerifyOtp_InvalidOtp_ReturnsFalse()
+    {
+        _otpMock.Setup(o => o.VerifyOtpAsync("alice@test.com", "000000")).ReturnsAsync(false);
+
+        var result = await _service.VerifyOtpAsync(new VerifyOtpDto("alice@test.com", "000000"));
+
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public async Task ResetPassword_ValidOtp_UpdatesPassword()
+    {
+        var user = new User { Id = 1, Email = "alice@test.com", PasswordHash = "old", IsActive = true };
+        _otpMock.Setup(o => o.VerifyOtpAsync("alice@test.com", "123456")).ReturnsAsync(true);
+        _repoMock.Setup(r => r.GetByEmailAsync("alice@test.com")).ReturnsAsync(user);
+        _repoMock.Setup(r => r.UpdateAsync(It.IsAny<User>())).ReturnsAsync((User u) => u);
+        _otpMock.Setup(o => o.InvalidateOtpAsync("alice@test.com")).Returns(Task.CompletedTask);
+
+        await _service.ResetPasswordAsync(new ResetPasswordDto("alice@test.com", "123456", "NewPass123!"));
+
+        _repoMock.Verify(r => r.UpdateAsync(It.Is<User>(u => u.PasswordHash != "old")), Times.Once);
+        _otpMock.Verify(o => o.InvalidateOtpAsync("alice@test.com"), Times.Once);
+    }
+
+    [Test]
+    public void ResetPassword_InvalidOtp_ThrowsUnauthorized()
+    {
+        _otpMock.Setup(o => o.VerifyOtpAsync("alice@test.com", "000000")).ReturnsAsync(false);
+
+        Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
+            _service.ResetPasswordAsync(new ResetPasswordDto("alice@test.com", "000000", "NewPass123!")));
     }
 }

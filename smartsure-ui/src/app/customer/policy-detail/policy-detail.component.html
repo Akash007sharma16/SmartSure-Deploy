@@ -1,0 +1,196 @@
+<div class="pd-root">
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="pd-loading">
+    <div class="pd-spinner"></div>
+    <p>Loading policy details...</p>
+  </div>
+
+  <!-- Not Found -->
+  <div *ngIf="!policy && !loading" class="pd-empty">
+    <div class="pd-empty-icon"><i class="fa-solid fa-circle-xmark"></i></div>
+    <h3>Policy not found</h3>
+    <p>The policy you're looking for doesn't exist or you don't have access.</p>
+    <a routerLink="/customer/policies" class="pd-back-btn">
+      <i class="fa-solid fa-arrow-left me-2"></i>Back to Policies
+    </a>
+  </div>
+
+  <!-- Policy Detail -->
+  <div *ngIf="policy && !loading">
+
+    <!-- Page Header -->
+    <div class="pd-header">
+      <div class="pd-header-left">
+        <div class="pd-header-badge">
+          <i class="fa-solid fa-file-shield"></i> Policy Details
+        </div>
+        <h1 class="pd-header-title">{{ policy.policyType }}</h1>
+        <p class="pd-header-sub">{{ policy.policyNumber }}</p>
+      </div>
+      <a routerLink="/customer/policies" class="pd-back-link">
+        <i class="fa-solid fa-arrow-left me-1"></i> Back to Policies
+      </a>
+    </div>
+
+    <div class="pd-layout">
+
+      <!-- ── Left: Hero Card + Actions ── -->
+      <div class="pd-left">
+
+        <!-- Hero Card -->
+        <div class="pd-hero-card"
+             [class.pd-hero-active]="policy.status === 'Active'"
+             [class.pd-hero-expired]="policy.status === 'Expired'"
+             [class.pd-hero-cancelled]="policy.status === 'Cancelled'">
+          <div class="pd-hero-top">
+            <div class="pd-hero-icon">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="pd-hero-title-block">
+              <div class="pd-hero-num">{{ policy.policyNumber }}</div>
+              <div class="pd-hero-type">{{ policy.policyType }}</div>
+            </div>
+            <span class="pd-hero-badge" [ngClass]="badge(policy.status)">
+              <span class="pd-hero-badge-dot"></span>
+              {{ policy.status }}
+            </span>
+          </div>
+
+          <div class="pd-hero-coverage">
+            <div class="pd-hero-cov-lbl">Coverage Amount</div>
+            <div class="pd-hero-cov-val">{{ policy.coverageAmount | currency:'INR':'symbol':'1.0-0' }}</div>
+          </div>
+
+          <div class="pd-hero-premium">
+            <div class="pd-hero-prem-lbl">
+              <i class="fa-solid fa-receipt me-1"></i> Annual Premium
+            </div>
+            <div class="pd-hero-prem-val">{{ policy.premiumAmount | currency:'INR':'symbol':'1.0-0' }}/yr</div>
+          </div>
+
+          <div class="pd-hero-dates">
+            <div class="pd-hero-date-item">
+              <div class="pd-hero-date-lbl">Start Date</div>
+              <div class="pd-hero-date-val">{{ policy.startDate | date:'MMM d, y' }}</div>
+            </div>
+            <div class="pd-hero-date-arrow">
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+            <div class="pd-hero-date-item">
+              <div class="pd-hero-date-lbl">End Date</div>
+              <div class="pd-hero-date-val">{{ policy.endDate | date:'MMM d, y' }}</div>
+            </div>
+          </div>
+
+          <!-- Status accent strip -->
+          <div class="pd-hero-status-strip"
+               [class.pd-strip-active]="policy.status === 'Active'"
+               [class.pd-strip-expired]="policy.status === 'Expired'"
+               [class.pd-strip-cancelled]="policy.status === 'Cancelled'"
+               [class.pd-strip-draft]="policy.status === 'Draft'">
+            <i class="fa-solid fa-circle-check" *ngIf="policy.status === 'Active'"></i>
+            <i class="fa-solid fa-clock" *ngIf="policy.status === 'Draft'"></i>
+            <i class="fa-solid fa-calendar-xmark" *ngIf="policy.status === 'Expired'"></i>
+            <i class="fa-solid fa-ban" *ngIf="policy.status === 'Cancelled'"></i>
+            <span>{{ policy.status }}</span>
+          </div>
+        </div>
+
+        <!-- Activate (Draft) -->
+        <div class="pd-actions" *ngIf="policy.status === 'Draft'">
+          <button class="pd-btn-activate" [disabled]="activating" (click)="activatePolicy()">
+            <span *ngIf="activating" class="spinner-border spinner-border-sm"></span>
+            <i *ngIf="!activating" class="fa-solid fa-circle-check"></i>
+            {{ activating ? 'Activating...' : 'Activate Policy' }}
+          </button>
+        </div>
+
+        <!-- Active Actions -->
+        <div class="pd-actions pd-actions-row" *ngIf="policy.status === 'Active'">
+          <a routerLink="/claims/initiate" class="pd-btn-claim">
+            <i class="fa-solid fa-pen-to-square"></i> File a Claim
+          </a>
+          <a [routerLink]="['/customer/upload-documents', policy.id]" class="pd-btn-upload">
+            <i class="fa-solid fa-paperclip"></i> Upload Docs
+          </a>
+        </div>
+      </div>
+
+      <!-- ── Right: Info Cards ── -->
+      <div class="pd-right">
+
+        <!-- Policy Information -->
+        <div class="pd-info-card">
+          <div class="pd-info-card-header">
+            <div class="pd-info-card-icon blue">
+              <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <span>Policy Information</span>
+          </div>
+          <div class="pd-info-row">
+            <span class="pd-info-lbl">Policy Number</span>
+            <span class="pd-info-val pd-info-mono">{{ policy.policyNumber }}</span>
+          </div>
+          <div class="pd-info-row">
+            <span class="pd-info-lbl">Policy Type</span>
+            <span class="pd-info-val">{{ policy.policyType }}</span>
+          </div>
+          <div class="pd-info-row">
+            <span class="pd-info-lbl">Coverage Amount</span>
+            <span class="pd-info-val pd-info-bold">{{ policy.coverageAmount | currency:'INR':'symbol':'1.0-0' }}</span>
+          </div>
+          <div class="pd-info-row">
+            <span class="pd-info-lbl">Annual Premium</span>
+            <span class="pd-info-val pd-info-premium">{{ policy.premiumAmount | currency:'INR':'symbol':'1.0-0' }}</span>
+          </div>
+          <div class="pd-info-row">
+            <span class="pd-info-lbl">Start Date</span>
+            <span class="pd-info-val">{{ policy.startDate | date:'mediumDate' }}</span>
+          </div>
+          <div class="pd-info-row">
+            <span class="pd-info-lbl">End Date</span>
+            <span class="pd-info-val">{{ policy.endDate | date:'mediumDate' }}</span>
+          </div>
+          <div class="pd-info-row">
+            <span class="pd-info-lbl">Status</span>
+            <span class="pd-badge" [ngClass]="badge(policy.status)">
+              <span class="pd-badge-dot"></span>{{ policy.status }}
+            </span>
+          </div>
+          <div class="pd-info-row pd-info-row-last">
+            <span class="pd-info-lbl">Created On</span>
+            <span class="pd-info-val">{{ policy.createdAt | date:'medium' }}</span>
+          </div>
+        </div>
+
+        <!-- Payment History -->
+        <div class="pd-info-card" *ngIf="policy.status === 'Active' || policy.status === 'Expired'">
+          <div class="pd-info-card-header">
+            <div class="pd-info-card-icon green">
+              <i class="fa-solid fa-credit-card"></i>
+            </div>
+            <span>Payment History</span>
+          </div>
+          <div class="pd-info-row">
+            <span class="pd-info-lbl">Payment Status</span>
+            <span class="pd-badge pd-badge-completed">
+              <span class="pd-badge-dot"></span>Completed
+            </span>
+          </div>
+          <div class="pd-info-row">
+            <span class="pd-info-lbl">Amount Paid</span>
+            <span class="pd-info-val pd-info-success">{{ policy.premiumAmount | currency:'INR':'symbol':'1.0-0' }}</span>
+          </div>
+          <div class="pd-info-row pd-info-row-last">
+            <span class="pd-info-lbl">Payment Method</span>
+            <div class="pd-payment-method">
+              <i class="fa-solid fa-globe"></i> Online Payment
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -13,6 +13,8 @@ builder.Services.AddDbContext<IdentityDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IOtpService, OtpService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -57,6 +59,14 @@ builder.Services.AddCors(opt =>
          .AllowCredentials()));
 
 var app = builder.Build();
+
+// Seed database (apply migrations + create Admin user if not exists)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    await DbSeeder.SeedAsync(db, logger);
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();

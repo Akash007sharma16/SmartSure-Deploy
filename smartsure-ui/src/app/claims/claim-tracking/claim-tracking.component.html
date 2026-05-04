@@ -1,0 +1,108 @@
+<div class="ct-root">
+
+  <!-- ── Page Header ── -->
+  <div class="ct-header">
+    <div class="ct-header-left">
+      <div class="ct-header-badge">
+        <i class="fa-solid fa-file-lines"></i> Claims Management
+      </div>
+      <h1 class="ct-header-title">My Claims</h1>
+      <p class="ct-header-sub">Track the status of all your insurance claims</p>
+    </div>
+    <div class="ct-header-right">
+      <div class="ct-count-pill">
+        <i class="fa-solid fa-layer-group"></i>
+        {{ claims.length }} Total
+      </div>
+      <a routerLink="/claims/initiate" class="ct-new-btn">
+        <i class="fa-solid fa-plus"></i> File New Claim
+      </a>
+    </div>
+  </div>
+
+  <!-- ── Empty State ── -->
+  <div *ngIf="claims.length === 0" class="ct-empty">
+    <div class="ct-empty-icon"><i class="fa-solid fa-folder-open"></i></div>
+    <h3>No claims filed yet</h3>
+    <p>When you file a claim, it will appear here with real-time status updates.</p>
+    <a routerLink="/claims/initiate" class="ct-empty-btn">
+      <i class="fa-solid fa-plus me-2"></i>File Your First Claim
+    </a>
+  </div>
+
+  <!-- ── Claims List ── -->
+  <div class="ct-list" *ngIf="claims.length > 0">
+    <div class="ct-claim-card" *ngFor="let c of claims">
+      <div class="ct-claim-bar" [ngClass]="barClass(c.status)"></div>
+      <div class="ct-claim-body">
+
+        <!-- Top Row -->
+        <div class="ct-claim-top">
+          <div class="ct-claim-left">
+            <div class="ct-claim-icon" [ngClass]="iconClass(c.status)">
+              <i class="fa-solid fa-file-invoice"></i>
+            </div>
+            <div>
+              <div class="ct-claim-id">Claim #{{ c.id }}</div>
+              <div class="ct-claim-date">
+                <i class="fa-regular fa-calendar ct-meta-icon"></i>
+                Filed {{ c.createdAt | date:'MMM d, y' }}
+              </div>
+            </div>
+          </div>
+          <span class="ct-badge" [ngClass]="badge(c.status)">
+            <span class="ct-badge-dot"></span>{{ c.status }}
+          </span>
+        </div>
+
+        <!-- Meta Grid -->
+        <div class="ct-meta-grid">
+          <div class="ct-meta-item">
+            <div class="ct-meta-lbl">
+              <i class="fa-solid fa-shield-halved ct-meta-icon"></i> Policy
+            </div>
+            <div class="ct-meta-val">#{{ c.policyId }}</div>
+          </div>
+          <div class="ct-meta-item">
+            <div class="ct-meta-lbl">
+              <i class="fa-solid fa-indian-rupee-sign ct-meta-icon"></i> Amount
+            </div>
+            <div class="ct-meta-val">{{ c.claimAmount | currency:'INR':'symbol':'1.0-0' }}</div>
+          </div>
+          <div class="ct-meta-item">
+            <div class="ct-meta-lbl">
+              <i class="fa-solid fa-tag ct-meta-icon"></i> Status
+            </div>
+            <div class="ct-meta-val">{{ c.status }}</div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <p class="ct-description">{{ c.description }}</p>
+
+        <!-- Admin Remarks -->
+        <div *ngIf="c.adminRemarks" class="ct-admin-remarks">
+          <div class="ct-ar-header">
+            <i class="fa-solid fa-comment-dots"></i> Admin Remarks
+          </div>
+          <p class="ct-ar-text">{{ c.adminRemarks }}</p>
+        </div>
+
+        <!-- Upload Button — only for Draft claims (not Submitted) -->
+        <div *ngIf="c.status === 'Draft'" class="ct-upload-row">
+          <button class="ct-upload-btn" (click)="goToUpload(c.id)">
+            <i class="fa-solid fa-paperclip"></i> Upload Documents
+          </button>
+        </div>
+
+        <!-- Submitted info -->
+        <div *ngIf="c.status === 'Submitted'" class="ct-submitted-info">
+          <i class="fa-solid fa-circle-check"></i>
+          Claim submitted — our team will review it within 2–3 business days.
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

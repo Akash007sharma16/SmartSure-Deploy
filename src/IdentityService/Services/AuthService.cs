@@ -12,11 +12,19 @@ public class AuthService : IAuthService
 {
     private readonly IUserRepository _repo;
     private readonly IConfiguration _config;
+    private readonly IEmailService _emailService;
+    private readonly IOtpService _otpService;
 
-    public AuthService(IUserRepository repo, IConfiguration config)
+    public AuthService(
+        IUserRepository repo,
+        IConfiguration config,
+        IEmailService emailService,
+        IOtpService otpService)
     {
         _repo = repo;
         _config = config;
+        _emailService = emailService;
+        _otpService = otpService;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
@@ -29,7 +37,7 @@ public class AuthService : IAuthService
             FullName = dto.FullName,
             Email = dto.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-            Role = dto.Role
+            Role = "Customer"  // Public registration always creates Customer accounts
         };
 
         await _repo.CreateAsync(user);
@@ -69,6 +77,44 @@ public class AuthService : IAuthService
         await _repo.UpdateAsync(user);
         return new UserDto(user.Id, user.FullName, user.Email, user.Role, user.IsActive, user.CreatedAt);
     }
+
+    // ── Forgot Password Flow ──────────────────────────────────────────────────
+
+    public async Task ForgotPasswordAsync(ForgotPasswordDto dto)
+    {
+        var user = await _repo.GetByEmailAsync(dto.Email);
+
+        // Always return success to prevent email enumeration attacks
+        if (user == null || !user.IsActive) return;
+
+        var otp = await _otpService.GenerateAndStoreOtpAsync(dto.Email);
+
+        // Non-blocking — failure is logged inside EmailService, never throws
+        await _emailService.SendOtpEmailAsync(dto.Email, user.FullName, otp);
+    }
+
+    public async Task<bool> VerifyOtpAsync(VerifyOtpDto dto)
+    {
+        return await _otpService.VerifyOtpAsync(dto.Email, dto.Otp);
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordDto dto)
+    {
+        // Re-verify OTP before allowing password change
+        var valid = await _otpService.VerifyOtpAsync(dto.Email, dto.Otp);
+        if (!valid) throw new UnauthorizedAccessException("Invalid or expired OTP.");
+
+        var user = await _repo.GetByEmailAsync(dto.Email)
+            ?? throw new KeyNotFoundException("User not found.");
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+        await _repo.UpdateAsync(user);
+
+        // Invalidate the OTP so it cannot be reused
+        await _otpService.InvalidateOtpAsync(dto.Email);
+    }
+
+    // ── Private Helpers ───────────────────────────────────────────────────────
 
     private string GenerateToken(User user)
     {

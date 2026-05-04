@@ -84,6 +84,21 @@ public class ClaimService : IClaimService
         if (!Enum.TryParse<ClaimStatus>(dto.Status, true, out var newStatus))
             throw new ArgumentException("Invalid status.");
 
+        // ── Lifecycle transition guard ────────────────────────────────────────
+        var validTransitions = new Dictionary<ClaimStatus, ClaimStatus[]>
+        {
+            [ClaimStatus.Draft]       = [ClaimStatus.Submitted],
+            [ClaimStatus.Submitted]   = [ClaimStatus.UnderReview],
+            [ClaimStatus.UnderReview] = [ClaimStatus.Approved, ClaimStatus.Rejected],
+            [ClaimStatus.Approved]    = [ClaimStatus.Closed],
+            [ClaimStatus.Rejected]    = [ClaimStatus.Closed],
+            [ClaimStatus.Closed]      = []
+        };
+
+        if (!validTransitions.TryGetValue(claim.Status, out var allowed) || !allowed.Contains(newStatus))
+            throw new InvalidOperationException(
+                $"Cannot transition from {claim.Status} to {newStatus}.");
+
         claim.Status = newStatus;
         claim.AdminRemarks = dto.AdminRemarks;
         claim.UpdatedAt = DateTime.UtcNow;
@@ -137,7 +152,9 @@ public class ClaimService : IClaimService
         var uploadsDir = Path.Combine(_env.ContentRootPath, "uploads");
         Directory.CreateDirectory(uploadsDir);
 
-        var fileName = $"{Guid.NewGuid()}_{file.FileName}";
+        // Sanitize filename to prevent path traversal attacks
+        var safeFileName = Path.GetFileName(file.FileName);
+        var fileName = $"{Guid.NewGuid()}_{safeFileName}";
         var filePath = Path.Combine(uploadsDir, fileName);
 
         using var stream = new FileStream(filePath, FileMode.Create);
@@ -146,7 +163,7 @@ public class ClaimService : IClaimService
         var doc = new ClaimDocument
         {
             ClaimId = claimId,
-            FileName = file.FileName,
+            FileName = safeFileName,
             FilePath = filePath,
             FileType = file.ContentType
         };

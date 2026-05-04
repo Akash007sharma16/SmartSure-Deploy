@@ -24,9 +24,9 @@ public class PolicyPurchaseSaga : MassTransitStateMachine<PolicyPurchaseSagaStat
     {
         InstanceState(x => x.CurrentState);
 
-        Event(() => PolicyCreatedEvent,    x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
-        Event(() => PolicyActivatedEvent,  x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
-        Event(() => PaymentRecordedEvent,  x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
+        Event(() => PolicyCreatedEvent,       x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
+        Event(() => PolicyActivatedEvent,     x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
+        Event(() => PaymentRecordedEvent,     x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
         Event(() => PolicyPurchaseFailedEvent, x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
 
         Initially(
@@ -37,6 +37,12 @@ public class PolicyPurchaseSaga : MassTransitStateMachine<PolicyPurchaseSagaStat
                     ctx.Saga.CustomerId = ctx.Message.CustomerId;
                     ctx.Saga.CoverageAmount = ctx.Message.CoverageAmount;
                     ctx.Saga.PolicyCreatedAt = DateTime.UtcNow;
+                    // Store customer/policy details for email notifications
+                    ctx.Saga.CustomerEmail = ctx.Message.CustomerEmail;
+                    ctx.Saga.CustomerName = ctx.Message.CustomerName;
+                    ctx.Saga.PolicyTypeName = ctx.Message.PolicyTypeName;
+                    ctx.Saga.StartDate = ctx.Message.StartDate;
+                    ctx.Saga.EndDate = ctx.Message.EndDate;
                 })
                 .TransitionTo(PolicyCreatedState));
 
@@ -51,12 +57,23 @@ public class PolicyPurchaseSaga : MassTransitStateMachine<PolicyPurchaseSagaStat
 
         During(PolicyActivatedState,
             When(PaymentRecordedEvent)
-                .Then(ctx => ctx.Saga.PaymentRecordedAt = DateTime.UtcNow)
+                .Then(ctx =>
+                {
+                    ctx.Saga.PaymentRecordedAt = DateTime.UtcNow;
+                    ctx.Saga.PremiumAmount = ctx.Message.Amount;
+                })
                 .Publish(ctx => new PolicyPurchaseCompleted(
                     ctx.Saga.CorrelationId,
                     ctx.Saga.PolicyId,
                     ctx.Saga.CustomerId,
-                    DateTime.UtcNow))
+                    DateTime.UtcNow,
+                    ctx.Saga.CustomerEmail,
+                    ctx.Saga.CustomerName,
+                    ctx.Saga.PolicyTypeName,
+                    ctx.Saga.CoverageAmount,
+                    ctx.Saga.PremiumAmount,
+                    ctx.Saga.StartDate,
+                    ctx.Saga.EndDate))
                 .TransitionTo(CompletedState),
             When(PolicyPurchaseFailedEvent)
                 .Then(ctx => ctx.Saga.FailureReason = ctx.Message.Reason)

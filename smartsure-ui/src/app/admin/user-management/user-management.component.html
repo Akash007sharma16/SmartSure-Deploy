@@ -1,0 +1,170 @@
+<div class="um-root">
+
+  <!-- ── Page Header ── -->
+  <div class="um-header">
+    <div class="um-header-left">
+      <div class="um-header-badge">
+        <i class="fa-solid fa-users-gear"></i> User Administration
+      </div>
+      <h1 class="um-header-title">User Management</h1>
+      <p class="um-header-sub">Manage platform users and control their access</p>
+    </div>
+    <div class="um-header-right">
+      <div class="um-stat-pill">
+        <i class="fa-solid fa-users"></i>
+        {{ users.length }} Total Users
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Summary Bar ── -->
+  <div class="um-summary-bar" *ngIf="users.length > 0">
+    <div class="um-summary-item">
+      <div class="um-summary-icon blue"><i class="fa-solid fa-users"></i></div>
+      <div>
+        <div class="um-summary-value">{{ users.length }}</div>
+        <div class="um-summary-label">Total Users</div>
+      </div>
+    </div>
+    <div class="um-summary-divider"></div>
+    <div class="um-summary-item">
+      <div class="um-summary-icon green"><i class="fa-solid fa-circle-check"></i></div>
+      <div>
+        <div class="um-summary-value">{{ activeCount }}</div>
+        <div class="um-summary-label">Active</div>
+      </div>
+    </div>
+    <div class="um-summary-divider"></div>
+    <div class="um-summary-item">
+      <div class="um-summary-icon red"><i class="fa-solid fa-circle-xmark"></i></div>
+      <div>
+        <div class="um-summary-value">{{ inactiveCount }}</div>
+        <div class="um-summary-label">Inactive</div>
+      </div>
+    </div>
+    <div class="um-summary-divider"></div>
+    <div class="um-summary-item">
+      <div class="um-summary-icon purple"><i class="fa-solid fa-user-shield"></i></div>
+      <div>
+        <div class="um-summary-value">{{ adminCount }}</div>
+        <div class="um-summary-label">Admins</div>
+      </div>
+    </div>
+    <div class="um-summary-divider"></div>
+    <div class="um-summary-item">
+      <div class="um-summary-icon orange"><i class="fa-solid fa-user"></i></div>
+      <div>
+        <div class="um-summary-value">{{ customerCount }}</div>
+        <div class="um-summary-label">Customers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Empty State ── -->
+  <div *ngIf="users.length === 0" class="um-empty">
+    <div class="um-empty-icon"><i class="fa-solid fa-users"></i></div>
+    <h3>No users found</h3>
+    <p>Users will appear here once they register on the platform.</p>
+  </div>
+
+  <!-- ── Main Card ── -->
+  <div class="um-card" *ngIf="users.length > 0">
+
+    <!-- Card Header with Search & Filter -->
+    <div class="um-card-header">
+      <div class="um-card-title-row">
+        <div class="um-card-icon">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+          <h3 class="um-card-title">All Users</h3>
+          <p class="um-card-sub">{{ filteredUsers.length }} of {{ users.length }} users shown</p>
+        </div>
+      </div>
+      <div class="um-filters">
+        <div class="um-search-wrap">
+          <i class="fa-solid fa-magnifying-glass um-search-icon"></i>
+          <input type="text" [(ngModel)]="searchTerm"
+                 class="um-search-input"
+                 placeholder="Search by name or email..." />
+        </div>
+        <select [(ngModel)]="roleFilter" class="um-filter-select">
+          <option value="">All Roles</option>
+          <option value="Admin">Admin</option>
+          <option value="Customer">Customer</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- No filter results -->
+    <div *ngIf="filteredUsers.length === 0" class="um-no-results">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      No users match your search. Try adjusting the filters.
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive" *ngIf="filteredUsers.length > 0">
+      <table class="um-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Member Since</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of filteredUsers">
+            <td>
+              <div class="um-user-cell">
+                <div class="um-avatar" [class.um-avatar-admin]="u.role === 'Admin'">
+                  {{ getInitials(u.fullName) }}
+                </div>
+                <div class="um-user-info">
+                  <div class="um-user-name">{{ u.fullName }}</div>
+                  <div class="um-user-id">ID #{{ u.id }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="um-email-cell">
+                <i class="fa-solid fa-envelope um-email-icon"></i>
+                {{ u.email }}
+              </div>
+            </td>
+            <td>
+              <span class="um-role-badge" [class.um-role-admin]="u.role === 'Admin'" [class.um-role-customer]="u.role === 'Customer'">
+                <i [class]="u.role === 'Admin' ? 'fa-solid fa-user-shield' : 'fa-solid fa-user'"></i>
+                {{ u.role }}
+              </span>
+            </td>
+            <td>
+              <div class="um-status-cell">
+                <span class="um-status-dot" [class.um-dot-active]="u.isActive" [class.um-dot-inactive]="!u.isActive"></span>
+                <span class="um-status-text" [class.um-status-active]="u.isActive" [class.um-status-inactive]="!u.isActive">
+                  {{ u.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </div>
+            </td>
+            <td class="um-date">
+              <i class="fa-regular fa-calendar um-date-icon"></i>
+              {{ u.createdAt | date:'MMM d, y' }}
+            </td>
+            <td>
+              <button class="um-toggle-btn"
+                      [class.um-btn-deactivate]="u.isActive"
+                      [class.um-btn-activate]="!u.isActive"
+                      (click)="toggleStatus(u)">
+                <i [class]="u.isActive ? 'fa-solid fa-ban' : 'fa-solid fa-circle-check'"></i>
+                {{ u.isActive ? 'Deactivate' : 'Activate' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

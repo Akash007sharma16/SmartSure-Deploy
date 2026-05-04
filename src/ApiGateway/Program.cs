@@ -41,9 +41,15 @@ builder.Services.AddEndpointsApiExplorer();
 
 // HttpClient for swagger proxy (bypasses SSL in dev)
 builder.Services.AddHttpClient("swagger-proxy")
-    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    .ConfigurePrimaryHttpMessageHandler(() =>
     {
-        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        var handler = new HttpClientHandler();
+#if DEBUG
+        // Allow self-signed dev certificates — remove before production deployment
+        handler.ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+#endif
+        return handler;
     });
 
 // ── Swagger ───────────────────────────────────────────────────────────────────
@@ -278,16 +284,18 @@ static string RewriteSwaggerServerMulti(string swaggerJson, string gatewayUrl,
 
 /// <summary>
 /// Delegating handler that bypasses SSL certificate validation for downstream HTTPS services.
-/// Only active in Development — safe for local dev with self-signed certs.
+/// Only active in DEBUG builds — safe for local dev with self-signed certs.
+/// Remove or disable before production deployment.
 /// </summary>
 public class DevSslBypassHandler : DelegatingHandler
 {
     public DevSslBypassHandler()
     {
-        InnerHandler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback =
-                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-        };
+        var inner = new HttpClientHandler();
+#if DEBUG
+        inner.ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+#endif
+        InnerHandler = inner;
     }
 }

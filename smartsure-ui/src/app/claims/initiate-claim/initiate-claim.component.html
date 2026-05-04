@@ -1,0 +1,196 @@
+<div class="ic-wrap">
+  <div class="ic-wizard">
+
+    <!-- Header -->
+    <div class="ic-wizard-header">
+      <div class="ic-wizard-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+      <div>
+        <h2 class="ic-wizard-title">File a Claim</h2>
+        <p class="ic-wizard-sub">Complete the steps below to submit your insurance claim</p>
+      </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="ic-stepper">
+      <div class="ic-step" [class.ic-step-active]="step===1" [class.ic-step-done]="step>1">
+        <div class="ic-step-circle">
+          <i *ngIf="step>1" class="fa-solid fa-check"></i>
+          <span *ngIf="step<=1">1</span>
+        </div>
+        <div class="ic-step-label">Select Policy</div>
+      </div>
+      <div class="ic-step-line" [class.ic-line-done]="step>1"></div>
+      <div class="ic-step" [class.ic-step-active]="step===2" [class.ic-step-done]="step>2">
+        <div class="ic-step-circle">
+          <i *ngIf="step>2" class="fa-solid fa-check"></i>
+          <span *ngIf="step<=2">2</span>
+        </div>
+        <div class="ic-step-label">Claim Details</div>
+      </div>
+      <div class="ic-step-line" [class.ic-line-done]="step>2"></div>
+      <div class="ic-step" [class.ic-step-active]="step===3" [class.ic-step-done]="step>3">
+        <div class="ic-step-circle">
+          <i *ngIf="step>3" class="fa-solid fa-check"></i>
+          <span *ngIf="step<=3">3</span>
+        </div>
+        <div class="ic-step-label">Upload Docs</div>
+      </div>
+      <div class="ic-step-line" [class.ic-line-done]="step>3"></div>
+      <div class="ic-step" [class.ic-step-active]="step===4">
+        <div class="ic-step-circle">4</div>
+        <div class="ic-step-label">Submit</div>
+      </div>
+    </div>
+
+    <!-- ── Step 1: Select Policy ── -->
+    <div *ngIf="step === 1">
+      <h3 class="ic-step-heading">
+        <i class="fa-solid fa-file-shield me-2" style="color:#4f46e5;font-size:1rem;"></i>
+        Select your policy
+      </h3>
+      <div *ngIf="policies.length === 0" class="ic-no-policies">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        No active policies found.
+        <a routerLink="/customer/buy-policy">Buy a policy first →</a>
+      </div>
+      <div class="ic-policy-list" *ngIf="policies.length > 0">
+        <div class="ic-policy-item"
+             *ngFor="let p of policies"
+             [class.ic-policy-selected]="selectedPolicyId === p.id"
+             (click)="selectedPolicyId = p.id">
+          <div class="ic-policy-radio">
+            <div class="ic-radio-inner" *ngIf="selectedPolicyId === p.id"></div>
+          </div>
+          <div class="ic-policy-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="ic-policy-info">
+            <div class="ic-policy-num">{{ p.policyNumber }}</div>
+            <div class="ic-policy-type">{{ p.policyType }}</div>
+          </div>
+          <div class="ic-policy-right">
+            <div class="ic-policy-coverage">{{ p.coverageAmount | currency:'INR':'symbol':'1.0-0' }}</div>
+            <span class="ic-badge-active">
+              <span class="ic-badge-dot"></span>Active
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="ic-step-footer">
+        <div></div>
+        <button class="ic-btn-next" [disabled]="!selectedPolicyId" (click)="step = 2">
+          Continue <i class="fa-solid fa-arrow-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Step 2: Claim Details ── -->
+    <div *ngIf="step === 2">
+      <h3 class="ic-step-heading">
+        <i class="fa-solid fa-file-lines me-2" style="color:#4f46e5;font-size:1rem;"></i>
+        Claim details
+      </h3>
+      <form [formGroup]="claimForm">
+        <div class="ic-form-group">
+          <label class="ic-form-label">Description of Claim</label>
+          <textarea formControlName="description" class="ic-textarea" rows="4"
+                    [class.ic-input-error]="isInvalid('description')"
+                    placeholder="Describe what happened (min 15 characters)..."></textarea>
+          <div class="ic-error" *ngIf="isInvalid('description')">{{ err('description') }}</div>
+          <div class="ic-char-count">
+            {{ claimForm.get('description')?.value?.length || 0 }}/500 characters
+          </div>
+        </div>
+        <div class="ic-form-group">
+          <label class="ic-form-label">Claim Amount (₹)</label>
+          <div class="ic-amount-wrap">
+            <span class="ic-amount-prefix"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+            <input type="number" formControlName="claimAmount" class="ic-input ic-input-amount"
+                   [class.ic-input-error]="isInvalid('claimAmount')"
+                   placeholder="Enter claim amount" />
+          </div>
+          <div class="ic-error" *ngIf="isInvalid('claimAmount')">{{ err('claimAmount') }}</div>
+        </div>
+      </form>
+      <div class="ic-step-footer">
+        <button class="ic-btn-back" (click)="step = 1">
+          <i class="fa-solid fa-arrow-left me-1"></i> Back
+        </button>
+        <button class="ic-btn-next" [disabled]="claimForm.invalid" (click)="saveDraft()">
+          Save &amp; Continue <i class="fa-solid fa-arrow-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Step 3: Upload Documents ── -->
+    <div *ngIf="step === 3">
+      <h3 class="ic-step-heading">
+        <i class="fa-solid fa-paperclip me-2" style="color:#4f46e5;font-size:1rem;"></i>
+        Upload supporting documents
+      </h3>
+      <div class="ic-upload-zone">
+        <div class="ic-upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+        <p class="ic-upload-text">Upload PDF, JPG, PNG, or Word documents</p>
+        <p class="ic-upload-hint">Max file size: 10MB</p>
+        <input type="file" (change)="onFileSelected($event)" class="ic-file-input"
+               accept=".pdf,.jpg,.png,.doc,.docx" />
+      </div>
+      <button class="ic-btn-upload" [disabled]="!selectedFile || uploading" (click)="uploadDoc()">
+        <span *ngIf="uploading" class="spinner-border spinner-border-sm"></span>
+        <i *ngIf="!uploading" class="fa-solid fa-arrow-up-from-bracket"></i>
+        {{ uploading ? 'Uploading...' : 'Upload Document' }}
+      </button>
+      <div *ngFor="let d of uploadedDocs" class="ic-doc-item">
+        <div class="ic-doc-icon"><i class="fa-solid fa-file-circle-check"></i></div>
+        <span>{{ d }}</span>
+        <span class="ic-doc-ok"><i class="fa-solid fa-circle-check"></i> Uploaded</span>
+      </div>
+      <div class="ic-step-footer">
+        <button class="ic-btn-back" (click)="step = 2">
+          <i class="fa-solid fa-arrow-left me-1"></i> Back
+        </button>
+        <button class="ic-btn-next" (click)="step = 4">
+          Continue <i class="fa-solid fa-arrow-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Step 4: Submit ── -->
+    <div *ngIf="step === 4">
+      <h3 class="ic-step-heading">
+        <i class="fa-solid fa-paper-plane me-2" style="color:#4f46e5;font-size:1rem;"></i>
+        Submit your claim
+      </h3>
+      <div class="ic-submit-info">
+        <div class="ic-submit-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div>
+          <div class="ic-submit-title">Your claim is ready to submit</div>
+          <p class="ic-submit-desc">
+            Once submitted, our team will review your claim within 2–3 business days.
+            You can track the status from your dashboard.
+          </p>
+        </div>
+      </div>
+      <div *ngIf="errorMsg" class="ic-error-alert">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ errorMsg }}
+      </div>
+
+      <!-- Success message -->
+      <div *ngIf="successMsg" class="ic-success-alert">
+        <i class="fa-solid fa-circle-check"></i> {{ successMsg }}
+      </div>
+
+      <div class="ic-step-footer" *ngIf="!successMsg">
+        <button class="ic-btn-back" (click)="step = 3" [disabled]="loading">
+          <i class="fa-solid fa-arrow-left me-1"></i> Back
+        </button>
+        <button class="ic-btn-submit" [disabled]="loading" (click)="submitClaim()">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+          <i *ngIf="!loading" class="fa-solid fa-paper-plane"></i>
+          {{ loading ? 'Submitting...' : 'Submit Claim' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

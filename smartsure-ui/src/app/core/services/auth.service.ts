@@ -59,6 +59,20 @@ export class AuthService {
     return this.http.patch<User>(`${this.baseUrl}/users/${id}/status`, isActive);
   }
 
+  // ── Forgot Password Flow ──────────────────────────────────────────────────
+
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/forgot-password`, { email });
+  }
+
+  verifyOtp(email: string, otp: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/verify-otp`, { email, otp });
+  }
+
+  resetPassword(email: string, otp: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/reset-password`, { email, otp, newPassword });
+  }
+
   private storeUser(res: AuthResponse): void {
     localStorage.setItem('auth', JSON.stringify(res));
     this.currentUserSubject.next(res);

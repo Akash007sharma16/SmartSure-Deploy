@@ -1,4 +1,6 @@
 using MassTransit;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using PolicyService.DTOs;
@@ -15,6 +17,7 @@ public class PolicyServiceTests
     private Mock<IPremiumRepository> _premiumRepoMock = null!;
     private Mock<IPaymentRepository> _paymentRepoMock = null!;
     private Mock<IPublishEndpoint> _publishMock = null!;
+    private Mock<IHttpClientFactory> _httpClientFactoryMock = null!;
     private PolicyService.Services.PolicyService _service = null!;
 
     [SetUp]
@@ -25,12 +28,28 @@ public class PolicyServiceTests
         _premiumRepoMock = new Mock<IPremiumRepository>();
         _paymentRepoMock = new Mock<IPaymentRepository>();
         _publishMock = new Mock<IPublishEndpoint>();
+        _httpClientFactoryMock = new Mock<IHttpClientFactory>();
+
         _paymentRepoMock.Setup(r => r.CreateAsync(It.IsAny<Payment>()))
             .ReturnsAsync((Payment p) => p);
+
+        // HttpClient factory returns a client that will fail gracefully (non-blocking)
+        _httpClientFactoryMock.Setup(f => f.CreateClient(It.IsAny<string>()))
+            .Returns(new HttpClient());
+
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["InternalApi:Key"] = "test-key"
+            }).Build();
+
+        var logger = Mock.Of<ILogger<PolicyService.Services.PolicyService>>();
+
         _service = new PolicyService.Services.PolicyService(
             _policyRepoMock.Object, _typeRepoMock.Object,
             _premiumRepoMock.Object, _paymentRepoMock.Object,
-            _publishMock.Object);
+            _publishMock.Object, _httpClientFactoryMock.Object,
+            config, logger);
     }
 
     [Test]
@@ -251,5 +270,59 @@ public class PolicyServiceTests
         var result = await _service.GetPolicyByIdAsync(1);
 
         Assert.That(result!.Status, Is.EqualTo("Expired"));
+    }
+
+    // ── Lifecycle Transition Guard Tests ──────────────────────────────────────
+
+    [Test]
+    public async Task UpdatePolicyStatus_ValidTransition_Active_To_Expired_Succeeds()
+    {
+        var policyType = new PolicyType { Id = 1, Name = "Health", BaseRate = 5m };
+        var policy = new Policy { Id = 1, CustomerId = 1, Status = PolicyStatus.Active, PolicyType = policyType };
+        _policyRepoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(policy);
+        _policyRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Policy>())).ReturnsAsync((Policy p) => p);
+
+        var result = await _service.UpdatePolicyStatusAsync(1, "Expired");
+
+        Assert.That(result.Status, Is.EqualTo("Expired"));
+    }
+
+    [Test]
+    public async Task UpdatePolicyStatus_ValidTransition_Active_To_Cancelled_Succeeds()
+    {
+        var policyType = new PolicyType { Id = 1, Name = "Health", BaseRate = 5m };
+        var policy = new Policy { Id = 1, CustomerId = 1, Status = PolicyStatus.Active, PolicyType = policyType };
+        _policyRepoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(policy);
+        _policyRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Policy>())).ReturnsAsync((Policy p) => p);
+
+        var result = await _service.UpdatePolicyStatusAsync(1, "Cancelled");
+
+        Assert.That(result.Status, Is.EqualTo("Cancelled"));
+    }
+
+    [Test]
+    public void UpdatePolicyStatus_InvalidTransition_Expired_To_Active_ThrowsInvalidOperation()
+    {
+        var policyType = new PolicyType { Id = 1, Name = "Health", BaseRate = 5m };
+        var policy = new Policy { Id = 1, CustomerId = 1, Status = PolicyStatus.Expired, PolicyType = policyType };
+        _policyRepoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(policy);
+
+        var ex = Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _service.UpdatePolicyStatusAsync(1, "Active"));
+
+        Assert.That(ex!.Message, Does.Contain("Cannot transition from Expired to Active"));
+    }
+
+    [Test]
+    public void UpdatePolicyStatus_InvalidTransition_Cancelled_To_Draft_ThrowsInvalidOperation()
+    {
+        var policyType = new PolicyType { Id = 1, Name = "Health", BaseRate = 5m };
+        var policy = new Policy { Id = 1, CustomerId = 1, Status = PolicyStatus.Cancelled, PolicyType = policyType };
+        _policyRepoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(policy);
+
+        var ex = Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _service.UpdatePolicyStatusAsync(1, "Draft"));
+
+        Assert.That(ex!.Message, Does.Contain("Cannot transition from Cancelled to Draft"));
     }
 }

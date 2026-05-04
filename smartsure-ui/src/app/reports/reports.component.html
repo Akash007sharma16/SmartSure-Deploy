@@ -1,0 +1,215 @@
+<div class="rp-root">
+
+  <!-- ── Page Header ── -->
+  <div class="rp-header">
+    <div class="rp-header-left">
+      <div class="rp-header-badge">
+        <i class="fa-solid fa-chart-pie"></i> Analytics & Reporting
+      </div>
+      <h1 class="rp-header-title">Reports &amp; Analytics</h1>
+      <p class="rp-header-sub">Generate, view and export platform analytics</p>
+    </div>
+    <div class="rp-header-right">
+      <button class="rp-export-btn" (click)="exportCsv()" [disabled]="reports.length === 0">
+        <i class="fa-solid fa-file-arrow-down"></i>
+        Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- ── KPI Cards ── -->
+  <div class="rp-kpi-grid">
+    <div class="rp-kpi-card">
+      <div class="rp-kpi-top">
+        <div class="rp-kpi-icon blue"><i class="fa-solid fa-chart-bar"></i></div>
+        <span class="rp-kpi-trend"><i class="fa-solid fa-arrow-trend-up"></i></span>
+      </div>
+      <div class="rp-kpi-value">{{ reports.length }}</div>
+      <div class="rp-kpi-label">Total Reports</div>
+    </div>
+    <div class="rp-kpi-card">
+      <div class="rp-kpi-top">
+        <div class="rp-kpi-icon red"><i class="fa-solid fa-file-circle-check"></i></div>
+        <span class="rp-kpi-trend"><i class="fa-solid fa-arrow-trend-up"></i></span>
+      </div>
+      <div class="rp-kpi-value">{{ getCount('Claims') }}</div>
+      <div class="rp-kpi-label">Claims Reports</div>
+    </div>
+    <div class="rp-kpi-card">
+      <div class="rp-kpi-top">
+        <div class="rp-kpi-icon green"><i class="fa-solid fa-shield-halved"></i></div>
+        <span class="rp-kpi-trend"><i class="fa-solid fa-arrow-trend-up"></i></span>
+      </div>
+      <div class="rp-kpi-value">{{ getCount('Policies') }}</div>
+      <div class="rp-kpi-label">Policy Reports</div>
+    </div>
+    <div class="rp-kpi-card">
+      <div class="rp-kpi-top">
+        <div class="rp-kpi-icon purple"><i class="fa-solid fa-users"></i></div>
+        <span class="rp-kpi-trend"><i class="fa-solid fa-arrow-trend-up"></i></span>
+      </div>
+      <div class="rp-kpi-value">{{ getCount('Users') }}</div>
+      <div class="rp-kpi-label">User Reports</div>
+    </div>
+  </div>
+
+  <!-- ── Generate Report Card ── -->
+  <div class="rp-card">
+    <div class="rp-card-header">
+      <div class="rp-card-header-icon">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+      </div>
+      <div>
+        <h3 class="rp-card-title">Generate New Report</h3>
+        <p class="rp-card-sub">Create a new analytics report for the platform</p>
+      </div>
+    </div>
+    <div class="rp-card-body">
+      <div *ngIf="errorMsg" class="rp-alert rp-alert-error">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ errorMsg }}
+      </div>
+      <div *ngIf="successMsg" class="rp-alert rp-alert-success">
+        <i class="fa-solid fa-circle-check"></i> {{ successMsg }}
+      </div>
+      <form [formGroup]="reportForm" (ngSubmit)="generate()">
+        <div class="rp-form-row">
+          <div class="rp-form-group rp-form-wide">
+            <label class="rp-form-label">Report Title</label>
+            <input formControlName="title" class="rp-input"
+                   [class.rp-input-error]="isInvalid('title')"
+                   [class.rp-input-ok]="isValid('title')"
+                   placeholder="e.g. Monthly Claims Summary" />
+            <div class="rp-error" *ngIf="isInvalid('title')">{{ err('title') }}</div>
+          </div>
+          <div class="rp-form-group">
+            <label class="rp-form-label">Report Type</label>
+            <select formControlName="reportType" class="rp-select">
+              <option value="Claims">Claims Report</option>
+              <option value="Policies">Policies Report</option>
+              <option value="Users">Users Report</option>
+            </select>
+          </div>
+          <div class="rp-form-group rp-form-btn">
+            <label class="rp-form-label">&nbsp;</label>
+            <button type="submit" class="rp-btn-generate" [disabled]="reportForm.invalid || generating">
+              <span *ngIf="generating" class="spinner-border spinner-border-sm"></span>
+              <i *ngIf="!generating" class="fa-solid fa-chart-bar"></i>
+              {{ generating ? 'Generating...' : 'Generate Report' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Charts ── -->
+  <div class="rp-charts-grid" *ngIf="reports.length > 0">
+    <div class="rp-card">
+      <div class="rp-card-header">
+        <div class="rp-card-header-icon orange">
+          <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <div>
+          <h3 class="rp-card-title">Distribution by Type</h3>
+          <p class="rp-card-sub">Breakdown of report categories</p>
+        </div>
+      </div>
+      <div class="rp-card-body rp-chart-wrap">
+        <canvas #doughnutCanvas></canvas>
+      </div>
+    </div>
+    <div class="rp-card">
+      <div class="rp-card-header">
+        <div class="rp-card-header-icon blue">
+          <i class="fa-solid fa-chart-column"></i>
+        </div>
+        <div>
+          <h3 class="rp-card-title">Reports by Type</h3>
+          <p class="rp-card-sub">Volume comparison across categories</p>
+        </div>
+      </div>
+      <div class="rp-card-body rp-chart-wrap">
+        <canvas #barCanvas></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Reports Table ── -->
+  <div class="rp-card" *ngIf="reports.length > 0">
+    <div class="rp-card-header">
+      <div class="rp-card-header-icon green">
+        <i class="fa-solid fa-table-list"></i>
+      </div>
+      <div>
+        <h3 class="rp-card-title">All Reports</h3>
+        <p class="rp-card-sub">{{ reports.length }} reports generated</p>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="rp-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Generated By</th>
+            <th>Date &amp; Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of reports; let i = index">
+            <td class="rp-row-num">{{ i + 1 }}</td>
+            <td>
+              <div class="rp-report-title-cell">
+                <div class="rp-report-icon">
+                  <i class="fa-solid fa-file-chart-column"></i>
+                </div>
+                <span class="rp-report-name">{{ r.title }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="rp-type-badge" [ngClass]="typeBadge(r.reportType)">
+                <i [class]="typeIcon(r.reportType)"></i>
+                {{ r.reportType }}
+              </span>
+            </td>
+            <td>
+              <div class="rp-admin-cell">
+                <div class="rp-admin-avatar">A</div>
+                <span>Admin #{{ r.generatedBy }}</span>
+              </div>
+            </td>
+            <td class="rp-date">
+              <i class="fa-regular fa-clock rp-date-icon"></i>
+              {{ r.generatedAt | date:'MMM d, y · h:mm a' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Empty State ── -->
+  <div *ngIf="reports.length === 0 && !loading && !errorMsg" class="rp-empty">
+    <div class="rp-empty-icon"><i class="fa-solid fa-chart-bar"></i></div>
+    <h3>No reports yet</h3>
+    <p>Generate your first report using the form above.</p>
+  </div>
+
+  <!-- ── Loading ── -->
+  <div *ngIf="loading" class="rp-loading">
+    <div class="rp-spinner"></div>
+    <p>Loading reports...</p>
+  </div>
+
+  <!-- ── Error State ── -->
+  <div *ngIf="!loading && errorMsg && reports.length === 0" class="rp-empty">
+    <div class="rp-empty-icon rp-empty-error"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h3>Could not load reports</h3>
+    <p>{{ errorMsg }}</p>
+    <button class="rp-retry-btn" (click)="ngOnInit()">
+      <i class="fa-solid fa-rotate-right"></i> Retry
+    </button>
+  </div>
+
+</div>

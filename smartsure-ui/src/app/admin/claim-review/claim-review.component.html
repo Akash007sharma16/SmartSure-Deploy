@@ -1,0 +1,226 @@
+<div class="cr-root">
+
+  <!-- ── Page Header ── -->
+  <div class="cr-header">
+    <div class="cr-header-left">
+      <div class="cr-header-badge">
+        <i class="fa-solid fa-file-circle-check"></i> Claims Management
+      </div>
+      <h1 class="cr-header-title">Claim Review</h1>
+      <p class="cr-header-sub">Review, verify and update claim statuses</p>
+    </div>
+    <div class="cr-header-right">
+      <div class="cr-count-pill">
+        <i class="fa-solid fa-layer-group"></i>
+        {{ claims.length }} Total Claims
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Empty State ── -->
+  <div *ngIf="claims.length === 0" class="cr-empty">
+    <div class="cr-empty-icon">
+      <i class="fa-solid fa-folder-open"></i>
+    </div>
+    <h3>No claims to review</h3>
+    <p>Claims will appear here once customers start filing them.</p>
+  </div>
+
+  <!-- ── Split Layout ── -->
+  <div class="cr-split" *ngIf="claims.length > 0">
+
+    <!-- ── Left Panel: Claims List ── -->
+    <div class="cr-list-panel">
+      <div class="cr-list-header">
+        <span>All Claims</span>
+        <span class="cr-list-count">{{ claims.length }}</span>
+      </div>
+
+      <div class="cr-list-scroll">
+        <div *ngFor="let c of claims"
+             class="cr-list-item"
+             [class.cr-list-active]="selectedClaimId === c.id"
+             (click)="openReview(c)">
+          <div class="cr-li-top">
+            <div class="cr-li-avatar">
+              <i class="fa-solid fa-file-invoice"></i>
+            </div>
+            <div class="cr-li-info">
+              <div class="cr-li-id">Claim #{{ c.id }}</div>
+              <div class="cr-li-customer">
+                <i class="fa-solid fa-user cr-li-icon"></i>
+                Customer #{{ c.customerId }}
+              </div>
+            </div>
+            <span class="cr-badge" [ngClass]="badgeClass(c.status)">{{ c.status }}</span>
+          </div>
+          <div class="cr-li-bottom">
+            <span class="cr-li-amount">
+              <i class="fa-solid fa-indian-rupee-sign cr-li-icon"></i>
+              {{ c.claimAmount | currency:'INR':'symbol':'1.0-0' }}
+            </span>
+            <span class="cr-li-policy">
+              <i class="fa-solid fa-shield-halved cr-li-icon"></i>
+              Policy #{{ c.policyId }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Right Panel: Review Detail ── -->
+    <div class="cr-detail-panel">
+
+      <!-- Empty selection -->
+      <div *ngIf="!selectedClaim" class="cr-no-selection">
+        <div class="cr-no-sel-icon">
+          <i class="fa-solid fa-arrow-pointer"></i>
+        </div>
+        <h3>Select a claim</h3>
+        <p>Click on any claim from the list to review its details and update its status.</p>
+      </div>
+
+      <!-- Claim Detail -->
+      <div *ngIf="selectedClaim as c" class="cr-detail-content">
+
+        <!-- Detail Header -->
+        <div class="cr-detail-header">
+          <div class="cr-detail-title-row">
+            <div class="cr-detail-icon">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+            <div>
+              <h3 class="cr-detail-title">Claim #{{ c.id }}</h3>
+              <p class="cr-detail-sub">
+                <i class="fa-solid fa-shield-halved me-1"></i> Policy #{{ c.policyId }}
+                &nbsp;·&nbsp;
+                <i class="fa-solid fa-user me-1"></i> Customer #{{ c.customerId }}
+              </p>
+            </div>
+          </div>
+          <span class="cr-badge cr-badge-lg" [ngClass]="badgeClass(c.status)">
+            <span class="cr-badge-dot"></span>
+            {{ c.status }}
+          </span>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="cr-info-grid">
+          <div class="cr-info-card">
+            <div class="cr-info-card-icon blue">
+              <i class="fa-solid fa-indian-rupee-sign"></i>
+            </div>
+            <div class="cr-info-card-label">Claim Amount</div>
+            <div class="cr-info-card-value">{{ c.claimAmount | currency:'INR':'symbol':'1.0-0' }}</div>
+          </div>
+          <div class="cr-info-card">
+            <div class="cr-info-card-icon purple">
+              <i class="fa-solid fa-tag"></i>
+            </div>
+            <div class="cr-info-card-label">Current Status</div>
+            <div class="cr-info-card-value">{{ c.status }}</div>
+          </div>
+          <div class="cr-info-card">
+            <div class="cr-info-card-icon green">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="cr-info-card-label">Policy ID</div>
+            <div class="cr-info-card-value">#{{ c.policyId }}</div>
+          </div>
+          <div class="cr-info-card">
+            <div class="cr-info-card-icon orange">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="cr-info-card-label">Customer ID</div>
+            <div class="cr-info-card-value">#{{ c.customerId }}</div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="cr-section">
+          <div class="cr-section-title">
+            <i class="fa-solid fa-align-left"></i> Description
+          </div>
+          <div class="cr-description">{{ c.description || 'No description provided.' }}</div>
+        </div>
+
+        <!-- Documents -->
+        <div class="cr-section">
+          <div class="cr-section-title">
+            <i class="fa-solid fa-paperclip"></i> Uploaded Documents
+          </div>
+          <div *ngIf="selectedClaimDocuments.length > 0">
+            <div *ngFor="let doc of selectedClaimDocuments" class="cr-doc-item">
+              <div class="cr-doc-icon">
+                <i class="fa-solid fa-file-pdf"></i>
+              </div>
+              <div class="cr-doc-info">
+                <div class="cr-doc-name">{{ doc.fileName }}</div>
+                <div class="cr-doc-meta">{{ doc.fileType }} &nbsp;·&nbsp; {{ doc.uploadedAt | date:'mediumDate' }}</div>
+              </div>
+              <div class="cr-doc-badge">
+                <i class="fa-solid fa-circle-check"></i> Uploaded
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedClaimDocuments.length === 0" class="cr-no-docs">
+            <i class="fa-solid fa-folder-open"></i>
+            No documents uploaded for this claim.
+          </div>
+        </div>
+
+        <!-- Review Form -->
+        <div class="cr-review-form">
+          <div class="cr-review-form-title">
+            <i class="fa-solid fa-pen-to-square"></i> Update Claim Status
+          </div>
+
+          <!-- No valid transitions -->
+          <div *ngIf="availableStatuses.length === 0" class="cr-no-transition">
+            <i class="fa-solid fa-lock"></i>
+            This claim is in <strong>{{ c.status }}</strong> status — no further transitions are allowed.
+          </div>
+
+          <!-- Success message -->
+          <div *ngIf="updateSuccess" class="cr-update-success">
+            <i class="fa-solid fa-circle-check"></i> {{ updateSuccess }}
+          </div>
+
+          <!-- Error message -->
+          <div *ngIf="updateError" class="cr-update-error">
+            <i class="fa-solid fa-circle-exclamation"></i> {{ updateError }}
+          </div>
+
+          <form [formGroup]="reviewForm" (ngSubmit)="submitReview(c.id)" *ngIf="availableStatuses.length > 0">
+            <div class="cr-form-row">
+              <div class="cr-form-group">
+                <label class="cr-form-label">New Status</label>
+                <select formControlName="status" class="cr-select">
+                  <option *ngFor="let s of availableStatuses" [value]="s">{{ s }}</option>
+                </select>
+                <div class="cr-status-hint">
+                  Current: <strong>{{ c.status }}</strong> → Can move to: <strong>{{ availableStatuses.join(', ') }}</strong>
+                </div>
+              </div>
+            </div>
+            <div class="cr-form-group">
+              <label class="cr-form-label">Admin Remarks</label>
+              <textarea formControlName="adminRemarks" class="cr-textarea" rows="3"
+                        placeholder="Add notes, reasons, or remarks for this decision..."></textarea>
+            </div>
+            <div class="cr-form-actions">
+              <button type="submit" class="cr-btn-submit" [disabled]="reviewForm.invalid">
+                <i class="fa-solid fa-circle-check"></i> Update Status
+              </button>
+              <button type="button" class="cr-btn-cancel" (click)="selectedClaimId = null">
+                <i class="fa-solid fa-xmark"></i> Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

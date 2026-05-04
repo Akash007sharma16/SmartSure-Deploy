@@ -1,0 +1,74 @@
+<div>
+  <!-- Page Header -->
+  <div class="ss-page-header mb-4">
+    <div>
+      <h2 class="ss-page-title">Upload Documents</h2>
+      <p class="ss-page-sub">Claim #{{ claimId }} · Upload supporting documents</p>
+    </div>
+    <a routerLink="/claims/track" class="btn btn-outline-secondary">← Back to Claims</a>
+  </div>
+
+  <div class="row g-4">
+    <!-- Upload Area -->
+    <div class="col-lg-6">
+      <div class="ss-upload-card">
+        <div class="ss-upload-header">Upload New Document</div>
+        <div class="ss-upload-body">
+          <div class="ss-drop-zone" [class.ss-dz-active]="selectedFile" (click)="fileInput.click()">
+            <input #fileInput type="file" hidden
+                   (change)="onFileSelected($event)"
+                   accept=".pdf,.jpg,.png,.doc,.docx" />
+            <div *ngIf="!selectedFile">
+              <div class="ss-dz-icon">📎</div>
+              <div class="ss-dz-title">Click to select a file</div>
+              <div class="ss-dz-sub">PDF, JPG, PNG, DOC up to 10MB</div>
+            </div>
+            <div *ngIf="selectedFile" class="ss-dz-selected">
+              <div class="ss-dz-file-icon">📄</div>
+              <div>
+                <div class="ss-dz-file-name">{{ selectedFile.name }}</div>
+                <div class="ss-dz-file-size">{{ (selectedFile.size / 1024).toFixed(1) }} KB</div>
+              </div>
+              <button class="ss-dz-remove"
+                      (click)="$event.stopPropagation(); selectedFile = null">✕</button>
+            </div>
+          </div>
+
+          <div *ngIf="errorMsg" class="alert alert-danger mt-3">⚠️ {{ errorMsg }}</div>
+          <div *ngIf="successMsg" class="alert alert-success mt-3">✅ {{ successMsg }}</div>
+
+          <button class="btn btn-primary w-100 mt-3"
+                  [disabled]="!selectedFile || uploading"
+                  (click)="upload()">
+            <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ uploading ? 'Uploading...' : '⬆ Upload Document' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documents List -->
+    <div class="col-lg-6">
+      <div class="ss-upload-card">
+        <div class="ss-upload-header">
+          Uploaded Documents
+          <span class="badge bg-primary rounded-pill ms-2">{{ documents.length }}</span>
+        </div>
+        <div class="ss-upload-body">
+          <div *ngIf="documents.length === 0" class="ss-empty-inline">
+            <div class="ss-empty-icon-sm">📂</div>
+            <p class="text-muted">No documents uploaded yet.</p>
+          </div>
+          <div *ngFor="let d of documents" class="ss-doc-row">
+            <div class="ss-doc-icon">📄</div>
+            <div class="flex-grow-1">
+              <div class="ss-doc-name">{{ d.fileName }}</div>
+              <div class="ss-doc-meta">{{ d.fileType }} · {{ d.uploadedAt | date:'MMM d, y · h:mm a' }}</div>
+            </div>
+            <span class="badge bg-success">Uploaded</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

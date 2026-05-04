@@ -19,6 +19,25 @@ builder.Services.AddScoped<IPolicyTypeRepository, PolicyTypeRepository>();
 builder.Services.AddScoped<IPremiumRepository, PremiumRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPolicyService, PolicyService.Services.PolicyService>();
+builder.Services.AddScoped<IEmailService, PolicyService.Services.EmailService>();
+
+// Named HTTP client for calling IdentityService internal API
+builder.Services.AddHttpClient("IdentityService", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["InternalServices:IdentityServiceUrl"]
+        ?? "https://localhost:7001/");
+    client.Timeout = TimeSpan.FromSeconds(5);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+#if DEBUG
+    // Allow self-signed dev certificates — remove before production deployment
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+#endif
+    return handler;
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
@@ -63,6 +82,8 @@ builder.Services.AddCors(opt =>
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<CancelPolicyConsumer>();
+    x.AddConsumer<PolicyPurchaseCompletedConsumer>();
+    x.AddConsumer<PolicyPurchaseFailedConsumer>();
 
     x.UsingRabbitMq((ctx, cfg) =>
     {

@@ -1,0 +1,121 @@
+<div class="ad-root">
+
+  <!-- ── Hero Banner ── -->
+  <div class="ad-banner">
+    <div class="ad-banner-left">
+      <div class="ad-banner-badge">
+        <i class="fa-solid fa-gauge-high"></i> Admin Control Panel
+      </div>
+      <h1 class="ad-banner-title">Admin Dashboard</h1>
+      <p class="ad-banner-sub">Platform overview and management controls</p>
+    </div>
+    <div class="ad-banner-actions">
+      <a routerLink="/reports" class="ad-btn-ghost">
+        <i class="fa-solid fa-chart-bar"></i> Reports
+      </a>
+      <a routerLink="/admin/claims" class="ad-btn-solid">
+        <i class="fa-solid fa-file-circle-check"></i> Review Claims
+      </a>
+    </div>
+  </div>
+
+  <!-- ── Warning ── -->
+  <div *ngIf="stats.totalUsers === 0 && stats.totalPolicies === 0 && !loading"
+       class="ad-warning">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    Dashboard stats show zero — ensure all microservices are running and reachable.
+  </div>
+
+  <!-- ── Stat Cards ── -->
+  <div class="ad-stats-grid">
+    <div class="ad-stat-card" *ngFor="let s of statCards">
+      <div class="ad-stat-top">
+        <div class="ad-stat-icon" [style.background]="s.bg" [style.color]="s.iconColor">
+          <i [class]="s.icon"></i>
+        </div>
+        <a [routerLink]="s.link" class="ad-stat-action">
+          {{ s.action }} <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="ad-stat-value">{{ s.value }}</div>
+      <div class="ad-stat-label">{{ s.label }}</div>
+    </div>
+  </div>
+
+  <!-- ── Quick Actions ── -->
+  <div class="ad-section-title">Quick Actions</div>
+  <div class="ad-actions-grid">
+    <a [routerLink]="a.link" class="ad-action-card" *ngFor="let a of actions">
+      <div class="ad-action-icon" [style.background]="a.bg" [style.color]="a.iconColor">
+        <i [class]="a.icon"></i>
+      </div>
+      <span class="ad-action-label">{{ a.label }}</span>
+      <i class="fa-solid fa-chevron-right ad-action-arr"></i>
+    </a>
+  </div>
+
+  <!-- ── Recent Claims ── -->
+  <div class="ad-card" *ngIf="recentClaims.length > 0">
+    <div class="ad-card-header">
+      <div>
+        <h3 class="ad-card-title">
+          <i class="fa-solid fa-clock-rotate-left me-2" style="color:#4f46e5;font-size:1rem;"></i>
+          Recent Claims
+        </h3>
+        <p class="ad-card-sub">Latest claims requiring attention</p>
+      </div>
+      <a routerLink="/admin/claims" class="ad-view-all">
+        View All <i class="fa-solid fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="ad-table">
+        <thead>
+          <tr>
+            <th>Claim ID</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of recentClaims.slice(0, 8)">
+            <td>
+              <span class="ad-claim-id">#{{ c.id }}</span>
+            </td>
+            <td>
+              <div class="ad-customer">
+                <div class="ad-customer-avatar">C</div>
+                <span>Customer #{{ c.customerId }}</span>
+              </div>
+            </td>
+            <td class="ad-amount">{{ c.claimAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+            <td>
+              <span class="ad-badge" [ngClass]="badgeClass(c.status)">
+                <span class="ad-badge-dot"></span>
+                {{ c.status }}
+              </span>
+            </td>
+            <td>
+              <a [routerLink]="['/admin/claims']" [queryParams]="{claimId: c.id}" class="ad-review-btn">
+                <i class="fa-solid fa-eye me-1"></i> Review
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Empty State ── -->
+  <div *ngIf="recentClaims.length === 0 && !loading" class="ad-empty">
+    <div class="ad-empty-icon">
+      <i class="fa-solid fa-folder-open"></i>
+    </div>
+    <h3>No claims yet</h3>
+    <p>Claims will appear here once customers start filing them.</p>
+  </div>
+
+</div>
