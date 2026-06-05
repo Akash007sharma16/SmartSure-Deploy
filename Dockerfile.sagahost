@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["src/SmartSure.SagaHost/SmartSure.SagaHost.csproj", "src/SmartSure.SagaHost/"]
+COPY ["src/SmartSure.Contracts/SmartSure.Contracts.csproj", "src/SmartSure.Contracts/"]
+COPY ["src/SmartSure.Sagas/SmartSure.Sagas.csproj", "src/SmartSure.Sagas/"]
+RUN dotnet restore "src/SmartSure.SagaHost/SmartSure.SagaHost.csproj"
+COPY . .
+WORKDIR "/src/src/SmartSure.SagaHost"
+RUN dotnet build "SmartSure.SagaHost.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "SmartSure.SagaHost.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "SmartSure.SagaHost.dll"]
